@@ -1419,8 +1419,13 @@ paths:
       operationId: Autofill
       tags:
         - Auto
-      summary: Автозаполнение нагрузки по преподавателям
+      summary: Автозаполнение нагрузки с другого года по преподавателям
       parameters:
+        - name: sourceYearId
+          in: query
+          required: true
+          schema:
+            type: integer
         - name: teacherId
           in: query
           required: false
