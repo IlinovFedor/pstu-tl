@@ -24,6 +24,7 @@ paths:
 
   /auth/login:
     post:
+      operationId: Login
       tags:
         - Auth
       requestBody:
@@ -54,6 +55,7 @@ paths:
 
   /auth/logout:
     post:
+      operationId: Logout
       tags:
         - Auth
       responses:
@@ -65,6 +67,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /auth/me:
     get:
+      operationId: GetMe
       tags:
         - Auth
       responses:
@@ -81,6 +84,7 @@ paths:
 
   /teachers:
     get:
+      operationId: GetTeachers
       tags:
         - Catalog teachers
       responses:
@@ -103,6 +107,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      operationId: CreateTeacher
       tags:
         - Catalog teachers
       requestBody:
@@ -135,6 +140,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetTeacher
       tags:
         - Catalog teachers
       responses:
@@ -155,6 +161,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      operationId: UpdateTeacher
       tags:
         - Catalog teachers
       requestBody:
@@ -181,6 +188,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteTeacher
       tags:
         - Catalog teachers
       responses:
@@ -203,6 +211,7 @@ paths:
 
   /groups:
     get:
+      operationId: GetGroups
       tags:
         - Catalog groups
       responses:
@@ -225,6 +234,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      operationId: CreateGroup
       tags:
         - Catalog groups
       requestBody:
@@ -257,6 +267,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetGroup
       tags:
         - Catalog groups
       responses:
@@ -277,6 +288,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      operationId: UpdateGroup
       tags:
         - Catalog groups
       requestBody:
@@ -303,6 +315,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteGroup
       tags:
         - Catalog groups
       responses:
@@ -326,6 +339,7 @@ paths:
 
   /disciplines:
     get:
+      operationId: GetDisciplines
       tags:
         - Catalog disciplines
       responses:
@@ -348,6 +362,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      operationId: CreateDiscipline
       tags:
         - Catalog disciplines
       requestBody:
@@ -380,6 +395,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetDiscipline
       tags:
         - Catalog disciplines
       responses:
@@ -400,6 +416,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      operationId: UpdateDiscipline
       tags:
         - Catalog disciplines
       requestBody:
@@ -426,6 +443,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteDiscipline
       tags:
         - Catalog disciplines
       responses:
@@ -448,6 +466,7 @@ paths:
 
   /users:
     get:
+      operationId: GetUsers
       tags:
         - Catalog users
       responses:
@@ -470,6 +489,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      operationId: CreateUser
       tags:
         - Catalog users
       requestBody:
@@ -502,6 +522,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetUser
       tags:
         - Catalog users
       responses:
@@ -522,6 +543,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      operationId: UpdateUser
       tags:
         - Catalog users
       requestBody:
@@ -548,6 +570,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteUser
       tags:
         - Catalog users
       responses:
@@ -576,6 +599,7 @@ paths:
         schema:
           type: integer
     post:
+      operationId: ChangeUserPassword
       tags:
         - Catalog users
       requestBody:
@@ -608,6 +632,7 @@ paths:
 
   /years:
     get:
+      operationId: GetYears
       summary: Получить список учебных годов
       tags:
         - Years
@@ -632,6 +657,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      operationId: CreateYear
       summary: Создать новый год
       tags:
         - Years
@@ -671,6 +697,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetYear
       summary: Получить конфиг года
       tags:
         - Years
@@ -692,6 +719,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      operationId: UpdateYear
       summary: Перезаписать конфиг года
       tags:
         - Years
@@ -717,6 +745,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteYear
       summary: Удалить учебный год
       tags:
         - Years
@@ -742,6 +771,7 @@ paths:
         schema:
           type: integer
     post:
+      operationId: ImportFile
       summary: Импорт данных из XLSX с перезаписью records. Для типов postgraduate undergraduate part_time требуется указать term. Отсутствующие сущности в общих каталогах добавляются.
       tags:
         - Years/Import
@@ -799,6 +829,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     get:
+      operationId: GetImportedFiles
       summary: Список текущих импортированных файлов
       tags:
         - Years/Import
@@ -834,6 +865,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetImportedFile
       summary: Получить данные о файле импорта
       tags:
         - Years/Import
@@ -855,6 +887,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteImportedFile
       summary: Удалить файл импорта и все соответствующие ему записи
       tags:
         - Years/Import
@@ -889,6 +922,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: DownloadImportedFile
       summary: Скачать файл импорта
       tags:
         - Years/Import
@@ -919,6 +953,7 @@ paths:
         schema:
           type: integer
     post:
+      operationId: ExportFile
       tags:
         - Years/Export
       summary: Создание файла экспорта
@@ -940,6 +975,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     get:
+      operationId: GetExportedFiles
       summary: Список текущих файлов экспорта
       tags:
         - Years/Export
@@ -975,6 +1011,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetExportedFile
       summary: Получить данные о файле экспорта
       tags:
         - Years/Export
@@ -996,6 +1033,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteExportedFile
       summary: Удалить файл экспорта
       tags:
         - Years/Export
@@ -1030,6 +1068,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: DownloadExportedFile
       summary: Скачать файл экспорта
       tags:
         - Years/Export
@@ -1060,6 +1099,7 @@ paths:
         schema:
           type: integer
     post:
+      operationId: CreateReports
       tags:
         - Years/Reports
       summary: Сформировать отчеты по преподавателям
@@ -1117,6 +1157,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     get:
+      operationId: GetReports
       summary: Список текущих файлов отчетов
       tags:
         - Years/Reports
@@ -1162,6 +1203,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetReport
       summary: Получить данные о файле отчета
       tags:
         - Years/Reports
@@ -1183,6 +1225,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      operationId: DeleteReport
       summary: Удалить файл отчета
       tags:
         - Years/Reports
@@ -1217,6 +1260,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: DownloadReport
       summary: Скачать файл отчета
       tags:
         - Years/Reports
@@ -1247,6 +1291,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: DownloadReportsZIP
       summary: Скачать файлы отчетов за определенную дату
       tags:
         - Years/Reports
@@ -1284,6 +1329,7 @@ paths:
         schema:
           type: integer
     post:
+      operationId: Autofill
       tags:
         - Years/Auto
       summary: Автозаполнение нагрузки по преподавателям
@@ -1317,6 +1363,7 @@ paths:
         schema:
           type: integer
     post:
+      operationId: Autoremove
       tags:
         - Years/Auto
       summary: Удалить нагрузку преподавателя
@@ -1344,6 +1391,7 @@ paths:
 
   /years/{year_id}/diff:
     get:
+      operationId: GetDiffs
       tags:
         - Diff
       summary: Сравнительная таблица с другим годом
@@ -1419,6 +1467,7 @@ paths:
 
   /years/{year_id}/diff/records:
     get:
+      operationId: GetDiffsRecords
       tags:
         - Diff
       summary: Записи за оба года по дисциплине
@@ -1477,6 +1526,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetYearDisciplines
       summary: Получить список дисциплин, назначенных преподавателей, ошибочность и завершенность
       tags:
         - Year/Disciplines
@@ -1559,6 +1609,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetRecordsByYearAndDiscipline
       summary: Получить список записей по дисциплине
       tags:
         - Year/Disciplines
@@ -1632,6 +1683,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetYearTeachers
       tags:
         - Year/Teachers
       summary: Получить список преподавателей и их калькуляции
@@ -1719,6 +1771,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetRecordsByYearAndTeacher
       summary: Получить список записей по преподавателю
       tags:
         - Year/Teachers
@@ -1788,14 +1841,9 @@ paths:
   #        '500':
   #          $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/records/batch:
-    parameters:
-      - name: year_id
-        in: path
-        required: true
-        schema:
-          type: integer
+  /records/batch:
     put:
+      operationId: BatchRecordsEdit
       summary: Пакетное изменение записей (назначение преподавателей, ошибочность)
       tags:
         - Records
@@ -1864,19 +1912,15 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
 
-  /years/{year_id}/records/{record_id}:
+  /records/{record_id}:
     parameters:
-      - name: year_id
-        in: path
-        required: true
-        schema:
-          type: integer
       - name: record_id
         in: path
         required: true
         schema:
           type: integer
     get:
+      operationId: GetRecord
       tags:
         - Records
       summary: Получить данные записи
@@ -1899,6 +1943,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
     put:
+      operationId: UpdateRecord
       tags:
         - Records
       summary: Перезапись часов преподавателей, ошибочность
@@ -1949,19 +1994,15 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/records/{record_id}/history:
+  /records/{record_id}/history:
     parameters:
-      - name: year_id
-        in: path
-        required: true
-        schema:
-          type: integer
       - name: record_id
         in: path
         required: true
         schema:
           type: integer
     get:
+      operationId: GetRecordHistory
       summary: Получить историю изменений записи
       tags:
         - Records
@@ -2008,6 +2049,7 @@ paths:
         schema:
           type: integer
     get:
+      operationId: GetYearHistory
       tags:
         - History
       summary: Получить журнал изменений года
@@ -2067,19 +2109,15 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/history/{action_id}:
+  /history/{action_id}:
     parameters:
-      - name: year_id
-        in: path
-        required: true
-        schema:
-          type: integer
       - name: action_id
         in: path
         required: true
         schema:
           type: integer
     get:
+      operationId: GetAction
       tags:
         - History
       summary: Получить запись журнала изменений
@@ -2136,6 +2174,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
     delete:
+      operationId: RevertAction
       tags:
         - History
       summary: Откатить запись журнала изменений
