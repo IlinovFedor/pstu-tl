@@ -577,18 +577,20 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - name
-                  - username
-                  - password
-                properties:
-                  name:
-                    type: string
-                  username:
-                    type: string
-                  password:
-                    type: string
+                type: array
+                items:
+                  type: object
+                  required:
+                    - name
+                    - username
+                    - password
+                  properties:
+                    name:
+                      type: string
+                    username:
+                      type: string
+                    password:
+                      type: string
 
   /users/{userId}:
     parameters:
