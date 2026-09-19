@@ -128,13 +128,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /teachers/{teacher_id}:
+    parameters:
+      - name: teacher_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      parameters:
-        - name: teacher_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog teachers
       responses:
@@ -155,12 +155,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      parameters:
-        - name: teacher_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog teachers
       requestBody:
@@ -187,12 +181,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      parameters:
-        - name: teacher_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog teachers
       responses:
@@ -262,13 +250,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /groups/{group_id}:
+    parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      parameters:
-        - name: group_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog groups
       responses:
@@ -289,12 +277,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      parameters:
-        - name: group_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog groups
       requestBody:
@@ -321,12 +303,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      parameters:
-        - name: group_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog groups
       responses:
@@ -397,13 +373,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /disciplines/{discipline_id}:
+    parameters:
+      - name: discipline_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      parameters:
-        - name: discipline_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog disciplines
       responses:
@@ -424,12 +400,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      parameters:
-        - name: discipline_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog disciplines
       requestBody:
@@ -456,12 +426,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      parameters:
-        - name: discipline_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog disciplines
       responses:
@@ -531,13 +495,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /users/{user_id}:
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog users
       responses:
@@ -558,12 +522,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog users
       requestBody:
@@ -590,12 +548,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog users
       responses:
@@ -617,13 +569,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /users/{user_id}/change-password:
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
     post:
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Catalog users
       requestBody:
@@ -712,13 +664,13 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /years/{year_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
       summary: Получить конфиг года
       tags:
         - Years
@@ -740,12 +692,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
       summary: Перезаписать конфиг года
       tags:
         - Years
@@ -771,12 +717,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
       summary: Удалить учебный год
       tags:
         - Years
@@ -795,16 +735,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/import:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     post:
       summary: Импорт данных из XLSX с перезаписью records. Для типов postgraduate undergraduate part_time требуется указать term. Отсутствующие сущности в общих каталогах добавляются.
       tags:
         - Years/Import
       parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: type
           in: query
           required: true
@@ -861,12 +802,6 @@ paths:
       summary: Список текущих импортированных файлов
       tags:
         - Years/Import
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные файлов
@@ -887,21 +822,21 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /years/{year_id}/import/{file_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Получить данные о файле импорта
       tags:
         - Years/Import
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные о файле
@@ -923,17 +858,6 @@ paths:
       summary: Удалить файл импорта и все соответствующие ему записи
       tags:
         - Years/Import
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные удаленного файла
@@ -953,21 +877,21 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/import/{file_id}/download:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Скачать файл импорта
       tags:
         - Years/Import
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: XLSX файл
@@ -988,16 +912,16 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/export:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - Years/Export
       summary: Создание файла экспорта
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные нового файла
@@ -1019,12 +943,6 @@ paths:
       summary: Список текущих файлов экспорта
       tags:
         - Years/Export
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные файлов
@@ -1045,21 +963,21 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /years/{year_id}/export/{file_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Получить данные о файле экспорта
       tags:
         - Years/Export
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные о файле
@@ -1081,17 +999,6 @@ paths:
       summary: Удалить файл экспорта
       tags:
         - Years/Export
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные удаленного файла
@@ -1111,21 +1018,21 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/export/{file_id}/download:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Скачать файл экспорта
       tags:
         - Years/Export
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: XLSX файл
@@ -1146,16 +1053,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/reports:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - Years/Reports
       summary: Сформировать отчеты по преподавателям
       parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: include
           in: query
           required: false
@@ -1212,12 +1120,6 @@ paths:
       summary: Список текущих файлов отчетов
       tags:
         - Years/Reports
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные файлов
@@ -1248,21 +1150,21 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /years/{year_id}/reports/{file_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Получить данные о файле отчета
       tags:
         - Years/Reports
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные о файле
@@ -1284,17 +1186,6 @@ paths:
       summary: Удалить файл отчета
       tags:
         - Years/Reports
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Данные удаленного файла
@@ -1314,21 +1205,21 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/reports/{file_id}/download:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Скачать файл отчета
       tags:
         - Years/Reports
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: file_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: DOCX файл
@@ -1349,16 +1240,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/reports/download_zip:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Скачать файлы отчетов за определенную дату
       tags:
         - Years/Reports
       parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: date
           in: query
           required: true
@@ -1385,16 +1277,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/autofill:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - Years/Auto
       summary: Автозаполнение нагрузки по преподавателям
       parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: teacher_id
           in: query
           required: false
@@ -1417,16 +1310,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/autoremove:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - Years/Auto
       summary: Удалить нагрузку преподавателя
       parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: teacher_id
           in: query
           required: true
@@ -1971,18 +1865,18 @@ paths:
 
 
   /years/{year_id}/records/{record_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: record_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      parameters:
-        - name: year_id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: record_id
-          in: path
-          required: true
-          schema:
-            type: integer
       tags:
         - Records
       summary: Получить данные записи
