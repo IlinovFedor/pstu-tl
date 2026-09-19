@@ -56,6 +56,7 @@ paths:
 
   /auth/login:
     post:
+      summary: Вход в систему
       operationId: Login
       tags:
         - Auth
@@ -87,6 +88,7 @@ paths:
 
   /auth/logout:
     post:
+      summary: Выход из системы
       operationId: Logout
       tags:
         - Auth
@@ -99,6 +101,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /auth/me:
     get:
+      summary: Получить текущего пользователя
       operationId: GetMe
       tags:
         - Auth
@@ -116,6 +119,7 @@ paths:
 
   /teachers:
     get:
+      summary: Получить список преподавателей в системе
       operationId: GetTeachers
       tags:
         - Catalog teachers
@@ -139,6 +143,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      summary: Создать преподавателя
       operationId: CreateTeacher
       tags:
         - Catalog teachers
@@ -150,7 +155,7 @@ paths:
               $ref: '#/components/schemas/TeacherRequest'
       responses:
         '200':
-          description: Данные о новом преподавателе
+          description: Данные нового преподавателе
           content:
             application/json:
               schema:
@@ -172,12 +177,13 @@ paths:
         schema:
           type: integer
     get:
+      summary: Получить данные преподавателя
       operationId: GetTeacher
       tags:
         - Catalog teachers
       responses:
         '200':
-          description: Данные о преподавателе
+          description: Данные преподавателя
           content:
             application/json:
               schema:
@@ -193,6 +199,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      summary: Изменить данные преподавателя
       operationId: UpdateTeacher
       tags:
         - Catalog teachers
@@ -204,7 +211,7 @@ paths:
               $ref: '#/components/schemas/UserRequest'
       responses:
         '200':
-          description: Новые данные о преподавателе
+          description: Новые данные преподавателя
           content:
             application/json:
               schema:
@@ -220,6 +227,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      summary: Удалить преподавателя
       operationId: DeleteTeacher
       tags:
         - Catalog teachers
@@ -243,6 +251,7 @@ paths:
 
   /groups:
     get:
+      summary: Получить список групп в системе
       operationId: GetGroups
       tags:
         - Catalog groups
@@ -266,6 +275,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      summary: Создать группу
       operationId: CreateGroup
       tags:
         - Catalog groups
@@ -277,7 +287,7 @@ paths:
               $ref: '#/components/schemas/GroupRequest'
       responses:
         '200':
-          description: Данные о новой группе
+          description: Данные новой группы
           content:
             application/json:
               schema:
@@ -299,12 +309,13 @@ paths:
         schema:
           type: integer
     get:
+      summary: Получить данные группы
       operationId: GetGroup
       tags:
         - Catalog groups
       responses:
         '200':
-          description: Данные о группе
+          description: Данные группы
           content:
             application/json:
               schema:
@@ -320,6 +331,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      summary: Изменить данные группы
       operationId: UpdateGroup
       tags:
         - Catalog groups
@@ -331,7 +343,7 @@ paths:
               $ref: '#/components/schemas/GroupRequest'
       responses:
         '200':
-          description: Новые данные о группе
+          description: Новые данные группы
           content:
             application/json:
               schema:
@@ -347,6 +359,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      summary: Удалить группу
       operationId: DeleteGroup
       tags:
         - Catalog groups
@@ -371,6 +384,7 @@ paths:
 
   /disciplines:
     get:
+      summary: Получить список дисциплин в системе
       operationId: GetDisciplines
       tags:
         - Catalog disciplines
@@ -394,6 +408,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      summary: Создать дисциплину в системе
       operationId: CreateDiscipline
       tags:
         - Catalog disciplines
@@ -405,7 +420,7 @@ paths:
               $ref: '#/components/schemas/DisciplineRequest'
       responses:
         '200':
-          description: Данные о новой дисциплине
+          description: Данные новой дисциплины
           content:
             application/json:
               schema:
@@ -427,12 +442,13 @@ paths:
         schema:
           type: integer
     get:
+      summary: Получить данные дисциплины
       operationId: GetDiscipline
       tags:
         - Catalog disciplines
       responses:
         '200':
-          description: Данные о дисциплине
+          description: Данные дисциплины
           content:
             application/json:
               schema:
@@ -448,6 +464,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      summary: Изменить данные дисциплины
       operationId: UpdateDiscipline
       tags:
         - Catalog disciplines
@@ -459,7 +476,7 @@ paths:
               $ref: '#/components/schemas/DisciplineRequest'
       responses:
         '200':
-          description: Новые данные о дисциплине
+          description: Новые данные дисциплины
           content:
             application/json:
               schema:
@@ -475,6 +492,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      summary: Удалить дисциплину
       operationId: DeleteDiscipline
       tags:
         - Catalog disciplines
@@ -498,6 +516,7 @@ paths:
 
   /users:
     get:
+      summary: Получить список пользователей системы
       operationId: GetUsers
       tags:
         - Catalog users
@@ -521,6 +540,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      summary: Создать пользователя
       operationId: CreateUser
       tags:
         - Catalog users
@@ -554,12 +574,13 @@ paths:
         schema:
           type: integer
     get:
+      summary: Получить данные пользователя
       operationId: GetUser
       tags:
         - Catalog users
       responses:
         '200':
-          description: Данные о пользователе
+          description: Данные пользователя
           content:
             application/json:
               schema:
@@ -575,6 +596,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
+      summary: Изменить данные пользователя
       operationId: UpdateUser
       tags:
         - Catalog users
@@ -586,7 +608,7 @@ paths:
               $ref: '#/components/schemas/UserRequest'
       responses:
         '200':
-          description: Новые данные о пользователе
+          description: Новые данные пользователя
           content:
             application/json:
               schema:
@@ -602,6 +624,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      summary: Удалить пользователя
       operationId: DeleteUser
       tags:
         - Catalog users
@@ -631,6 +654,7 @@ paths:
         schema:
           type: integer
     post:
+      summary: Изменить пароль пользователя
       operationId: ChangeUserPassword
       tags:
         - Catalog users
@@ -646,7 +670,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: Изменить пароль пользователя
+          description: Данные пользователя, чей пароль был изменен
           content:
             application/json:
               schema:
