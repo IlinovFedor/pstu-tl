@@ -2496,8 +2496,8 @@ components:
         role:
           type: string
           enum: [ admin, editor, teacher ]
-        associatedTeacher:
-          $ref: '#/components/schemas/TeacherResponse'
+        associatedTeacherId:
+          type: integer
     UserRequest:
       description: Модель пользователя для запросов
       $ref: '#/components/schemas/UserBase'
@@ -2510,6 +2510,8 @@ components:
           properties:
             id:
               type: integer
+            associatedTeacher:
+              $ref: '#/components/schemas/TeacherResponse'
         - $ref: '#/components/schemas/UserBase'
 
     FileBase:
