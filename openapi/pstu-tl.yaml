@@ -3,6 +3,38 @@ info:
   title: pstu-tl
   description: pstu-tl
   version: 1.0.0
+tags:
+  - name: Auth
+    description: Авторизация
+  - name: Catalog teachers
+    description: Управление справочником преподавателей
+  - name: Catalog groups
+    description: Управление справочником учебных групп
+  - name: Catalog disciplines
+    description: Управление справочником дисциплин
+  - name: Catalog users
+    description: Управление пользователями
+  - name: Years
+    description: Управление справочником учебных годов
+  - name: Import
+    description: Управление данными импорта
+  - name: Export
+    description: Управление данными экспорта
+  - name: Reports
+    description: Управление отчетами по преподавателям
+  - name: Auto
+    description: Автоматизации (автозаполнение, автоудаление)
+  - name: Diff
+    description: Сравнение по годам
+  - name: Year's disciplines
+    description: Просмотр нагрузки по дисциплинам
+  - name: Year's teachers
+    description: Просмотр нагрузки по преподавателям
+  - name: Records
+    description: Управление записями
+  - name: History
+    description: Управление историей изменений записей
+
 servers:
   - url: 'http://0.0.0.0:9774/api/v1'
 paths:
@@ -774,7 +806,7 @@ paths:
       operationId: ImportFile
       summary: Импорт данных из XLSX с перезаписью records. Для типов postgraduate undergraduate part_time требуется указать term. Отсутствующие сущности в общих каталогах добавляются.
       tags:
-        - Years/Import
+        - Import
       parameters:
         - name: type
           in: query
@@ -832,7 +864,7 @@ paths:
       operationId: GetImportedFiles
       summary: Список текущих импортированных файлов
       tags:
-        - Years/Import
+        - Import
       responses:
         '200':
           description: Данные файлов
@@ -868,7 +900,7 @@ paths:
       operationId: GetImportedFile
       summary: Получить данные о файле импорта
       tags:
-        - Years/Import
+        - Import
       responses:
         '200':
           description: Данные о файле
@@ -890,7 +922,7 @@ paths:
       operationId: DeleteImportedFile
       summary: Удалить файл импорта и все соответствующие ему записи
       tags:
-        - Years/Import
+        - Import
       responses:
         '200':
           description: Данные удаленного файла
@@ -925,7 +957,7 @@ paths:
       operationId: DownloadImportedFile
       summary: Скачать файл импорта
       tags:
-        - Years/Import
+        - Import
       responses:
         '200':
           description: XLSX файл
@@ -955,7 +987,7 @@ paths:
     post:
       operationId: ExportFile
       tags:
-        - Years/Export
+        - Export
       summary: Создание файла экспорта
       responses:
         '200':
@@ -978,7 +1010,7 @@ paths:
       operationId: GetExportedFiles
       summary: Список текущих файлов экспорта
       tags:
-        - Years/Export
+        - Export
       responses:
         '200':
           description: Данные файлов
@@ -1014,7 +1046,7 @@ paths:
       operationId: GetExportedFile
       summary: Получить данные о файле экспорта
       tags:
-        - Years/Export
+        - Export
       responses:
         '200':
           description: Данные о файле
@@ -1036,7 +1068,7 @@ paths:
       operationId: DeleteExportedFile
       summary: Удалить файл экспорта
       tags:
-        - Years/Export
+        - Export
       responses:
         '200':
           description: Данные удаленного файла
@@ -1071,7 +1103,7 @@ paths:
       operationId: DownloadExportedFile
       summary: Скачать файл экспорта
       tags:
-        - Years/Export
+        - Export
       responses:
         '200':
           description: XLSX файл
@@ -1101,7 +1133,7 @@ paths:
     post:
       operationId: CreateReports
       tags:
-        - Years/Reports
+        - Reports
       summary: Сформировать отчеты по преподавателям
       parameters:
         - name: include
@@ -1160,7 +1192,7 @@ paths:
       operationId: GetReports
       summary: Список текущих файлов отчетов
       tags:
-        - Years/Reports
+        - Reports
       responses:
         '200':
           description: Данные файлов
@@ -1206,7 +1238,7 @@ paths:
       operationId: GetReport
       summary: Получить данные о файле отчета
       tags:
-        - Years/Reports
+        - Reports
       responses:
         '200':
           description: Данные о файле
@@ -1228,7 +1260,7 @@ paths:
       operationId: DeleteReport
       summary: Удалить файл отчета
       tags:
-        - Years/Reports
+        - Reports
       responses:
         '200':
           description: Данные удаленного файла
@@ -1263,7 +1295,7 @@ paths:
       operationId: DownloadReport
       summary: Скачать файл отчета
       tags:
-        - Years/Reports
+        - Reports
       responses:
         '200':
           description: DOCX файл
@@ -1283,7 +1315,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/reports/download_zip:
+  /years/{year_id}/reports/download-zip:
     parameters:
       - name: year_id
         in: path
@@ -1294,7 +1326,7 @@ paths:
       operationId: DownloadReportsZIP
       summary: Скачать файлы отчетов за определенную дату
       tags:
-        - Years/Reports
+        - Reports
       parameters:
         - name: date
           in: query
@@ -1331,7 +1363,7 @@ paths:
     post:
       operationId: Autofill
       tags:
-        - Years/Auto
+        - Auto
       summary: Автозаполнение нагрузки по преподавателям
       parameters:
         - name: teacher_id
@@ -1365,7 +1397,7 @@ paths:
     post:
       operationId: Autoremove
       tags:
-        - Years/Auto
+        - Auto
       summary: Удалить нагрузку преподавателя
       parameters:
         - name: teacher_id
@@ -1390,6 +1422,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/diff:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       operationId: GetDiffs
       tags:
@@ -1466,6 +1504,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /years/{year_id}/diff/records:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       operationId: GetDiffsRecords
       tags:
@@ -1529,7 +1573,7 @@ paths:
       operationId: GetYearDisciplines
       summary: Получить список дисциплин, назначенных преподавателей, ошибочность и завершенность
       tags:
-        - Year/Disciplines
+        - Year's disciplines
       responses:
         '200':
           description: Список дисциплин, назначенных на них преподавателей, ошибочность, завершенность
@@ -1564,7 +1608,7 @@ paths:
   #    post:
   #      summary: Добавить дисциплину из справочника в год
   #      tags:
-  #        - Year/Disciplines
+  #        - Year's disciplines
   #      requestBody:
   #        required: true
   #        content:
@@ -1612,7 +1656,7 @@ paths:
       operationId: GetRecordsByYearAndDiscipline
       summary: Получить список записей по дисциплине
       tags:
-        - Year/Disciplines
+        - Year's disciplines
       responses:
         '200':
           description: Список записей
@@ -1656,7 +1700,7 @@ paths:
   #    delete:
   #      summary: Удаление дисциплины из года
   #      tags:
-  #        - Year/Disciplines
+  #        - Year's disciplines
   #      responses:
   #        '200':
   #          description: Удаленная дисциплина
@@ -1685,7 +1729,7 @@ paths:
     get:
       operationId: GetYearTeachers
       tags:
-        - Year/Teachers
+        - Year's teachers
       summary: Получить список преподавателей и их калькуляции
       responses:
         '200':
@@ -1726,7 +1770,7 @@ paths:
   #    post:
   #      summary: Добавить преподавателя из справочника в год
   #      tags:
-  #        - Year/Teachers
+  #        - Year's teachers
   #      requestBody:
   #        required: true
   #        content:
@@ -1774,7 +1818,7 @@ paths:
       operationId: GetRecordsByYearAndTeacher
       summary: Получить список записей по преподавателю
       tags:
-        - Year/Teachers
+        - Year's teachers
       responses:
         '200':
           description: Список записей
@@ -1822,7 +1866,7 @@ paths:
   #    delete:
   #      summary: Удаление преподавателя из года
   #      tags:
-  #        - Year/Teachers
+  #        - Year's teachers
   #      responses:
   #        '200':
   #          description: Удаленный преподаватель
