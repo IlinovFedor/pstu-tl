@@ -38,21 +38,21 @@ tags:
 servers:
   - url: 'http://0.0.0.0:9774/api/v1'
 paths:
-  /copypast/errors:
-    get:
-      responses:
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+  #  /copypast/errors:
+  #    get:
+  #      responses:
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '403':
+  #          $ref: '#/components/responses/Forbidden'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #        '409':
+  #          $ref: '#/components/responses/Conflict'
+  #        '500':
+  #          $ref: '#/components/responses/InternalServerError'
 
   /auth/login:
     post:
@@ -164,9 +164,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /teachers/{teacher_id}:
+  /teachers/{teacherId}:
     parameters:
-      - name: teacher_id
+      - name: teacherId
         in: path
         required: true
         schema:
@@ -291,9 +291,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /groups/{group_id}:
+  /groups/{groupId}:
     parameters:
-      - name: group_id
+      - name: groupId
         in: path
         required: true
         schema:
@@ -419,9 +419,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /disciplines/{discipline_id}:
+  /disciplines/{disciplineId}:
     parameters:
-      - name: discipline_id
+      - name: disciplineId
         in: path
         required: true
         schema:
@@ -546,9 +546,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /users/{user_id}:
+  /users/{userId}:
     parameters:
-      - name: user_id
+      - name: userId
         in: path
         required: true
         schema:
@@ -623,9 +623,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /users/{user_id}/change-password:
+  /users/{userId}/change-password:
     parameters:
-      - name: user_id
+      - name: userId
         in: path
         required: true
         schema:
@@ -640,9 +640,9 @@ paths:
             schema:
               type: object
               required:
-                - new_password
+                - newPassword
               properties:
-                new_password:
+                newPassword:
                   type: string
       responses:
         '200':
@@ -721,9 +721,9 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{year_id}:
+  /years/{yearId}:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -795,16 +795,16 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/import:
+  /years/{yearId}/import:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
     post:
       operationId: ImportFile
-      summary: Импорт данных из XLSX с перезаписью records. Для типов postgraduate undergraduate part_time требуется указать term. Отсутствующие сущности в общих каталогах добавляются.
+      summary: Импорт данных из XLSX с перезаписью records. Для типов postgraduate undergraduate partTime требуется указать term. Отсутствующие сущности в общих каталогах добавляются.
       tags:
         - Import
       parameters:
@@ -817,7 +817,7 @@ paths:
               - main
               - postgraduate
               - undergraduate
-              - part_time
+              - partTime
         - name: term
           in: query
           required: false
@@ -826,7 +826,7 @@ paths:
             enum:
               - 1
               - 2
-        - name: is_extra
+        - name: isExtra
           in: query
           required: false
           schema:
@@ -884,14 +884,14 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{year_id}/import/{file_id}:
+  /years/{yearId}/import/{fileId}:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: file_id
+      - name: fileId
         in: path
         required: true
         schema:
@@ -941,14 +941,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/import/{file_id}/download:
+  /years/{yearId}/import/{fileId}/download:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: file_id
+      - name: fileId
         in: path
         required: true
         schema:
@@ -977,9 +977,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/export:
+  /years/{yearId}/export:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1030,14 +1030,14 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{year_id}/export/{file_id}:
+  /years/{yearId}/export/{fileId}:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: file_id
+      - name: fileId
         in: path
         required: true
         schema:
@@ -1087,14 +1087,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/export/{file_id}/download:
+  /years/{yearId}/export/{fileId}/download:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: file_id
+      - name: fileId
         in: path
         required: true
         schema:
@@ -1123,9 +1123,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/reports:
+  /years/{yearId}/reports:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1150,7 +1150,7 @@ paths:
             type: array
             items:
               type: string
-        - name: is_project
+        - name: isProject
           in: query
           required: false
           schema:
@@ -1222,14 +1222,14 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{year_id}/reports/{file_id}:
+  /years/{yearId}/reports/{fileId}:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: file_id
+      - name: fileId
         in: path
         required: true
         schema:
@@ -1279,14 +1279,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/reports/{file_id}/download:
+  /years/{yearId}/reports/{fileId}/download:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: file_id
+      - name: fileId
         in: path
         required: true
         schema:
@@ -1315,9 +1315,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/reports/download-zip:
+  /years/{yearId}/reports/download-zip:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1353,9 +1353,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/autofill:
+  /years/{yearId}/autofill:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1366,7 +1366,7 @@ paths:
         - Auto
       summary: Автозаполнение нагрузки по преподавателям
       parameters:
-        - name: teacher_id
+        - name: teacherId
           in: query
           required: false
           schema:
@@ -1387,9 +1387,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/autoremove:
+  /years/{yearId}/autoremove:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1400,7 +1400,7 @@ paths:
         - Auto
       summary: Удалить нагрузку преподавателя
       parameters:
-        - name: teacher_id
+        - name: teacherId
           in: query
           required: true
           schema:
@@ -1421,9 +1421,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/diff:
+  /years/{yearId}/diff:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1434,7 +1434,7 @@ paths:
         - Diff
       summary: Сравнительная таблица с другим годом
       parameters:
-        - name: target_year_id
+        - name: targetYearId
           in: query
           required: true
           schema:
@@ -1447,9 +1447,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  current_year:
+                  currentYear:
                     $ref: '#/components/schemas/YearResponse'
-                  target_year:
+                  targetYear:
                     $ref: '#/components/schemas/YearResponse'
                   rows:
                     type: array
@@ -1459,10 +1459,10 @@ paths:
                         - discipline
                         - term
                         - status
-                        - current_hours
-                        - current_teachers
-                        - target_hours
-                        - target_teachers
+                        - currentHours
+                        - currentTeachers
+                        - targetHours
+                        - targetTeachers
                       properties:
                         discipline:
                           $ref: '#/components/schemas/DisciplineResponse'
@@ -1478,17 +1478,16 @@ paths:
                             - removed
                             - added
                             - kept
-                            -
-                        current_hours:
+                        currentHours:
                           type: integer
-                        current_teachers:
+                        currentTeachers:
                           type: array
                           items:
                             type: string
 
-                        target_hours:
+                        targetHours:
                           type: integer
-                        taget_teachers:
+                        tagetTeachers:
                           type: array
                           items:
                             type: string
@@ -1503,9 +1502,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/diff/records:
+  /years/{yearId}/diff/records:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1516,12 +1515,12 @@ paths:
         - Diff
       summary: Записи за оба года по дисциплине
       parameters:
-        - name: target_year_id
+        - name: targetYearId
           in: query
           required: true
           schema:
             type: integer
-        - name: discipline_id
+        - name: disciplineId
           in: query
           required: true
           schema:
@@ -1534,16 +1533,16 @@ paths:
               schema:
                 type: object
                 required:
-                  - current_year
-                  - target_year
+                  - currentYear
+                  - targetYear
                   - teachers
                   - groups
                   - disciplines
                   - records
                 properties:
-                  current_year:
+                  currentYear:
                     $ref: '#/components/schemas/YearResponse'
-                  target_year:
+                  targetYear:
                     $ref: '#/components/schemas/YearResponse'
                   records:
                     type: array
@@ -1557,14 +1556,14 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/TeacherResponse'
-                  import_files:
+                  importFiles:
                     type: array
                     items:
                       $ref: '#/components/schemas/FileImportBase'
 
-  /years/{year_id}/disciplines:
+  /years/{yearId}/disciplines:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1586,11 +1585,11 @@ paths:
                     - $ref: '#/components/schemas/DisciplineResponse'
                     - type: object
                       properties:
-                        has_errors:
+                        hasErrors:
                           type: boolean
-                        is_complete:
+                        isComplete:
                           type: boolean
-                        teachers_names:
+                        teachersNames:
                           type: array
                           items:
                             type:
@@ -1616,9 +1615,9 @@ paths:
   #            schema:
   #              type: object
   #              required:
-  #                - discipline_id
+  #                - disciplineId
   #              properties:
-  #                discipline_id:
+  #                disciplineId:
   #                  type: integer
   #      responses:
   #        '200':
@@ -1640,14 +1639,14 @@ paths:
   #        '500':
   #          $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/disciplines/{discipline_id}:
+  /years/{yearId}/disciplines/{disciplineId}:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: discipline_id
+      - name: disciplineId
         in: path
         required: true
         schema:
@@ -1669,7 +1668,7 @@ paths:
                   - groups
                   - teachers
                   - disciplines
-                  - import_files
+                  - importFiles
                 properties:
                   records:
                     type: array
@@ -1683,7 +1682,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/TeacherResponse'
-                  import_files:
+                  importFiles:
                     type: array
                     items:
                       $ref: '#/components/schemas/FileImportBase'
@@ -1719,9 +1718,9 @@ paths:
   #        '500':
   #          $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/teachers:
+  /years/{yearId}/teachers:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -1739,19 +1738,19 @@ paths:
               schema:
                 type: object
                 properties:
-                  summary_tier1:
+                  summaryTier1:
                     $ref: '#/components/schemas/Calculations'
-                  summary_tier2:
+                  summaryTier2:
                     $ref: '#/components/schemas/Calculations'
-                  summary_tier3:
+                  summaryTier3:
                     $ref: '#/components/schemas/Calculations'
-                  summary_overall:
+                  summaryOverall:
                     $ref: '#/components/schemas/Calculations'
-                  summary_incomplete:
+                  summaryIncomplete:
                     $ref: '#/components/schemas/Calculations'
-                  summary_errors:
+                  summaryErrors:
                     $ref: '#/components/schemas/Calculations'
-                  summary_teachers:
+                  summaryTeachers:
                     type: array
                     items:
                       allOf:
@@ -1778,9 +1777,9 @@ paths:
   #            schema:
   #              type: object
   #              required:
-  #                - teacher_id
+  #                - teacherId
   #              properties:
-  #                teacher_id:
+  #                teacherId:
   #                  type: integer
   #      responses:
   #        '200':
@@ -1802,14 +1801,14 @@ paths:
   #        '500':
   #          $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/teachers/{teacher_id}:
+  /years/{yearId}/teachers/{teacherId}:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
           type: integer
-      - name: teacher_id
+      - name: teacherId
         in: path
         required: true
         schema:
@@ -1831,7 +1830,7 @@ paths:
                   - groups
                   - teachers
                   - disciplines
-                  - import_files
+                  - importFiles
                 properties:
                   records:
                     type: array
@@ -1849,7 +1848,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/DisciplineResponse'
-                  import_files:
+                  importFiles:
                     type: array
                     items:
                       $ref: '#/components/schemas/FileImportBase'
@@ -1898,17 +1897,17 @@ paths:
             schema:
               type: object
               required:
-                - records_ids
+                - recordsIds
               properties:
-                records_ids:
+                recordsIds:
                   type: array
                   items:
                     type: integer
-                set_error:
+                setError:
                   type: boolean
-                remove_assignments:
+                removeAssignments:
                   type: boolean
-                new_teacher_id:
+                newTeacherId:
                   type: integer
       responses:
         '200':
@@ -1922,7 +1921,7 @@ paths:
                   - groups
                   - teachers
                   - disciplines
-                  - import_files
+                  - importFiles
                 properties:
                   records:
                     type: array
@@ -1940,7 +1939,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/DisciplineResponse'
-                  import_files:
+                  importFiles:
                     type: array
                     items:
                       $ref: '#/components/schemas/FileImportBase'
@@ -1956,9 +1955,9 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
 
-  /records/{record_id}:
+  /records/{recordId}:
     parameters:
-      - name: record_id
+      - name: recordId
         in: path
         required: true
         schema:
@@ -1999,26 +1998,26 @@ paths:
               type: object
               required:
                 - teachers
-                - is_error
+                - isError
               properties:
-                is_error:
+                isError:
                   type: boolean
                 teachers:
                   type: array
                   items:
                     type: object
                     required:
-                      - teacher_id
+                      - teacherId
                       - hours
-                      - is_extra
+                      - isExtra
                     properties:
-                      teacher_id:
+                      teacherId:
                         type: integer
                         minimum: 1
                       hours:
                         type: integer
                         minimum: 1
-                      is_extra:
+                      isExtra:
                         type: boolean
       responses:
         '200':
@@ -2038,9 +2037,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /records/{record_id}/history:
+  /records/{recordId}/history:
     parameters:
-      - name: record_id
+      - name: recordId
         in: path
         required: true
         schema:
@@ -2085,9 +2084,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{year_id}/history:
+  /years/{yearId}/history:
     parameters:
-      - name: year_id
+      - name: yearId
         in: path
         required: true
         schema:
@@ -2111,7 +2110,7 @@ paths:
                   - groups
                   - disciplines
                   - records
-                  - import_files
+                  - importFiles
                 properties:
                   actions:
                     type: array
@@ -2137,7 +2136,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/DisciplineResponse'
-                  import_files:
+                  importFiles:
                     type: array
                     items:
                       $ref: '#/components/schemas/FileImportBase'
@@ -2153,9 +2152,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /history/{action_id}:
+  /history/{actionId}:
     parameters:
-      - name: action_id
+      - name: actionId
         in: path
         required: true
         schema:
@@ -2180,7 +2179,7 @@ paths:
                       - groups
                       - disciplines
                       - records
-                      - import_files
+                      - importFiles
                     properties:
                       records:
                         type: array
@@ -2202,7 +2201,7 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/DisciplineResponse'
-                      import_files:
+                      importFiles:
                         type: array
                         items:
                           $ref: '#/components/schemas/FileImportBase'
@@ -2237,7 +2236,7 @@ paths:
                       - groups
                       - disciplines
                       - records
-                      - import_files
+                      - importFiles
                     properties:
                       records:
                         type: array
@@ -2259,7 +2258,7 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/DisciplineResponse'
-                      import_files:
+                      importFiles:
                         type: array
                         items:
                           $ref: '#/components/schemas/FileImportBase'
@@ -2317,46 +2316,48 @@ components:
 
   schemas:
     YearBase:
+      description: Базовая модель года
       type: object
       required:
         - name
-        - wage_normal_hours
-        - ext_hourly_wage_tier_1
-        - ext_hourly_wage_tier_2
-        - ext_hourly_wage_tier_3
-        - wage_tolerance
+        - wageNormalHours
+        - extHourlyWageTier1
+        - extHourlyWageTier2
+        - extHourlyWageTier3
+        - wageTolerance
       properties:
         name:
           type: string
-        wage_normal_hours:
+        wageNormalHours:
           type: integer
           minimum: 0
           description:
             Норма часов на ставку
-        ext_hourly_wage_tier_1:
+        extHourlyWageTier1:
           type: integer
           minimum: 0
           description:
             Стоимость 1 часа заочников для ассистентов и ст. пр
-        ext_hourly_wage_tier_2:
+        extHourlyWageTier2:
           type: integer
           minimum: 0
           description:
             Стоимость 1 часа заочников для доцентов
-        ext_hourly_wage_tier_3:
+        extHourlyWageTier3:
           type: integer
           minimum: 0
           description:
             Стоимость 1 часа заочников для профессоров
-        wage_tolerance:
+        wageTolerance:
           type: integer
           minimum: 0
           description:
             Какое отклонение по часам от ставки считается ОК
     YearRequest:
-      allOf:
-        - $ref: '#/components/schemas/YearBase'
+      description: Модель года для запросов
+      $ref: '#/components/schemas/YearBase'
     YearResponse:
+      description: Модель года для ответов
       allOf:
         - type: object
           required:
@@ -2367,6 +2368,7 @@ components:
         - $ref: '#/components/schemas/YearBase'
 
     TeacherBase:
+      description: Базовая модель преподавателя
       type: object
       required:
         - job
@@ -2377,19 +2379,20 @@ components:
           type: string
           enum:
             - assistant             # Асс.
-            - associate_professor   # Доц.
-            - department_head       # Зав. каф.
+            - associateProfessor   # Доц.
+            - departmentHead       # Зав. каф.
             - professor             # Проф.
-            - senior_lecturer       # Ст. пр.
+            - seniorLecturer       # Ст. пр.
         name:
           type: string
         wage:
           type: number
           enum: [ 0.25, 0.5, 1 ]
     TeacherRequest:
-      allOf:
-        - $ref: '#/components/schemas/TeacherBase'
+      description: Модель преподавателя для запросов
+      $ref: '#/components/schemas/TeacherBase'
     TeacherResponse:
+      description: Модель преподавателя для ответов
       allOf:
         - type: object
           required:
@@ -2400,6 +2403,7 @@ components:
         - $ref: '#/components/schemas/TeacherBase'
 
     DisciplineBase:
+      description: Базовая модель дисциплины
       type: object
       required:
         - name
@@ -2407,9 +2411,10 @@ components:
         name:
           type: string
     DisciplineRequest:
-      allOf:
-        - $ref: '#/components/schemas/DisciplineBase'
+      description: Модель дисциплины для запросов
+      $ref: '#/components/schemas/DisciplineBase'
     DisciplineResponse:
+      description: Модель дисциплины для ответов
       allOf:
         - type: object
           required:
@@ -2420,24 +2425,26 @@ components:
         - $ref: '#/components/schemas/DisciplineBase'
 
     GroupBase:
+      description: Базовая модель группы
       type: object
       required:
         - name
-        - students_amount
+        - studentsAmount
         - type
       properties:
         name:
           type: string
-        students_amount:
+        studentsAmount:
           type: integer
           minimum: 1
         type:
           type: string
-          enum: [ part_time, undergraduate, postgraduate ]
+          enum: [ partTime, undergraduate, postgraduate ]
     GroupRequest:
-      allOf:
-        - $ref: '#/components/schemas/GroupBase'
+      description: Модель группы для запросов
+      $ref: '#/components/schemas/GroupBase'
     GroupResponse:
+      description: Модель группы для ответов
       allOf:
         - type: object
           required:
@@ -2448,6 +2455,7 @@ components:
         - $ref: '#/components/schemas/GroupBase'
 
     UserBase:
+      description: Базовая модель пользователя
       type: object
       required:
         - name
@@ -2458,13 +2466,14 @@ components:
         role:
           type: string
           enum: [ admin, editor, teacher ]
-        associated_teacher_id:
+        associatedTeacherId:
           type: integer
           minimum: 1
     UserRequest:
-      allOf:
-        - $ref: '#/components/schemas/UserBase'
+      description: Модель пользователя для запросов
+      $ref: '#/components/schemas/UserBase'
     UserResponse:
+      description: Модель пользователя для ответов
       allOf:
         - type: object
           required:
@@ -2475,23 +2484,24 @@ components:
         - $ref: '#/components/schemas/UserBase'
 
     FileBase:
+      description: Базовая модель файла
       type: object
       required:
         - id
         - name
-        - created_at
+        - createdAt
         - type
       properties:
         id:
           type: integer
         name:
           type: string
-        created_at:
+        createdAt:
           type: string
           format: date-time
 
-
     FileImportBase:
+      description: Базовая модель файла импорта
       allOf:
         - $ref: '#/components/schemas/FileBase'
         - type: object
@@ -2504,30 +2514,32 @@ components:
                 - main
                 - postgraduate
                 - undergraduate
-                - part_time
+                - partTime
             term:
               type: integer
               enum:
                 - 1
                 - 2
-            is_extra:
+            isExtra:
               type: boolean
 
     FileExportBase:
-      allOf:
-        - $ref: '#/components/schemas/FileBase'
+      description: Базовая модель файла экспорта
+      $ref: '#/components/schemas/FileBase'
 
     FileReportBase:
+      description: Базовая модель файла отчета
       allOf:
         - $ref: '#/components/schemas/FileBase'
         - type: object
           required:
-            - teacher_id
+            - teacherId
           properties:
-            teacher_id:
+            teacherId:
               type: integer
 
     FileReportResponse:
+      description: Модель файла отчета для ответа
       allOf:
         - $ref: '#/components/schemas/FileReportBase'
         - type: object
@@ -2538,31 +2550,32 @@ components:
               $ref: '#/components/schemas/TeacherResponse'
 
     RecordBase:
+      description: Базовая модель записи
       type: object
       required:
         - id
-        - import_file_id
-        - group_id
-        - discipline_id
-        - subgroup_number
+        - importFileId
+        - groupId
+        - disciplineId
+        - subgroupNumber
         - term
         - type
-        - goal_hours
-        - current_hours
-        - teachers_ids
-        - is_error
+        - goalHours
+        - currentHours
+        - teachersIds
+        - isError
       properties:
         id:
           type: integer
           minimum: 1
-        import_file_id:
+        importFileId:
           type: integer
           minimum: 1
-        group_id:
+        groupId:
           type: integer
-        discipline_id:
+        disciplineId:
           type: integer
-        subgroup_number:
+        subgroupNumber:
           type: integer
           minimum: 0
         term:
@@ -2576,48 +2589,49 @@ components:
             - lab                  # Лаб
             - ksr                  # КСР
 
-            - course_project       # КП
-            - course_work          # КР
-            - control_work         # КонтрРаб
+            - courseProject       # КП
+            - courseWork          # КР
+            - controlWork         # КонтрРаб
 
             - pass                 # Зач
-            - graded_pass          # ДифЗач
+            - gradedPass          # ДифЗач
             - exam                 # Экз
-            - state_exam           # ГосЭкз
+            - stateExam           # ГосЭкз
             - gek                  # ГЭК
 
-            - thesis_supervision   # РукВКР
+            - thesisSupervision   # РукВКР
             - reviewing            # Рец
 
-            - study_practice       # УчПр
-            - work_practice        # ПрПр
-            - pre_diploma_practice # ПредПр
-        goal_hours:
+            - studyPractice       # УчПр
+            - workPractice        # ПрПр
+            - preDiplomaPractice # ПредПр
+        goalHours:
           type: integer
           minimum: 1
-        current_hours:
+        currentHours:
           type: integer
           minimum: 0
-        teachers_ids:
+        teachersIds:
           type: array
           items:
             type: object
             required:
-              - teacher_id
+              - teacherId
               - hours
-              - is_extra
+              - isExtra
             properties:
-              teacher_id:
+              teacherId:
                 type: integer
                 minimum: 1
               hours:
                 type: integer
                 minimum: 1
-              is_extra:
+              isExtra:
                 type: boolean
-        is_error:
+        isError:
           type: boolean
     RecordResponse:
+      description: Модель записи для ответа
       allOf:
         - $ref: '#/components/schemas/RecordBase'
         - type: object
@@ -2625,7 +2639,7 @@ components:
             - group
             - discipline
             - teachers
-            - import_file
+            - importFile
           properties:
             group:
               $ref: '#/components/schemas/GroupResponse'
@@ -2635,98 +2649,101 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TeacherResponse'
-            import_file:
+            importFile:
               $ref: '#/components/schemas/FileImportBase'
 
     Calculations:
+      description: Модель калькуляций по преподавателю
       type: object
       required:
-        - full_time_hours_term1
-        - full_time_hours_term2
-        - postgraduate_hours_term1
-        - postgraduate_hours_term2
-        - part_time_hours_term1
-        - part_time_hours_term2
+        - fullTimeHoursTerm1
+        - fullTimeHoursTerm2
+        - postgraduateHoursTerm1
+        - postgraduateHoursTerm2
+        - partTimeHoursTerm1
+        - partTimeHoursTerm2
       properties:
-        full_time_hours_term1:
+        fullTimeHoursTerm1:
           type: integer
           description: Часы очников 1 сем (основная + доп.)
-        full_time_hours_term2:
+        fullTimeHoursTerm2:
           type: integer
           description: Часы очников 2 сем (основная + доп.)
 
-        postgraduate_hours_term1:
+        postgraduateHoursTerm1:
           type: integer
           description: Часы аспирантуры 1 сем
-        postgraduate_hours_term2:
+        postgraduateHoursTerm2:
           type: integer
           description: Часы аспирантуры 2 сем
 
-        calculated_wage:
+        calculatedWage:
           type: number
           description: Выработанная доля ставки
 
-        part_time_hours_term1:
+        partTimeHoursTerm1:
           type: integer
           description: Часы заочников 1 сем
-        part_time_hours_term2:
+        partTimeHoursTerm2:
           type: integer
           description: Часы заочников 2 сем
 
-        part_time_cost_yearly:
+        partTimeCostYearly:
           type: integer
           description: Начислено за заочников за год, ₽
 
-        wage_diff_hours:
+        wageDiffHours:
           type: integer
           description: Отклонение от нормы ставки + перегруз, - недобор
 
     ActionBase:
+      description: Базовая модель события
       type: object
       required:
         - id
-        - user_id
-        - created_at
-        - is_reverted
+        - userId
+        - createdAt
+        - isReverted
         - diffs
       properties:
         id:
           type: integer
           minimum: 1
-        user_id:
+        userId:
           type: integer
           minimum: 1
-        created_at:
+        createdAt:
           type: string
           format: date-time
-        is_reverted:
+        isReverted:
           type: boolean
         diffs:
           type: array
           items:
             type: object
             required:
-              - record_id
-              - teacher_id
+              - recordId
+              - teacherId
             properties:
-              record_id:
+              recordId:
                 type: integer
                 minimum: 1
-              teacher_id:
+              teacherId:
                 type: integer
                 minimum: 1
-              old_hours:
+              oldHours:
                 type: integer
                 minimum: 1
-              new_hours:
+              newHours:
                 type: integer
                 minimum: 1
-              old_is_extra:
+              oldIsExtra:
                 type: boolean
-              new_is_extra:
+              newIsExtra:
                 type: boolean
 
     Error:
+      description: Модель ошибки
       type: object
       required:
         - code
@@ -2734,15 +2751,16 @@ components:
         code:
           type: string
           enum:
-            - CODE_BAD_REQUEST
-            - CODE_UNAUTHORIZED
-            - CODE_FORBIDDEN
-            - CODE_UNKNOWN_YEAR
-            - CODE_UNKNOWN_TEACHER
-            - CODE_UNKNOWN_GROUP
-            - CODE_UNKNOWN_DISCIPLINE
-            - CODE_UNKNOWN_USER
-            - CODE_UNKNOWN_FILE
-            - CODE_UNKNOWN_ACTION
+            - codeBadRequest
+            - codeUnauthorized
+            - codeForbidden
+            - codeUnknownYear
+            - codeUnknownTeacher
+            - codeUnknownGroup
+            - codeUnknownDiscipline
+            - codeUnknownUser
+            - codeUnknownFile
+            - codeUnknownAction
+            - codeCannotRevertAction
         message:
           type: string
