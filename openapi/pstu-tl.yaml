@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: pstu-tl
-  description: pstu-tl
+  description: Система распределения учебной нагрузки
   version: 1.0.0
 tags:
   - name: Auth
