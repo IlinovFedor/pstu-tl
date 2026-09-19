@@ -1,0 +1,2771 @@
+openapi: 3.1.0
+info:
+  title: pstu-tl
+  description: pstu-tl
+  version: 1.0.0
+servers:
+  - url: 'http://0.0.0.0:9774/api/v1'
+paths:
+  /copypast/errors:
+    get:
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required: true
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      responses:
+        '204':
+          description: Успешный выход
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/me:
+    get:
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Текущий пользователь
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /teachers:
+    get:
+      tags:
+        - Catalog teachers
+      responses:
+        '200':
+          description: Список всех преподавателей в системе
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeacherResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Catalog teachers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherRequest'
+      responses:
+        '200':
+          description: Данные о новом преподавателе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /teachers/{teacher_id}:
+    get:
+      parameters:
+        - name: teacher_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog teachers
+      responses:
+        '200':
+          description: Данные о преподавателе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      parameters:
+        - name: teacher_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog teachers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: Новые данные о преподавателе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      parameters:
+        - name: teacher_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog teachers
+      responses:
+        '200':
+          description: Данные удаленного преподавателя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /groups:
+    get:
+      tags:
+        - Catalog groups
+      responses:
+        '200':
+          description: Список всех групп в системе
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Catalog groups
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupRequest'
+      responses:
+        '200':
+          description: Данные о новой группе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /groups/{group_id}:
+    get:
+      parameters:
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog groups
+      responses:
+        '200':
+          description: Данные о группе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      parameters:
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog groups
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupRequest'
+      responses:
+        '200':
+          description: Новые данные о группе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      parameters:
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog groups
+      responses:
+        '200':
+          description: Данные удаленной группы
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+  /disciplines:
+    get:
+      tags:
+        - Catalog disciplines
+      responses:
+        '200':
+          description: Список всех дисциплин в системе
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DisciplineResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Catalog disciplines
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisciplineRequest'
+      responses:
+        '200':
+          description: Данные о новой дисциплине
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisciplineResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /disciplines/{discipline_id}:
+    get:
+      parameters:
+        - name: discipline_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog disciplines
+      responses:
+        '200':
+          description: Данные о дисциплине
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisciplineResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      parameters:
+        - name: discipline_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog disciplines
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisciplineRequest'
+      responses:
+        '200':
+          description: Новые данные о дисциплине
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisciplineResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      parameters:
+        - name: discipline_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog disciplines
+      responses:
+        '200':
+          description: Данные удаленной дисциплины
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisciplineResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users:
+    get:
+      tags:
+        - Catalog users
+      responses:
+        '200':
+          description: Список всех пользователей в системе
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Catalog users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: Данные о новом пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{user_id}:
+    get:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog users
+      responses:
+        '200':
+          description: Данные о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: Новые данные о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog users
+      responses:
+        '200':
+          description: Данные удаленного пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{user_id}/change-password:
+    post:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Catalog users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - new_password
+              properties:
+                new_password:
+                  type: string
+      responses:
+        '200':
+          description: Изменить пароль пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years:
+    get:
+      summary: Получить список учебных годов
+      tags:
+        - Years
+      responses:
+        '200':
+          description: Список годов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Создать новый год
+      tags:
+        - Years
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YearRequest'
+      responses:
+        '201':
+          description: Год создан
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: integer
+                  - $ref: '#/components/schemas/YearResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /years/{year_id}:
+    get:
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: Получить конфиг года
+      tags:
+        - Years
+      responses:
+        '200':
+          description: Конфиг года
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YearResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: Перезаписать конфиг года
+      tags:
+        - Years
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YearRequest'
+      responses:
+        '200':
+          description: Параметры года перезаписаны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YearResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: Удалить учебный год
+      tags:
+        - Years
+      responses:
+        '204':
+          description: Год удален
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/import:
+    post:
+      summary: Импорт данных из XLSX с перезаписью records. Для типов postgraduate undergraduate part_time требуется указать term. Отсутствующие сущности в общих каталогах добавляются.
+      tags:
+        - Years/Import
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - main
+              - postgraduate
+              - undergraduate
+              - part_time
+        - name: term
+          in: query
+          required: false
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+        - name: is_extra
+          in: query
+          required: false
+          schema:
+            type: boolean
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Информация об импортированном файле
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Список текущих импортированных файлов
+      tags:
+        - Years/Import
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные файлов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /years/{year_id}/import/{file_id}:
+    get:
+      summary: Получить данные о файле импорта
+      tags:
+        - Years/Import
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные о файле
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Удалить файл импорта и все соответствующие ему записи
+      tags:
+        - Years/Import
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные удаленного файла
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/import/{file_id}/download:
+    get:
+      summary: Скачать файл импорта
+      tags:
+        - Years/Import
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: XLSX файл
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/export:
+    post:
+      tags:
+        - Years/Export
+      summary: Создание файла экспорта
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные нового файла
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileExportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Список текущих файлов экспорта
+      tags:
+        - Years/Export
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные файлов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileExportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /years/{year_id}/export/{file_id}:
+    get:
+      summary: Получить данные о файле экспорта
+      tags:
+        - Years/Export
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные о файле
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileExportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Удалить файл экспорта
+      tags:
+        - Years/Export
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные удаленного файла
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileExportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/export/{file_id}/download:
+    get:
+      summary: Скачать файл экспорта
+      tags:
+        - Years/Export
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: XLSX файл
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/reports:
+    post:
+      tags:
+        - Years/Reports
+      summary: Сформировать отчеты по преподавателям
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: include
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: exclude
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: is_project
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: overwrite
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Список данных о файлах отчетов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileReportBase'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Список текущих файлов отчетов
+      tags:
+        - Years/Reports
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные файлов
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - files
+                  - teachers
+                properties:
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileReportBase'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /years/{year_id}/reports/{file_id}:
+    get:
+      summary: Получить данные о файле отчета
+      tags:
+        - Years/Reports
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные о файле
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Удалить файл отчета
+      tags:
+        - Years/Reports
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные удаленного файла
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/reports/{file_id}/download:
+    get:
+      summary: Скачать файл отчета
+      tags:
+        - Years/Reports
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: DOCX файл
+          content:
+            application/vnd.openxmlformats-officedocument.wordprocessingml.document:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/reports/download_zip:
+    get:
+      summary: Скачать файлы отчетов за определенную дату
+      tags:
+        - Years/Reports
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: ZIP архив с DOCX файлами
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/autofill:
+    post:
+      tags:
+        - Years/Auto
+      summary: Автозаполнение нагрузки по преподавателям
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: teacher_id
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: Нагрузка перенесена
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/autoremove:
+    post:
+      tags:
+        - Years/Auto
+      summary: Удалить нагрузку преподавателя
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: teacher_id
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: Нагрузка удалена
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/diff:
+    get:
+      tags:
+        - Diff
+      summary: Сравнительная таблица с другим годом
+      parameters:
+        - name: target_year_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Таблица по (дисциплинам, часам)/преподавателям
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  current_year:
+                    $ref: '#/components/schemas/YearResponse'
+                  target_year:
+                    $ref: '#/components/schemas/YearResponse'
+                  rows:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - discipline
+                        - term
+                        - status
+                        - current_hours
+                        - current_teachers
+                        - target_hours
+                        - target_teachers
+                      properties:
+                        discipline:
+                          $ref: '#/components/schemas/DisciplineResponse'
+                        term: # 0 - оба
+                          type: integer
+                          enum:
+                            - 0
+                            - 1
+                            - 2
+                        status:
+                          type: string
+                          enum:
+                            - removed
+                            - added
+                            - kept
+                            -
+                        current_hours:
+                          type: integer
+                        current_teachers:
+                          type: array
+                          items:
+                            type: string
+
+                        target_hours:
+                          type: integer
+                        taget_teachers:
+                          type: array
+                          items:
+                            type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/diff/records:
+    get:
+      tags:
+        - Diff
+      summary: Записи за оба года по дисциплине
+      parameters:
+        - name: target_year_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: discipline_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Список записей
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - current_year
+                  - target_year
+                  - teachers
+                  - groups
+                  - disciplines
+                  - records
+                properties:
+                  current_year:
+                    $ref: '#/components/schemas/YearResponse'
+                  target_year:
+                    $ref: '#/components/schemas/YearResponse'
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordBase'
+                  groups:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupResponse'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+                  import_files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportBase'
+
+  /years/{year_id}/disciplines:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить список дисциплин, назначенных преподавателей, ошибочность и завершенность
+      tags:
+        - Year/Disciplines
+      responses:
+        '200':
+          description: Список дисциплин, назначенных на них преподавателей, ошибочность, завершенность
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/DisciplineResponse'
+                    - type: object
+                      properties:
+                        has_errors:
+                          type: boolean
+                        is_complete:
+                          type: boolean
+                        teachers_names:
+                          type: array
+                          items:
+                            type:
+                              string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  #    post:
+  #      summary: Добавить дисциплину из справочника в год
+  #      tags:
+  #        - Year/Disciplines
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: object
+  #              required:
+  #                - discipline_id
+  #              properties:
+  #                discipline_id:
+  #                  type: integer
+  #      responses:
+  #        '200':
+  #          description: Добавленная дисциплина
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: '#/components/schemas/DisciplineResponse'
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '403':
+  #          $ref: '#/components/responses/Forbidden'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #        '409':
+  #          $ref: '#/components/responses/Conflict'
+  #        '500':
+  #          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/disciplines/{discipline_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: discipline_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить список записей по дисциплине
+      tags:
+        - Year/Disciplines
+      responses:
+        '200':
+          description: Список записей
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - records
+                  - groups
+                  - teachers
+                  - disciplines
+                  - import_files
+                properties:
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordBase'
+                  groups:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupResponse'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+                  import_files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  #    delete:
+  #      summary: Удаление дисциплины из года
+  #      tags:
+  #        - Year/Disciplines
+  #      responses:
+  #        '200':
+  #          description: Удаленная дисциплина
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: '#/components/schemas/DisciplineResponse'
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '403':
+  #          $ref: '#/components/responses/Forbidden'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #        '500':
+  #          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/teachers:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Year/Teachers
+      summary: Получить список преподавателей и их калькуляции
+      responses:
+        '200':
+          description: Сводная ведомость ППС
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary_tier1:
+                    $ref: '#/components/schemas/Calculations'
+                  summary_tier2:
+                    $ref: '#/components/schemas/Calculations'
+                  summary_tier3:
+                    $ref: '#/components/schemas/Calculations'
+                  summary_overall:
+                    $ref: '#/components/schemas/Calculations'
+                  summary_incomplete:
+                    $ref: '#/components/schemas/Calculations'
+                  summary_errors:
+                    $ref: '#/components/schemas/Calculations'
+                  summary_teachers:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/TeacherResponse'
+                        - $ref: '#/components/schemas/Calculations'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  #    post:
+  #      summary: Добавить преподавателя из справочника в год
+  #      tags:
+  #        - Year/Teachers
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: object
+  #              required:
+  #                - teacher_id
+  #              properties:
+  #                teacher_id:
+  #                  type: integer
+  #      responses:
+  #        '200':
+  #          description: Добавленный преподаватель
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: '#/components/schemas/TeacherResponse'
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '403':
+  #          $ref: '#/components/responses/Forbidden'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #        '409':
+  #          $ref: '#/components/responses/Conflict'
+  #        '500':
+  #          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/teachers/{teacher_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: teacher_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить список записей по преподавателю
+      tags:
+        - Year/Teachers
+      responses:
+        '200':
+          description: Список записей
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - records
+                  - groups
+                  - teachers
+                  - disciplines
+                  - import_files
+                properties:
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordBase'
+                  groups:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupResponse'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+                  disciplines:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DisciplineResponse'
+                  import_files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  #    delete:
+  #      summary: Удаление преподавателя из года
+  #      tags:
+  #        - Year/Teachers
+  #      responses:
+  #        '200':
+  #          description: Удаленный преподаватель
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: '#/components/schemas/TeacherResponse'
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '403':
+  #          $ref: '#/components/responses/Forbidden'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #        '500':
+  #          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/records/batch:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      summary: Пакетное изменение записей (назначение преподавателей, ошибочность)
+      tags:
+        - Records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - records_ids
+              properties:
+                records_ids:
+                  type: array
+                  items:
+                    type: integer
+                set_error:
+                  type: boolean
+                remove_assignments:
+                  type: boolean
+                new_teacher_id:
+                  type: integer
+      responses:
+        '200':
+          description: Новые данные записей
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - records
+                  - groups
+                  - teachers
+                  - disciplines
+                  - import_files
+                properties:
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordBase'
+                  groups:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupResponse'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+                  disciplines:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DisciplineResponse'
+                  import_files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+  /years/{year_id}/records/{record_id}:
+    get:
+      parameters:
+        - name: year_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: record_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Records
+      summary: Получить данные записи
+      responses:
+        '200':
+          description: Запись
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - Records
+      summary: Перезапись часов преподавателей, ошибочность
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - teachers
+                - is_error
+              properties:
+                is_error:
+                  type: boolean
+                teachers:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - teacher_id
+                      - hours
+                      - is_extra
+                    properties:
+                      teacher_id:
+                        type: integer
+                        minimum: 1
+                      hours:
+                        type: integer
+                        minimum: 1
+                      is_extra:
+                        type: boolean
+      responses:
+        '200':
+          description: Новые данные записи
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/records/{record_id}/history:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: record_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить историю изменений записи
+      tags:
+        - Records
+      responses:
+        '200':
+          description: История изменений записи
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                  - users
+                  - teachers
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActionBase'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserResponse'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/history:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - History
+      summary: Получить журнал изменений года
+      responses:
+        '200':
+          description: История изменений всего года
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                  - users
+                  - teachers
+                  - groups
+                  - disciplines
+                  - records
+                  - import_files
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActionBase'
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordBase'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserResponse'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+                  groups:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupResponse'
+                  disciplines:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DisciplineResponse'
+                  import_files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportBase'
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{year_id}/history/{action_id}:
+    parameters:
+      - name: year_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: action_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - History
+      summary: Получить запись журнала изменений
+      responses:
+        '200':
+          description: Запись журнала изменений
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ActionBase'
+                  - type: object
+                    required:
+                      - users
+                      - teachers
+                      - groups
+                      - disciplines
+                      - records
+                      - import_files
+                    properties:
+                      records:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/RecordBase'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/UserResponse'
+                      teachers:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TeacherResponse'
+                      groups:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GroupResponse'
+                      disciplines:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DisciplineResponse'
+                      import_files:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - History
+      summary: Откатить запись журнала изменений
+      responses:
+        '200':
+          description: Измененная запись журнала изменений
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ActionBase'
+                  - type: object
+                    required:
+                      - users
+                      - teachers
+                      - groups
+                      - disciplines
+                      - records
+                      - import_files
+                    properties:
+                      records:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/RecordBase'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/UserResponse'
+                      teachers:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TeacherResponse'
+                      groups:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GroupResponse'
+                      disciplines:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DisciplineResponse'
+                      import_files:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  responses:
+    Unauthorized:
+      description: Пользователь не авторизован (нет сессии)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Недостаточно прав для выполнения операции
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Запрошенный ресурс не найден
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Конфликт состояния
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Некорректные данные запроса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    YearBase:
+      type: object
+      required:
+        - name
+        - wage_normal_hours
+        - ext_hourly_wage_tier_1
+        - ext_hourly_wage_tier_2
+        - ext_hourly_wage_tier_3
+        - wage_tolerance
+      properties:
+        name:
+          type: string
+        wage_normal_hours:
+          type: integer
+          minimum: 0
+          description:
+            Норма часов на ставку
+        ext_hourly_wage_tier_1:
+          type: integer
+          minimum: 0
+          description:
+            Стоимость 1 часа заочников для ассистентов и ст. пр
+        ext_hourly_wage_tier_2:
+          type: integer
+          minimum: 0
+          description:
+            Стоимость 1 часа заочников для доцентов
+        ext_hourly_wage_tier_3:
+          type: integer
+          minimum: 0
+          description:
+            Стоимость 1 часа заочников для профессоров
+        wage_tolerance:
+          type: integer
+          minimum: 0
+          description:
+            Какое отклонение по часам от ставки считается ОК
+    YearRequest:
+      allOf:
+        - $ref: '#/components/schemas/YearBase'
+    YearResponse:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+        - $ref: '#/components/schemas/YearBase'
+
+    TeacherBase:
+      type: object
+      required:
+        - job
+        - name
+        - wage
+      properties:
+        job:
+          type: string
+          enum:
+            - assistant             # Асс.
+            - associate_professor   # Доц.
+            - department_head       # Зав. каф.
+            - professor             # Проф.
+            - senior_lecturer       # Ст. пр.
+        name:
+          type: string
+        wage:
+          type: number
+          enum: [ 0.25, 0.5, 1 ]
+    TeacherRequest:
+      allOf:
+        - $ref: '#/components/schemas/TeacherBase'
+    TeacherResponse:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+        - $ref: '#/components/schemas/TeacherBase'
+
+    DisciplineBase:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    DisciplineRequest:
+      allOf:
+        - $ref: '#/components/schemas/DisciplineBase'
+    DisciplineResponse:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+        - $ref: '#/components/schemas/DisciplineBase'
+
+    GroupBase:
+      type: object
+      required:
+        - name
+        - students_amount
+        - type
+      properties:
+        name:
+          type: string
+        students_amount:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          enum: [ part_time, undergraduate, postgraduate ]
+    GroupRequest:
+      allOf:
+        - $ref: '#/components/schemas/GroupBase'
+    GroupResponse:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+        - $ref: '#/components/schemas/GroupBase'
+
+    UserBase:
+      type: object
+      required:
+        - name
+        - role
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+          enum: [ admin, editor, teacher ]
+        associated_teacher_id:
+          type: integer
+          minimum: 1
+    UserRequest:
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+    UserResponse:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+        - $ref: '#/components/schemas/UserBase'
+
+    FileBase:
+      type: object
+      required:
+        - id
+        - name
+        - created_at
+        - type
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+
+    FileImportBase:
+      allOf:
+        - $ref: '#/components/schemas/FileBase'
+        - type: object
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - main
+                - postgraduate
+                - undergraduate
+                - part_time
+            term:
+              type: integer
+              enum:
+                - 1
+                - 2
+            is_extra:
+              type: boolean
+
+    FileExportBase:
+      allOf:
+        - $ref: '#/components/schemas/FileBase'
+
+    FileReportBase:
+      allOf:
+        - $ref: '#/components/schemas/FileBase'
+        - type: object
+          required:
+            - teacher_id
+          properties:
+            teacher_id:
+              type: integer
+
+    FileReportResponse:
+      allOf:
+        - $ref: '#/components/schemas/FileReportBase'
+        - type: object
+          required:
+            - teacher
+          properties:
+            teacher:
+              $ref: '#/components/schemas/TeacherResponse'
+
+    RecordBase:
+      type: object
+      required:
+        - id
+        - import_file_id
+        - group_id
+        - discipline_id
+        - subgroup_number
+        - term
+        - type
+        - goal_hours
+        - current_hours
+        - teachers_ids
+        - is_error
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        import_file_id:
+          type: integer
+          minimum: 1
+        group_id:
+          type: integer
+        discipline_id:
+          type: integer
+        subgroup_number:
+          type: integer
+          minimum: 0
+        term:
+          type: integer
+          enum: [ 1, 2 ]
+        type:
+          type: string
+          enum:
+            - lecture              # Лек
+            - practice             # Пр
+            - lab                  # Лаб
+            - ksr                  # КСР
+
+            - course_project       # КП
+            - course_work          # КР
+            - control_work         # КонтрРаб
+
+            - pass                 # Зач
+            - graded_pass          # ДифЗач
+            - exam                 # Экз
+            - state_exam           # ГосЭкз
+            - gek                  # ГЭК
+
+            - thesis_supervision   # РукВКР
+            - reviewing            # Рец
+
+            - study_practice       # УчПр
+            - work_practice        # ПрПр
+            - pre_diploma_practice # ПредПр
+        goal_hours:
+          type: integer
+          minimum: 1
+        current_hours:
+          type: integer
+          minimum: 0
+        teachers_ids:
+          type: array
+          items:
+            type: object
+            required:
+              - teacher_id
+              - hours
+              - is_extra
+            properties:
+              teacher_id:
+                type: integer
+                minimum: 1
+              hours:
+                type: integer
+                minimum: 1
+              is_extra:
+                type: boolean
+        is_error:
+          type: boolean
+    RecordResponse:
+      allOf:
+        - $ref: '#/components/schemas/RecordBase'
+        - type: object
+          required:
+            - group
+            - discipline
+            - teachers
+            - import_file
+          properties:
+            group:
+              $ref: '#/components/schemas/GroupResponse'
+            discipline:
+              $ref: '#/components/schemas/DisciplineResponse'
+            teachers:
+              type: array
+              items:
+                $ref: '#/components/schemas/TeacherResponse'
+            import_file:
+              $ref: '#/components/schemas/FileImportBase'
+
+    Calculations:
+      type: object
+      required:
+        - full_time_hours_term1
+        - full_time_hours_term2
+        - postgraduate_hours_term1
+        - postgraduate_hours_term2
+        - part_time_hours_term1
+        - part_time_hours_term2
+      properties:
+        full_time_hours_term1:
+          type: integer
+          description: Часы очников 1 сем (основная + доп.)
+        full_time_hours_term2:
+          type: integer
+          description: Часы очников 2 сем (основная + доп.)
+
+        postgraduate_hours_term1:
+          type: integer
+          description: Часы аспирантуры 1 сем
+        postgraduate_hours_term2:
+          type: integer
+          description: Часы аспирантуры 2 сем
+
+        calculated_wage:
+          type: number
+          description: Выработанная доля ставки
+
+        part_time_hours_term1:
+          type: integer
+          description: Часы заочников 1 сем
+        part_time_hours_term2:
+          type: integer
+          description: Часы заочников 2 сем
+
+        part_time_cost_yearly:
+          type: integer
+          description: Начислено за заочников за год, ₽
+
+        wage_diff_hours:
+          type: integer
+          description: Отклонение от нормы ставки + перегруз, - недобор
+
+    ActionBase:
+      type: object
+      required:
+        - id
+        - user_id
+        - created_at
+        - is_reverted
+        - diffs
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        user_id:
+          type: integer
+          minimum: 1
+        created_at:
+          type: string
+          format: date-time
+        is_reverted:
+          type: boolean
+        diffs:
+          type: array
+          items:
+            type: object
+            required:
+              - record_id
+              - teacher_id
+            properties:
+              record_id:
+                type: integer
+                minimum: 1
+              teacher_id:
+                type: integer
+                minimum: 1
+              old_hours:
+                type: integer
+                minimum: 1
+              new_hours:
+                type: integer
+                minimum: 1
+              old_is_extra:
+                type: boolean
+              new_is_extra:
+                type: boolean
+
+    Error:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          enum:
+            - CODE_BAD_REQUEST
+            - CODE_UNAUTHORIZED
+            - CODE_FORBIDDEN
+            - CODE_UNKNOWN_YEAR
+            - CODE_UNKNOWN_TEACHER
+            - CODE_UNKNOWN_GROUP
+            - CODE_UNKNOWN_DISCIPLINE
+            - CODE_UNKNOWN_USER
+            - CODE_UNKNOWN_FILE
+            - CODE_UNKNOWN_ACTION
+        message:
+          type: string
