@@ -66,8 +66,10 @@ paths:
         content:
           application/json:
             schema:
-              required: true
               type: object
+              required:
+                - username
+                - password
               properties:
                 username:
                   type: string
@@ -156,7 +158,7 @@ paths:
             schema:
               $ref: '#/components/schemas/TeacherRequest'
       responses:
-        '200':
+        '201':
           description: Данные нового преподавателе
           content:
             application/json:
@@ -189,7 +191,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/TeacherResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -211,14 +213,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: '#/components/schemas/TeacherRequest'
       responses:
         '200':
           description: Новые данные преподавателя
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/TeacherResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -235,12 +237,8 @@ paths:
       tags:
         - Catalog teachers
       responses:
-        '200':
-          description: Данные удаленного преподавателя
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
+        '204':
+          description: Преподаватель удален
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -290,7 +288,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GroupRequest'
       responses:
-        '200':
+        '201':
           description: Данные новой группы
           content:
             application/json:
@@ -369,12 +367,8 @@ paths:
       tags:
         - Catalog groups
       responses:
-        '200':
-          description: Данные удаленной группы
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GroupResponse'
+        '204':
+          description: Группа удалена
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -425,7 +419,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DisciplineRequest'
       responses:
-        '200':
+        '201':
           description: Данные новой дисциплины
           content:
             application/json:
@@ -504,12 +498,8 @@ paths:
       tags:
         - Catalog disciplines
       responses:
-        '200':
-          description: Данные удаленной дисциплины
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DisciplineResponse'
+        '204':
+          description: Дисциплина удалена
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -559,7 +549,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UserRequest'
       responses:
-        '200':
+        '201':
           description: Данные о новом пользователе
           content:
             application/json:
@@ -638,12 +628,8 @@ paths:
       tags:
         - Catalog users
       responses:
-        '200':
-          description: Данные удаленного пользователя
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
+        '204':
+          description: Пользователь удален
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -679,7 +665,7 @@ paths:
                 newPassword:
                   type: string
       responses:
-        '200':
+        '201':
           description: Данные пользователя, чей пароль был изменен
           content:
             application/json:
@@ -899,7 +885,7 @@ paths:
                   type: string
                   format: binary
       responses:
-        '200':
+        '201':
           description: Информация об импортированном файле
           content:
             application/json:
@@ -979,12 +965,8 @@ paths:
       tags:
         - Import
       responses:
-        '200':
-          description: Данные удаленного файла
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileImportBase'
+        '204':
+          description: Файл удален
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1045,7 +1027,7 @@ paths:
         - Export
       summary: Создание файла экспорта
       responses:
-        '200':
+        '201':
           description: Данные нового файла
           content:
             application/json:
@@ -1125,12 +1107,8 @@ paths:
       tags:
         - Export
       responses:
-        '200':
-          description: Данные удаленного файла
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileExportBase'
+        '204':
+          description: Файл удален
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1218,7 +1196,7 @@ paths:
             type: boolean
             default: false
       responses:
-        '200':
+        '201':
           description: Список данных о файлах отчетов
           content:
             application/json:
@@ -1317,12 +1295,8 @@ paths:
       tags:
         - Reports
       responses:
-        '200':
-          description: Данные удаленного файла
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileReportResponse'
+        '204':
+          description: Файл удален
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1434,7 +1408,7 @@ paths:
             items:
               type: integer
       responses:
-        '200':
+        '201':
           description: Нагрузка перенесена
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1468,7 +1442,7 @@ paths:
             items:
               type: integer
       responses:
-        '200':
+        '201':
           description: Нагрузка удалена
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1547,7 +1521,7 @@ paths:
 
                         targetHours:
                           type: integer
-                        tagetTeachers:
+                        targetTeachers:
                           type: array
                           items:
                             type: string
@@ -1681,7 +1655,7 @@ paths:
   #                disciplineId:
   #                  type: integer
   #      responses:
-  #        '200':
+  #        '201':
   #          description: Добавленная дисциплина
   #          content:
   #            application/json:
@@ -1762,12 +1736,8 @@ paths:
   #      tags:
   #        - Year's disciplines
   #      responses:
-  #        '200':
-  #          description: Удаленная дисциплина
-  #          content:
-  #            application/json:
-  #              schema:
-  #                $ref: '#/components/schemas/DisciplineResponse'
+  #        '204':
+  #          description: Дисциплина удалена
   #        '400':
   #          $ref: '#/components/responses/BadRequest'
   #        '401':
@@ -1843,7 +1813,7 @@ paths:
   #                teacherId:
   #                  type: integer
   #      responses:
-  #        '200':
+  #        '201':
   #          description: Добавленный преподаватель
   #          content:
   #            application/json:
@@ -1928,12 +1898,8 @@ paths:
   #      tags:
   #        - Year's teachers
   #      responses:
-  #        '200':
-  #          description: Удаленный преподаватель
-  #          content:
-  #            application/json:
-  #              schema:
-  #                $ref: '#/components/schemas/TeacherResponse'
+  #        '204':
+  #          description: Преподаватель удален
   #        '400':
   #          $ref: '#/components/responses/BadRequest'
   #        '401':
@@ -2286,46 +2252,8 @@ paths:
         - History
       summary: Откатить запись журнала изменений
       responses:
-        '200':
-          description: Измененная запись журнала изменений
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/ActionBase'
-                  - type: object
-                    required:
-                      - users
-                      - teachers
-                      - groups
-                      - disciplines
-                      - records
-                      - importFiles
-                    properties:
-                      records:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/RecordBase'
-                      users:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/UserResponse'
-                      teachers:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/TeacherResponse'
-                      groups:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GroupResponse'
-                      disciplines:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/DisciplineResponse'
-                      importFiles:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/FileImportBase'
+        '204':
+          description: Запись откачена
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2626,7 +2554,7 @@ components:
         - type
         - goalHours
         - currentHours
-        - teachersIds
+        - teachersHours
         - isError
       properties:
         id:
@@ -2675,7 +2603,7 @@ components:
         currentHours:
           type: integer
           minimum: 0
-        teachersIds:
+        teachersHours:
           type: array
           items:
             type: object
