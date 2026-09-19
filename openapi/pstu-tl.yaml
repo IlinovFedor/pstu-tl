@@ -1429,7 +1429,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: teacherId
+        - name: teacherIds
           in: query
           required: false
           schema:
@@ -1463,7 +1463,7 @@ paths:
         - Auto
       summary: Удалить нагрузку преподавателя
       parameters:
-        - name: teacherId
+        - name: teacherIds
           in: query
           required: true
           schema:
