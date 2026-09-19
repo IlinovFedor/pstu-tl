@@ -2364,6 +2364,9 @@ components:
       properties:
         name:
           type: string
+          format: studentYearName
+          pattern: '^[0-9]{4}-[0-9]{4}$'
+          example: '2025-2026'
         wageNormalHours:
           type: integer
           description:
