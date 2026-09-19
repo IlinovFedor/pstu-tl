@@ -61,6 +61,7 @@ paths:
       tags:
         - Auth
       requestBody:
+        description: Имя пользователя и пароль
         required: true
         content:
           application/json:
@@ -148,6 +149,7 @@ paths:
       tags:
         - Catalog teachers
       requestBody:
+        description: Данные нового преподавателя
         required: true
         content:
           application/json:
@@ -204,6 +206,7 @@ paths:
       tags:
         - Catalog teachers
       requestBody:
+        description: Новые данные пользователя
         required: true
         content:
           application/json:
@@ -280,6 +283,7 @@ paths:
       tags:
         - Catalog groups
       requestBody:
+        description: Данные новой группы
         required: true
         content:
           application/json:
@@ -336,6 +340,7 @@ paths:
       tags:
         - Catalog groups
       requestBody:
+        description: Новые данные группы
         required: true
         content:
           application/json:
@@ -413,6 +418,7 @@ paths:
       tags:
         - Catalog disciplines
       requestBody:
+        description: Данные новой дисциплины
         required: true
         content:
           application/json:
@@ -469,6 +475,7 @@ paths:
       tags:
         - Catalog disciplines
       requestBody:
+        description: Новые данные дисциплины
         required: true
         content:
           application/json:
@@ -545,6 +552,7 @@ paths:
       tags:
         - Catalog users
       requestBody:
+        description: Данные нового пользователя
         required: true
         content:
           application/json:
@@ -601,6 +609,7 @@ paths:
       tags:
         - Catalog users
       requestBody:
+        description: Новые данные пользователя
         required: true
         content:
           application/json:
@@ -659,6 +668,7 @@ paths:
       tags:
         - Catalog users
       requestBody:
+        description: Новый пароль пользователя
         content:
           application/json:
             schema:
@@ -718,6 +728,7 @@ paths:
       tags:
         - Years
       requestBody:
+        description: Данные нового года
         required: true
         content:
           application/json:
@@ -780,6 +791,7 @@ paths:
       tags:
         - Years
       requestBody:
+        description: Новые данные года
         required: true
         content:
           application/json:
@@ -828,7 +840,8 @@ paths:
           type: integer
     post:
       operationId: ImportFile
-      summary: Импорт данных из XLSX с перезаписью records. Для типов postgraduate undergraduate partTime требуется указать term. Отсутствующие сущности в общих каталогах добавляются.
+      summary: Импорт данных из XLSX.
+      description: Records перезаписываются для соответствующего типа файла (main, post/undergraduate + term + isExtra). Для типов postgraduate undergraduate partTime требуется указать term и is_extra. Отсутствующие сущности в каталогах системы добавляются.
       tags:
         - Import
       parameters:
@@ -856,6 +869,24 @@ paths:
           schema:
             type: boolean
       requestBody:
+        description: |
+          Файл Excel должен соответствовать **одной из трех схем**:
+          
+          ### 1. Файл учебных поручений
+          
+          ---
+          
+          ### 2. Схема «Для студентов»
+          
+          | Наименование дисциплины | Группа | Студентов | лекций | практик | КСР | лаборат. | экзамены | зачеты | КР и КП | контр. раб. | уч. прак. | ВКР | ГЭК | рец. ВКР |
+          |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+          
+          ---
+          
+          ### 3. Схема «Для аспирантов»
+          
+          | Наименование дисциплины | Программа | Кафедра | СНР | Курс | Аспирантов | лекций | практик | КСР | лаборат. | экзамены | зачеты |
+          |---|---|---|---|---|---|---|---|---|---|---|---|
         required: true
         content:
           multipart/form-data:
@@ -1594,7 +1625,8 @@ paths:
           type: integer
     get:
       operationId: GetYearDisciplines
-      summary: Получить список дисциплин, назначенных преподавателей, ошибочность и завершенность
+      summary: Получить список дисциплин в году
+      description: Дополнительно отображаются назначенные преподаватели, ошибочность и завершенность
       tags:
         - Year's disciplines
       responses:
@@ -1911,10 +1943,12 @@ paths:
   /records/batch:
     put:
       operationId: BatchRecordsEdit
-      summary: Пакетное изменение записей (назначение преподавателей, ошибочность)
+      summary: Пакетное изменение записей
+      description: Назначение преподавателей, ошибочность
       tags:
         - Records
       requestBody:
+        description: Список записей для изменения, новое состояние для is_error, флаг для удаления назначений или айди нового преподавателя
         required: true
         content:
           application/json:
@@ -2015,6 +2049,7 @@ paths:
         - Records
       summary: Перезапись часов преподавателей, ошибочность
       requestBody:
+        description: Изменение часов преподавателей, пометка их как осн. или доп. нагрузка, изменение ошибочности
         required: true
         content:
           application/json:
