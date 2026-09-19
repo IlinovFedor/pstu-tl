@@ -564,6 +564,32 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /users/create-users-for-teachers:
+    post:
+      summary: Создание пользователей для преподавателей
+      description: Создание пользователей для преподавателей, чьих учетных записей не существует.
+      operationId: CreateUsersForTeachers
+      tags:
+        - Catalog users
+      responses:
+        '201':
+          description: Данные новых пользователей с паролями
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - username
+                  - password
+                properties:
+                  name:
+                    type: string
+                  username:
+                    type: string
+                  password:
+                    type: string
+
   /users/{userId}:
     parameters:
       - name: userId
@@ -697,6 +723,9 @@ paths:
                 type: array
                 items:
                   type: object
+                  required:
+                    - id
+                    - name
                   properties:
                     id:
                       type: integer
@@ -726,12 +755,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: integer
-                  - $ref: '#/components/schemas/YearResponse'
+                $ref: '#/components/schemas/YearResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1202,6 +1226,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - files
+                  - teachers
                 properties:
                   files:
                     type: array
@@ -1480,6 +1507,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - currentYear
+                  - targetYear
+                  - rows
                 properties:
                   currentYear:
                     $ref: '#/components/schemas/YearResponse'
@@ -1500,7 +1531,8 @@ paths:
                       properties:
                         discipline:
                           $ref: '#/components/schemas/DisciplineResponse'
-                        term: # 0 - оба
+                        term:
+                          description: Номер семестра. 0 - оба.
                           type: integer
                           enum:
                             - 0
@@ -1619,6 +1651,10 @@ paths:
                   allOf:
                     - $ref: '#/components/schemas/DisciplineResponse'
                     - type: object
+                      required:
+                        - hasErrors
+                        - isComplete
+                        - teachersNames
                       properties:
                         hasErrors:
                           type: boolean
@@ -1768,6 +1804,14 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - summaryTier1
+                  - summaryTier2
+                  - summaryTier3
+                  - summaryOverall
+                  - summaryIncomplete
+                  - summaryErors
+                  - summaryTeachers
                 properties:
                   summaryTier1:
                     $ref: '#/components/schemas/Calculations'
@@ -2043,10 +2087,8 @@ paths:
                     properties:
                       teacherId:
                         type: integer
-                        minimum: 1
                       hours:
                         type: integer
-                        minimum: 1
                       isExtra:
                         type: boolean
       responses:
@@ -2322,27 +2364,22 @@ components:
           type: string
         wageNormalHours:
           type: integer
-          minimum: 0
           description:
             Норма часов на ставку
         extHourlyWageTier1:
           type: integer
-          minimum: 0
           description:
             Стоимость 1 часа заочников для ассистентов и ст. пр
         extHourlyWageTier2:
           type: integer
-          minimum: 0
           description:
             Стоимость 1 часа заочников для доцентов
         extHourlyWageTier3:
           type: integer
-          minimum: 0
           description:
             Стоимость 1 часа заочников для профессоров
         wageTolerance:
           type: integer
-          minimum: 0
           description:
             Какое отклонение по часам от ставки считается ОК
     YearRequest:
@@ -2428,7 +2465,6 @@ components:
           type: string
         studentsAmount:
           type: integer
-          minimum: 1
         type:
           type: string
           enum: [ partTime, undergraduate, postgraduate ]
@@ -2458,9 +2494,8 @@ components:
         role:
           type: string
           enum: [ admin, editor, teacher ]
-        associatedTeacherId:
-          type: integer
-          minimum: 1
+        associatedTeacher:
+          $ref: '#/components/schemas/TeacherResponse'
     UserRequest:
       description: Модель пользователя для запросов
       $ref: '#/components/schemas/UserBase'
@@ -2559,17 +2594,14 @@ components:
       properties:
         id:
           type: integer
-          minimum: 1
         importFileId:
           type: integer
-          minimum: 1
         groupId:
           type: integer
         disciplineId:
           type: integer
         subgroupNumber:
           type: integer
-          minimum: 0
         term:
           type: integer
           enum: [ 1, 2 ]
@@ -2599,10 +2631,8 @@ components:
             - preDiplomaPractice # ПредПр
         goalHours:
           type: integer
-          minimum: 1
         currentHours:
           type: integer
-          minimum: 0
         teachersHours:
           type: array
           items:
@@ -2614,10 +2644,8 @@ components:
             properties:
               teacherId:
                 type: integer
-                minimum: 1
               hours:
                 type: integer
-                minimum: 1
               isExtra:
                 type: boolean
         isError:
@@ -2700,10 +2728,8 @@ components:
       properties:
         id:
           type: integer
-          minimum: 1
         userId:
           type: integer
-          minimum: 1
         createdAt:
           type: string
           format: date-time
@@ -2719,16 +2745,12 @@ components:
             properties:
               recordId:
                 type: integer
-                minimum: 1
               teacherId:
                 type: integer
-                minimum: 1
               oldHours:
                 type: integer
-                minimum: 1
               newHours:
                 type: integer
-                minimum: 1
               oldIsExtra:
                 type: boolean
               newIsExtra:
