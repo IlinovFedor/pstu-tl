@@ -179,7 +179,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       summary: Получить данные преподавателя
       operationId: GetTeacher
@@ -309,7 +310,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       summary: Получить данные группы
       operationId: GetGroup
@@ -440,7 +442,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       summary: Получить данные дисциплины
       operationId: GetDiscipline
@@ -598,7 +601,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       summary: Получить данные пользователя
       operationId: GetUser
@@ -675,7 +679,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     post:
       summary: Изменить пароль пользователя
       operationId: ChangeUserPassword
@@ -724,15 +729,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  required:
-                    - id
-                    - name
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
+                  type: integer
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -768,9 +765,9 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{yearId}:
+  /years/{yearName}:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -843,9 +840,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/import:
+  /years/{yearName}/import:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -925,6 +922,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
     get:
@@ -951,9 +950,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{yearId}/import/{fileId}:
+  /years/{yearName}/import/{fileId}:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -962,7 +961,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetImportedFile
       summary: Получить данные о файле импорта
@@ -1004,9 +1004,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/import/{fileId}/download:
+  /years/{yearName}/import/{fileId}/download:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1015,7 +1015,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: DownloadImportedFile
       summary: Скачать файл импорта
@@ -1040,9 +1041,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/export:
+  /years/{yearName}/export:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1093,9 +1094,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{yearId}/export/{fileId}:
+  /years/{yearName}/export/{fileId}:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1104,7 +1105,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetExportedFile
       summary: Получить данные о файле экспорта
@@ -1146,9 +1148,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/export/{fileId}/download:
+  /years/{yearName}/export/{fileId}/download:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1157,7 +1159,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: DownloadExportedFile
       summary: Скачать файл экспорта
@@ -1182,9 +1185,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/reports:
+  /years/{yearName}/reports:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1284,9 +1287,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /years/{yearId}/reports/{fileId}:
+  /years/{yearName}/reports/{fileId}:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1295,7 +1298,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetReport
       summary: Получить данные о файле отчета
@@ -1337,9 +1341,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/reports/{fileId}/download:
+  /years/{yearName}/reports/{fileId}/download:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1348,7 +1352,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: DownloadReport
       summary: Скачать файл отчета
@@ -1373,9 +1378,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/reports/download-zip:
+  /years/{yearName}/reports/download-zip:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1411,9 +1416,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/autofill:
+  /years/{yearName}/autofill:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1424,7 +1429,7 @@ paths:
         - Auto
       summary: Автозаполнение нагрузки с другого года по преподавателям
       parameters:
-        - name: sourceYearId
+        - name: sourceYearName
           in: query
           required: true
           schema:
@@ -1435,10 +1440,17 @@ paths:
           schema:
             type: array
             items:
-              type: integer
+              type: string
+              format: uuid
       responses:
         '201':
           description: Нагрузка перенесена
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecordResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1450,9 +1462,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/autoremove:
+  /years/{yearName}/autoremove:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1469,7 +1481,8 @@ paths:
           schema:
             type: array
             items:
-              type: integer
+              type: string
+              format: uuid
       responses:
         '201':
           description: Нагрузка удалена
@@ -1484,9 +1497,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/diff:
+  /years/{yearName}/diff:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1497,7 +1510,7 @@ paths:
         - Diff
       summary: Сравнительная таблица с другим годом
       parameters:
-        - name: targetYearId
+        - name: targetYearName
           in: query
           required: true
           schema:
@@ -1570,9 +1583,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/diff/records:
+  /years/{yearName}/diff/records:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1583,7 +1596,7 @@ paths:
         - Diff
       summary: Записи за оба года по дисциплине
       parameters:
-        - name: targetYearId
+        - name: targetYearName
           in: query
           required: true
           schema:
@@ -1592,7 +1605,8 @@ paths:
           in: query
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
       responses:
         '200':
           description: Список записей
@@ -1629,9 +1643,9 @@ paths:
                     items:
                       $ref: '#/components/schemas/FileImportBase'
 
-  /years/{yearId}/disciplines:
+  /years/{yearName}/disciplines:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1691,7 +1705,8 @@ paths:
   #                - disciplineId
   #              properties:
   #                disciplineId:
-  #                  type: integer
+  #                  type: string
+  #                  format: uuid
   #      responses:
   #        '201':
   #          description: Добавленная дисциплина
@@ -1712,9 +1727,9 @@ paths:
   #        '500':
   #          $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/disciplines/{disciplineId}:
+  /years/{yearName}/disciplines/{disciplineId}:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1723,7 +1738,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetRecordsByYearAndDiscipline
       summary: Получить список записей по дисциплине
@@ -1787,9 +1803,9 @@ paths:
   #        '500':
   #          $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/teachers:
+  /years/{yearName}/teachers:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1812,7 +1828,7 @@ paths:
                   - summaryTier3
                   - summaryOverall
                   - summaryIncomplete
-                  - summaryErors
+                  - summaryErrors
                   - summaryTeachers
                 properties:
                   summaryTier1:
@@ -1857,7 +1873,8 @@ paths:
   #                - teacherId
   #              properties:
   #                teacherId:
-  #                  type: integer
+  #                  type: string
+  #                  format: uuid
   #      responses:
   #        '201':
   #          description: Добавленный преподаватель
@@ -1878,9 +1895,9 @@ paths:
   #        '500':
   #          $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/teachers/{teacherId}:
+  /years/{yearName}/teachers/{teacherId}:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -1889,7 +1906,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetRecordsByYearAndTeacher
       summary: Получить список записей по преподавателю
@@ -1977,13 +1995,15 @@ paths:
                 recordsIds:
                   type: array
                   items:
-                    type: integer
+                    type: string
+                    format: uuid
                 setError:
                   type: boolean
                 removeAssignments:
                   type: boolean
                 newTeacherId:
-                  type: integer
+                  type: string
+                  format: uuid
       responses:
         '200':
           description: Новые данные записей
@@ -2036,7 +2056,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetRecord
       tags:
@@ -2088,7 +2109,8 @@ paths:
                       - isExtra
                     properties:
                       teacherId:
-                        type: integer
+                        type: string
+                        format: uuid
                       hours:
                         type: integer
                       isExtra:
@@ -2117,7 +2139,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetRecordHistory
       summary: Получить историю изменений записи
@@ -2158,9 +2181,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearId}/history:
+  /years/{yearName}/history:
     parameters:
-      - name: yearId
+      - name: yearName
         in: path
         required: true
         schema:
@@ -2232,7 +2255,8 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
     get:
       operationId: GetAction
       tags:
@@ -2363,10 +2387,7 @@ components:
         - wageTolerance
       properties:
         name:
-          type: string
-          format: studentYearName
-          pattern: '^[0-9]{4}-[0-9]{4}$'
-          example: '2025-2026'
+          type: integer
         wageNormalHours:
           type: integer
           description:
@@ -2398,8 +2419,19 @@ components:
             - id
           properties:
             id:
-              type: integer
+              type: string
+              format: uuid
         - $ref: '#/components/schemas/YearBase'
+
+    TeacherJob:
+      description: Должности преподавателей
+      type: string
+      enum:
+        - assistant             # Асс.
+        - associateProfessor   # Доц.
+        - departmentHead       # Зав. каф.
+        - professor             # Проф.
+        - seniorLecturer       # Ст. пр.
 
     TeacherBase:
       description: Базовая модель преподавателя
@@ -2410,13 +2442,7 @@ components:
         - wage
       properties:
         job:
-          type: string
-          enum:
-            - assistant             # Асс.
-            - associateProfessor   # Доц.
-            - departmentHead       # Зав. каф.
-            - professor             # Проф.
-            - seniorLecturer       # Ст. пр.
+          $ref: '#/components/schemas/TeacherJob'
         name:
           type: string
         wage:
@@ -2433,7 +2459,8 @@ components:
             - id
           properties:
             id:
-              type: integer
+              type: string
+              format: uuid
         - $ref: '#/components/schemas/TeacherBase'
 
     DisciplineBase:
@@ -2455,8 +2482,14 @@ components:
             - id
           properties:
             id:
-              type: integer
+              type: string
+              format: uuid
         - $ref: '#/components/schemas/DisciplineBase'
+
+    GroupType:
+      description: Тип группы (заочники, бакалавриат, аспирантура)
+      type: string
+      enum: [ partTime, undergraduate, postgraduate ]
 
     GroupBase:
       description: Базовая модель группы
@@ -2465,14 +2498,20 @@ components:
         - name
         - studentsAmount
         - type
+        - specialization
+        - yearOfEnrollment
+        - sequenceNumber
       properties:
-        name:
+        specialization:
           type: string
+        yearOfEnrollment:
+          type: integer
+        sequenceNumber:
+          type: integer
         studentsAmount:
           type: integer
         type:
-          type: string
-          enum: [ partTime, undergraduate, postgraduate ]
+          $ref: '#/components/schemas/GroupType'
     GroupRequest:
       description: Модель группы для запросов
       $ref: '#/components/schemas/GroupBase'
@@ -2484,8 +2523,14 @@ components:
             - id
           properties:
             id:
-              type: integer
+              type: string
+              format: uuid
         - $ref: '#/components/schemas/GroupBase'
+
+    UserRole:
+      description: Роль пользователя
+      type: string
+      enum: [ admin, editor, teacher ]
 
     UserBase:
       description: Базовая модель пользователя
@@ -2497,10 +2542,7 @@ components:
         name:
           type: string
         role:
-          type: string
-          enum: [ admin, editor, teacher ]
-        associatedTeacherId:
-          type: integer
+          $ref: '#/components/schemas/UserRole'
     UserRequest:
       description: Модель пользователя для запросов
       $ref: '#/components/schemas/UserBase'
@@ -2508,11 +2550,7 @@ components:
       description: Модель пользователя для ответов
       allOf:
         - type: object
-          required:
-            - id
           properties:
-            id:
-              type: integer
             associatedTeacher:
               $ref: '#/components/schemas/TeacherResponse'
         - $ref: '#/components/schemas/UserBase'
@@ -2523,16 +2561,22 @@ components:
       required:
         - id
         - name
-        - createdAt
         - type
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         name:
           type: string
-        createdAt:
-          type: string
-          format: date-time
+
+    FileImportType:
+      description: Схема файла импорта
+      type: string
+      enum:
+        - main
+        - postgraduate
+        - undergraduate
+        - partTime
 
     FileImportBase:
       description: Базовая модель файла импорта
@@ -2543,12 +2587,7 @@ components:
             - type
           properties:
             type:
-              type: string
-              enum:
-                - main
-                - postgraduate
-                - undergraduate
-                - partTime
+              $ref: '#/components/schemas/FileImportType'
             term:
               type: integer
               enum:
@@ -2570,7 +2609,8 @@ components:
             - teacherId
           properties:
             teacherId:
-              type: integer
+              type: string
+              format: uuid
 
     FileReportResponse:
       description: Модель файла отчета для ответа
@@ -2583,15 +2623,41 @@ components:
             teacher:
               $ref: '#/components/schemas/TeacherResponse'
 
+    RecordType:
+      description: Вид записи (лекция, практика, ...)
+      type: string
+      enum:
+        - lecture              # Лек
+        - practice             # Пр
+        - lab                  # Лаб
+        - ksr                  # КСР
+
+        - courseProject       # КП
+        - courseWork          # КР
+        - controlWork         # КонтрРаб
+
+        - pass                 # Зач
+        - gradedPass          # ДифЗач
+        - exam                 # Экз
+        - stateExam           # ГосЭкз
+        - gek                  # ГЭК
+
+        - thesisSupervision   # РукВКР
+        - reviewing            # Рец
+
+        - studyPractice       # УчПр
+        - workPractice        # ПрПр
+        - preDiplomaPractice # ПредПр
+
+
     RecordBase:
       description: Базовая модель записи
       type: object
       required:
         - id
         - importFileId
-        - groupId
+        - groups
         - disciplineId
-        - subgroupNumber
         - term
         - type
         - goalHours
@@ -2600,42 +2666,33 @@ components:
         - isError
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         importFileId:
-          type: integer
-        groupId:
-          type: integer
+          type: string
+          format: uuid
+        groups:
+          type: array
+          items:
+            type: object
+            required:
+              - subgroupId
+            properties:
+              subgroupId:
+                type: string
+                format: uuid
+              subgroupNumber:
+                type: integer
+                enum: [1, 2]
         disciplineId:
-          type: integer
-        subgroupNumber:
-          type: integer
+          type: string
+          format: uuid
         term:
           type: integer
           enum: [ 1, 2 ]
         type:
           type: string
-          enum:
-            - lecture              # Лек
-            - practice             # Пр
-            - lab                  # Лаб
-            - ksr                  # КСР
-
-            - courseProject       # КП
-            - courseWork          # КР
-            - controlWork         # КонтрРаб
-
-            - pass                 # Зач
-            - gradedPass          # ДифЗач
-            - exam                 # Экз
-            - stateExam           # ГосЭкз
-            - gek                  # ГЭК
-
-            - thesisSupervision   # РукВКР
-            - reviewing            # Рец
-
-            - studyPractice       # УчПр
-            - workPractice        # ПрПр
-            - preDiplomaPractice # ПредПр
+          $ref: '#/components/schemas/RecordType'
         goalHours:
           type: integer
         currentHours:
@@ -2650,7 +2707,8 @@ components:
               - isExtra
             properties:
               teacherId:
-                type: integer
+                type: string
+                format: uuid
               hours:
                 type: integer
               isExtra:
@@ -2663,13 +2721,23 @@ components:
         - $ref: '#/components/schemas/RecordBase'
         - type: object
           required:
-            - group
+            - groups
             - discipline
             - teachers
             - importFile
           properties:
-            group:
-              $ref: '#/components/schemas/GroupResponse'
+            groups:
+              type: array
+              items:
+                type: object
+                required:
+                  - group
+                properties:
+                  group:
+                    $ref: '#/components/schemas/GroupResponse'
+                  subgroupNumber:
+                    type: integer
+                    enum: [ 1, 2 ]
             discipline:
               $ref: '#/components/schemas/DisciplineResponse'
             teachers:
@@ -2728,18 +2796,15 @@ components:
       type: object
       required:
         - id
-        - userId
-        - createdAt
+        - userName
         - isReverted
         - diffs
       properties:
         id:
-          type: integer
-        userId:
-          type: integer
-        createdAt:
           type: string
-          format: date-time
+          format: uuid
+        userName:
+          type: string
         isReverted:
           type: boolean
         diffs:
@@ -2751,9 +2816,11 @@ components:
               - teacherId
             properties:
               recordId:
-                type: integer
+                type: string
+                format: uuid
               teacherId:
-                type: integer
+                type: string
+                format: uuid
               oldHours:
                 type: integer
               newHours:
@@ -2763,6 +2830,22 @@ components:
               newIsExtra:
                 type: boolean
 
+    ErrorCode:
+      type: string
+      enum:
+        - codeBadRequest
+        - codeUnauthorized
+        - codeForbidden
+        - codeUnknownYear
+        - codeUnknownTeacher
+        - codeUnknownGroup
+        - codeUnknownDiscipline
+        - codeUnknownUser
+        - codeUnknownFile
+        - codeUnknownAction
+        - codeCannotRevertAction
+        - codeFileAlreadyAdded
+
     Error:
       description: Модель ошибки
       type: object
@@ -2770,18 +2853,6 @@ components:
         - code
       properties:
         code:
-          type: string
-          enum:
-            - codeBadRequest
-            - codeUnauthorized
-            - codeForbidden
-            - codeUnknownYear
-            - codeUnknownTeacher
-            - codeUnknownGroup
-            - codeUnknownDiscipline
-            - codeUnknownUser
-            - codeUnknownFile
-            - codeUnknownAction
-            - codeCannotRevertAction
+          $ref: '#/components/schemas/ErrorCode'
         message:
           type: string
