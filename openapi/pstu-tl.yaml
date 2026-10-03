@@ -32,8 +32,6 @@ tags:
     description: Просмотр нагрузки по преподавателям
   - name: Records
     description: Управление записями
-  - name: History
-    description: Управление историей изменений записей
 
 servers:
   - url: 'http://0.0.0.0:9774/api/v1'
@@ -251,6 +249,142 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /teachers/{teacherId}/restore:
+    parameters:
+      - name: teacherId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Восстановить преподавателя
+      operationId: RestoreTeacher
+      tags:
+        - Catalog teachers
+      responses:
+        '200':
+          description: Преподаватель восстановлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /teachers/history:
+    get:
+      summary: Получить историю изменений преподавателей
+      operationId: GetTeachersHistory
+      tags:
+        - Catalog teachers
+      parameters:
+        - name: teacherId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /teachers/{teacherId}/history:
+    parameters:
+      - name: teacherId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить историю изменений конкретного преподавателя
+      operationId: GetTeacherHistory
+      tags:
+        - Catalog teachers
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /teachers/history/{actionId}:
+    parameters:
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения преподавателя
+      operationId: RevertTeacherAction
+      tags:
+        - Catalog teachers
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /groups:
     get:
       summary: Получить список групп в системе
@@ -382,6 +516,141 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /groups/{groupId}/restore:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Восстановить группу
+      operationId: RestoreGroup
+      tags:
+        - Catalog groups
+      responses:
+        '200':
+          description: Группа восстановлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /groups/history:
+    get:
+      summary: Получить историю изменений групп
+      operationId: GetGroupsHistory
+      tags:
+        - Catalog groups
+      parameters:
+        - name: groupId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /groups/{groupId}/history:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить историю изменений конкретной группы
+      operationId: GetGroupHistory
+      tags:
+        - Catalog groups
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /groups/history/{actionId}:
+    parameters:
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения группы
+      operationId: RevertGroupAction
+      tags:
+        - Catalog groups
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /disciplines:
     get:
@@ -511,6 +780,142 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /disciplines/{disciplineId}/restore:
+    parameters:
+      - name: disciplineId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Восстановить дисциплину
+      operationId: RestoreDiscipline
+      tags:
+        - Catalog disciplines
+      responses:
+        '200':
+          description: Дисциплина восстановлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisciplineResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /disciplines/history:
+    get:
+      summary: Получить историю изменений дисциплин
+      operationId: GetDisciplinesHistory
+      tags:
+        - Catalog disciplines
+      parameters:
+        - name: disciplineId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DisciplineAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /disciplines/{disciplineId}/history:
+    parameters:
+      - name: disciplineId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить историю изменений конкретной дисциплины
+      operationId: GetDisciplineHistory
+      tags:
+        - Catalog disciplines
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DisciplineAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /disciplines/history/{actionId}:
+    parameters:
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения дисциплины
+      operationId: RevertDisciplineAction
+      tags:
+        - Catalog disciplines
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
 
@@ -840,6 +1245,169 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /years/{yearName}/restore:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      summary: Восстановить учебный год
+      operationId: RestoreYear
+      tags:
+        - Years
+      responses:
+        '200':
+          description: Учебный год восстановлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YearResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/history:
+    get:
+      summary: Получить историю изменений учебных годов
+      operationId: GetYearsHistory
+      tags:
+        - Years
+      parameters:
+        - name: yearName
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/YearAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/history:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить журнал изменений года
+      operationId: GetYearHistory
+      tags:
+        - Years
+      responses:
+        '200':
+          description: История изменений всего года
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                  - users
+                  - teachers
+                  - groups
+                  - disciplines
+                  - records
+                  - importFiles
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordAction'
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordBase'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserResponse'
+                  teachers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TeacherResponse'
+                  groups:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupResponse'
+                  disciplines:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DisciplineResponse'
+                  importFiles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/history/{actionId}:
+    parameters:
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения учебного года
+      operationId: RevertYearAction
+      tags:
+        - Years
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /years/{yearName}/import:
     parameters:
       - name: yearName
@@ -1041,6 +1609,163 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /years/{yearName}/import/{fileId}/restore:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Восстановить файл импорта
+      operationId: RestoreImportedFile
+      tags:
+        - Import
+      responses:
+        '200':
+          description: Файл импорта восстановлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileImportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/import/history:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить историю изменений файлов импорта
+      operationId: GetImportFilesHistory
+      tags:
+        - Import
+      parameters:
+        - name: fileId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/import/{fileId}/history:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить историю изменений конкретного файла импорта
+      operationId: GetImportFileHistory
+      tags:
+        - Import
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImportAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/import/history/{actionId}:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения файла импорта
+      operationId: RevertImportFileAction
+      tags:
+        - Import
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /years/{yearName}/export:
     parameters:
       - name: yearName
@@ -1182,6 +1907,163 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/export/{fileId}/restore:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Восстановить файл экспорта
+      operationId: RestoreExportedFile
+      tags:
+        - Export
+      responses:
+        '200':
+          description: Файл экспорта восстановлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileExportBase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/export/history:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить историю изменений файлов экспорта
+      operationId: GetExportFilesHistory
+      tags:
+        - Export
+      parameters:
+        - name: fileId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileExportAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/export/{fileId}/history:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить историю изменений конкретного файла экспорта
+      operationId: GetExportFileHistory
+      tags:
+        - Export
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileExportAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/export/history/{actionId}:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения файла экспорта
+      operationId: RevertExportFileAction
+      tags:
+        - Export
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
 
@@ -1375,6 +2257,163 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/reports/{fileId}/restore:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Восстановить файл отчета
+      operationId: RestoreReport
+      tags:
+        - Reports
+      responses:
+        '200':
+          description: Файл отчета восстановлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/reports/history:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Получить историю изменений файлов отчетов
+      operationId: GetReportFilesHistory
+      tags:
+        - Reports
+      parameters:
+        - name: fileId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileReportAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/reports/{fileId}/history:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить историю изменений конкретного файла отчета
+      operationId: GetReportFileHistory
+      tags:
+        - Reports
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileReportAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /years/{yearName}/reports/history/{actionId}:
+    parameters:
+      - name: yearName
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения файла отчета
+      operationId: RevertReportFileAction
+      tags:
+        - Reports
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
 
@@ -2161,7 +3200,7 @@ paths:
                   actions:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ActionBase'
+                      $ref: '#/components/schemas/RecordAction'
                   users:
                     type: array
                     items:
@@ -2181,75 +3220,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /years/{yearName}/history:
-    parameters:
-      - name: yearName
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      operationId: GetYearHistory
-      tags:
-        - History
-      summary: Получить журнал изменений года
-      responses:
-        '200':
-          description: История изменений всего года
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - actions
-                  - users
-                  - teachers
-                  - groups
-                  - disciplines
-                  - records
-                  - importFiles
-                properties:
-                  actions:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ActionBase'
-                  records:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/RecordBase'
-                  users:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/UserResponse'
-                  teachers:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/TeacherResponse'
-                  groups:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GroupResponse'
-                  disciplines:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/DisciplineResponse'
-                  importFiles:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/FileImportBase'
-
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /history/{actionId}:
+  /records/history/{actionId}:
     parameters:
       - name: actionId
         in: path
@@ -2257,71 +3228,14 @@ paths:
         schema:
           type: string
           format: uuid
-    get:
-      operationId: GetAction
-      tags:
-        - History
-      summary: Получить запись журнала изменений
-      responses:
-        '200':
-          description: Запись журнала изменений
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/ActionBase'
-                  - type: object
-                    required:
-                      - users
-                      - teachers
-                      - groups
-                      - disciplines
-                      - records
-                      - importFiles
-                    properties:
-                      records:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/RecordBase'
-                      users:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/UserResponse'
-                      teachers:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/TeacherResponse'
-                      groups:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GroupResponse'
-                      disciplines:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/DisciplineResponse'
-                      importFiles:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/FileImportBase'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
     delete:
-      operationId: RevertAction
+      operationId: RevertRecordAction
       tags:
-        - History
-      summary: Откатить запись журнала изменений
+        - Records
+      summary: Откатить запись журнала изменений записи
       responses:
         '204':
-          description: Запись откачена
+          description: Запись журнала изменений откачена
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2781,44 +3695,294 @@ components:
           type: integer
           description: Отклонение от нормы ставки + перегруз, - недобор
 
-    ActionBase:
-      description: Базовая модель события
+    RecordAction:
+      description: Базовая модель события изменения записи
       type: object
       required:
         - id
         - userName
+        - revertsActionId
+        - recordId
+        - teacherId
+        - oldHours
+        - newHours
+        - oldIsExtra
+        - newIsExtra
+        - newIsDeleted
         - isReverted
-        - diffs
       properties:
         id:
           type: string
           format: uuid
         userName:
           type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        recordId:
+          type: string
+          format: uuid
+        teacherId:
+          type: string
+          format: uuid
+        oldHours:
+          type: integer
+          nullable: true
+        newHours:
+          type: integer
+          nullable: true
+        oldIsExtra:
+          type: boolean
+          nullable: true
+        newIsExtra:
+          type: boolean
+          nullable: true
+        newIsDeleted:
+          type: boolean
         isReverted:
           type: boolean
-        diffs:
-          type: array
-          items:
-            type: object
-            required:
-              - recordId
-              - teacherId
-            properties:
-              recordId:
-                type: string
-                format: uuid
-              teacherId:
-                type: string
-                format: uuid
-              oldHours:
-                type: integer
-              newHours:
-                type: integer
-              oldIsExtra:
-                type: boolean
-              newIsExtra:
-                type: boolean
+
+    TeacherAction:
+      description: Запись журнала изменений преподавателя
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - teacherId
+        - newName
+        - newJob
+        - newWage
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        teacherId:
+          type: string
+          format: uuid
+        newName:
+          type: string
+        newJob:
+          $ref: '#/components/schemas/TeacherJob'
+        newWage:
+          type: number
+          enum: [ 0.25, 0.5, 1 ]
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
+
+    GroupAction:
+      description: Запись журнала изменений учебной группы
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - groupId
+        - newSpecialization
+        - newYearOfEnrollment
+        - newSequenceNumber
+        - newGroupType
+        - newStudentsAmount
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        groupId:
+          type: string
+          format: uuid
+        newSpecialization:
+          type: string
+        newYearOfEnrollment:
+          type: integer
+        newSequenceNumber:
+          type: integer
+        newGroupType:
+          $ref: '#/components/schemas/GroupType'
+        newStudentsAmount:
+          type: integer
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
+
+    DisciplineAction:
+      description: Запись журнала изменений дисциплины
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - disciplineId
+        - newName
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        disciplineId:
+          type: string
+          format: uuid
+        newName:
+          type: string
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
+
+    YearAction:
+      description: Запись журнала изменений учебного года
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - yearName
+        - newName
+        - newWageNormalHours
+        - newExtHourlyWageTier1
+        - newExtHourlyWageTier2
+        - newExtHourlyWageTier3
+        - newWageTolerance
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        yearName:
+          type: integer
+        newName:
+          type: integer
+        newWageNormalHours:
+          type: integer
+        newExtHourlyWageTier1:
+          type: integer
+        newExtHourlyWageTier2:
+          type: integer
+        newExtHourlyWageTier3:
+          type: integer
+        newWageTolerance:
+          type: integer
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
+
+    FileImportAction:
+      description: Запись журнала изменений файла импорта
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - fileId
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        fileId:
+          type: string
+          format: uuid
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
+
+    FileExportAction:
+      description: Запись журнала изменений файла экспорта
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - fileId
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        fileId:
+          type: string
+          format: uuid
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
+
+    FileReportAction:
+      description: Запись журнала изменений файла отчета
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - fileId
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        fileId:
+          type: string
+          format: uuid
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
 
     ErrorCode:
       type: string
