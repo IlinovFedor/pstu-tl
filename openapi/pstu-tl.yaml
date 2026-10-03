@@ -2413,15 +2413,7 @@ components:
       $ref: '#/components/schemas/YearBase'
     YearResponse:
       description: Модель года для ответов
-      allOf:
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              type: string
-              format: uuid
-        - $ref: '#/components/schemas/YearBase'
+      $ref: '#/components/schemas/YearBase'
 
     TeacherJob:
       description: Должности преподавателей
@@ -2495,7 +2487,6 @@ components:
       description: Базовая модель группы
       type: object
       required:
-        - name
         - studentsAmount
         - type
         - specialization
@@ -2559,13 +2550,12 @@ components:
       description: Базовая модель файла
       type: object
       required:
-        - id
+        - hash
         - name
         - type
       properties:
-        id:
+        hash:
           type: string
-          format: uuid
         name:
           type: string
 
