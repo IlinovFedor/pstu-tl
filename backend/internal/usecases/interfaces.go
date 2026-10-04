@@ -7,6 +7,11 @@ import (
 	"github.com/IlinovFedor/pstu-tl/internal/models"
 )
 
+// Transactor интерфейс для работы сервисов внутри одной SQL транзакции
+type Transactor interface {
+	WithTx(ctx context.Context, fn func(ctx context.Context) error) error
+}
+
 // CalculationRepository интерфейс для работы с калькуляциями по преподавателям
 type CalculationRepository interface {
 	GetCalculationsTier1(ctx context.Context, yearName int) (models.Calculation, error)
@@ -36,6 +41,22 @@ type DisciplineRepository interface {
 	GetDisciplinesActions(ctx context.Context) ([]models.DisciplineAction, error)
 	GetDisciplineActions(ctx context.Context, disciplineID uuid.UUID) ([]models.DisciplineAction, error)
 	RevertDisciplineAction(ctx context.Context, actionID uuid.UUID) error
+}
+
+// FacultyRepository интерфейс для работы с дисциплинами
+type FacultyRepository interface {
+	CreateFaculty(ctx context.Context, discipline models.Faculty) error
+	GetFaculty(ctx context.Context, disciplineID uuid.UUID) (*models.Faculty, error)
+	EditFaculty(ctx context.Context, name string) error
+
+	SoftDeleteFaculty(ctx context.Context, disciplineID uuid.UUID) error
+	RestoreFaculty(ctx context.Context, disciplineID uuid.UUID) error
+
+	GetFaculties(ctx context.Context, showDeleted bool) ([]models.Faculty, error)
+
+	GetFacultiesActions(ctx context.Context) ([]models.FacultyAction, error)
+	GetFacultyActions(ctx context.Context, disciplineID uuid.UUID) ([]models.FacultyAction, error)
+	RevertFacultyAction(ctx context.Context, actionID uuid.UUID) error
 }
 
 // FileExportRepository интерфейс для работы с файлами экспорта

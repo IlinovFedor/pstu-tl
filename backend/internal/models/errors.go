@@ -16,4 +16,5 @@ var (
 	ErrCannotRevertAction = errors.New("cannot revert action")
 	ErrDuplicateFileName  = errors.New("duplicate file name")
 	ErrDuplicateFileData  = errors.New("duplicate file data")
+	ErrInvalidFileData    = errors.New("invalid file data")
 )

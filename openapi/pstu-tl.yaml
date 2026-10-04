@@ -12,6 +12,8 @@ tags:
     description: Управление справочником учебных групп
   - name: Catalog disciplines
     description: Управление справочником дисциплин
+  - name: Catalog faculties
+    description: Управление справочником факультетов
   - name: Catalog users
     description: Управление пользователями
   - name: Years
@@ -115,6 +117,273 @@ paths:
                 $ref: '#/components/schemas/UserResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /faculties:
+    get:
+      summary: Получить список факультетов в системе
+      operationId: GetFaculties
+      tags:
+        - Catalog faculties
+      responses:
+        '200':
+          description: Список всех факультетов в системе
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacultyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Создать факультет
+      operationId: CreateFaculty
+      tags:
+        - Catalog faculties
+      requestBody:
+        description: Данные нового факультета
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyRequest'
+      responses:
+        '201':
+          description: Данные нового факультета
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacultyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /faculties/{facultyId}:
+    parameters:
+      - name: facultyId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить данные факультета
+      operationId: GetFaculty
+      tags:
+        - Catalog faculties
+      responses:
+        '200':
+          description: Данные факультета
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacultyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Изменить данные факультета
+      operationId: UpdateFaculty
+      tags:
+        - Catalog faculties
+      requestBody:
+        description: Новые данные факультета
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyRequest'
+      responses:
+        '200':
+          description: Новые данные факультета
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacultyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Удалить факультета
+      operationId: DeleteFaculty
+      tags:
+        - Catalog faculties
+      responses:
+        '204':
+          description: Факультет удален
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /faculties/{facultyId}/restore:
+    parameters:
+      - name: facultyId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Восстановить факультет
+      operationId: RestoreFaculty
+      tags:
+        - Catalog faculties
+      responses:
+        '200':
+          description: Факультет восстановлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacultyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /faculties/history:
+    get:
+      summary: Получить историю изменений факультетов
+      operationId: GetFacultiesHistory
+      tags:
+        - Catalog faculties
+      parameters:
+        - name: facultyId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FacultyAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /faculties/{facultyId}/history:
+    parameters:
+      - name: facultyId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Получить историю изменений конкретного факультета
+      operationId: GetFacultyHistory
+      tags:
+        - Catalog faculties
+      responses:
+        '200':
+          description: История изменений
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FacultyAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /faculties/history/{actionId}:
+    parameters:
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Откатить действие изменения факультета
+      operationId: RevertFacultyAction
+      tags:
+        - Catalog faculties
+      responses:
+        '204':
+          description: Действие откачено
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
 
@@ -3339,6 +3608,29 @@ components:
         - professor             # Проф.
         - seniorLecturer       # Ст. пр.
 
+    FacultyBase:
+      description: Базовая модель факультета
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    FacultyRequest:
+      description: Модель факультета для запросов
+      $ref: '#/components/schemas/FacultyBase'
+    FacultyResponse:
+      description: Модель факультета для ответов
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: '#/components/schemas/FacultyBase'
+
     TeacherBase:
       description: Базовая модель преподавателя
       type: object
@@ -3823,6 +4115,38 @@ components:
           type: boolean
         isReverted:
           type: boolean
+
+    FacultyAction:
+      description: Запись журнала изменений факультета
+      type: object
+      required:
+        - id
+        - userName
+        - revertsActionId
+        - facultyID
+        - newName
+        - newIsDeleted
+        - isReverted
+      properties:
+        id:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        revertsActionId:
+          type: string
+          format: uuid
+          nullable: true
+        facultyID:
+          type: string
+          format: uuid
+        newName:
+          type: string
+        newIsDeleted:
+          type: boolean
+        isReverted:
+          type: boolean
+
 
     DisciplineAction:
       description: Запись журнала изменений дисциплины
