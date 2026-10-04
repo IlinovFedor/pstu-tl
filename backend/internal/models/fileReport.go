@@ -1,66 +1,63 @@
 package models
 
-import "uuid"
+import (
+	"uuid"
+)
 
 type FileReport struct {
 	id                  uuid.UUID
-	name                string
 	isDeleted           bool
 	associatedTeacherId uuid.UUID
-	data                []byte
 }
 
 func (f *FileReport) SetIsDeleted(isDeleted bool) {
 	f.isDeleted = isDeleted
 }
 
-func (f FileReport) Id() uuid.UUID {
-	return f.id
-}
-
-func (f FileReport) Name() string {
-	return f.name
+func (f FileReport) AssociatedTeacherId() uuid.UUID {
+	return f.associatedTeacherId
 }
 
 func (f FileReport) IsDeleted() bool {
 	return f.isDeleted
 }
 
-func (f FileReport) AssociatedTeacherId() uuid.UUID {
-	return f.associatedTeacherId
+func (f FileReport) Id() uuid.UUID {
+	return f.id
 }
 
-func (f FileReport) Data() []byte {
-	return f.data
-}
-
-func NewFileReport(id uuid.UUID, name string, isDeleted bool, associatedTeacherId uuid.UUID, data []byte) *FileReport {
-	return &FileReport{id: id, name: name, isDeleted: isDeleted, associatedTeacherId: associatedTeacherId, data: data}
+func NewFileReport(id uuid.UUID, isDeleted bool, associatedTeacherId uuid.UUID) *FileReport {
+	return &FileReport{id: id, isDeleted: isDeleted, associatedTeacherId: associatedTeacherId}
 }
 
 type FileReportAction struct {
 	id              uuid.UUID
 	actorName       string
 	revertsActionID *uuid.UUID
+	fileID          uuid.UUID
 	newIsDeleted    bool
 }
 
-func (i FileReportAction) Id() uuid.UUID {
-	return i.id
+func (f FileReportAction) NewIsDeleted() bool {
+	return f.newIsDeleted
 }
 
-func (i FileReportAction) ActorName() string {
-	return i.actorName
+func (f FileReportAction) FileID() uuid.UUID {
+	return f.fileID
 }
 
-func (i FileReportAction) RevertsActionID() *uuid.UUID {
-	return i.revertsActionID
+func (f FileReportAction) RevertsActionID() *uuid.UUID {
+	return f.revertsActionID
 }
 
-func (i FileReportAction) NewIsDeleted() bool {
-	return i.newIsDeleted
+func (f FileReportAction) ActorName() string {
+	return f.actorName
 }
 
-func NewFileReportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, newIsDeleted bool) *FileReportAction {
-	return &FileReportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, newIsDeleted: newIsDeleted}
+func (f FileReportAction) Id() uuid.UUID {
+	return f.id
+}
+
+func NewFileReportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID uuid.UUID, newIsDeleted bool) *FileReportAction {
+	return &FileReportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newIsDeleted: newIsDeleted}
 }

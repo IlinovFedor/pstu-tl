@@ -1,61 +1,73 @@
 package models
 
-import "uuid"
+import (
+	"uuid"
+)
 
 type FileImport struct {
-	hash      string
+	id        uuid.UUID
+	yearName  int
 	name      string
+	hash      string
 	isDeleted bool
-	data      []byte
 }
 
-func NewFileImport(hash string, name string, isDeleted bool, data []byte) *FileImport {
-	return &FileImport{hash: hash, name: name, isDeleted: isDeleted, data: data}
+func (f *FileImport) SetIsDeleted(isDeleted bool) {
+	f.isDeleted = isDeleted
 }
 
-func (i *FileImport) Data() []byte {
-	return i.data
+func (f FileImport) Id() uuid.UUID {
+	return f.id
 }
 
-func (i *FileImport) SetIsDeleted(isDeleted bool) {
-	i.isDeleted = isDeleted
+func (f FileImport) YearName() int {
+	return f.yearName
 }
 
-func (i FileImport) IsDeleted() bool {
-	return i.isDeleted
+func (f FileImport) Name() string {
+	return f.name
 }
 
-func (i FileImport) Name() string {
-	return i.name
+func (f FileImport) Hash() string {
+	return f.hash
 }
 
-func (i FileImport) Hash() string {
-	return i.hash
+func (f FileImport) IsDeleted() bool {
+	return f.isDeleted
+}
+
+func NewFileImport(yearName int, name string, hash string) *FileImport {
+	return &FileImport{id: uuid.NewV7(), yearName: yearName, name: name, hash: hash}
 }
 
 type FileImportAction struct {
 	id              uuid.UUID
 	actorName       string
 	revertsActionID *uuid.UUID
+	fileID          uuid.UUID
 	newIsDeleted    bool
 }
 
-func (i FileImportAction) Id() uuid.UUID {
-	return i.id
+func (f FileImportAction) Id() uuid.UUID {
+	return f.id
 }
 
-func (i FileImportAction) ActorName() string {
-	return i.actorName
+func (f FileImportAction) ActorName() string {
+	return f.actorName
 }
 
-func (i FileImportAction) RevertsActionID() *uuid.UUID {
-	return i.revertsActionID
+func (f FileImportAction) RevertsActionID() *uuid.UUID {
+	return f.revertsActionID
 }
 
-func (i FileImportAction) NewIsDeleted() bool {
-	return i.newIsDeleted
+func (f FileImportAction) FileImportID() uuid.UUID {
+	return f.fileID
 }
 
-func NewFileImportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, newIsDeleted bool) *FileImportAction {
-	return &FileImportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, newIsDeleted: newIsDeleted}
+func (f FileImportAction) NewIsDeleted() bool {
+	return f.newIsDeleted
+}
+
+func NewFileImportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID uuid.UUID, newIsDeleted bool) *FileImportAction {
+	return &FileImportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newIsDeleted: newIsDeleted}
 }

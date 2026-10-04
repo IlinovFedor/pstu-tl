@@ -1,6 +1,8 @@
 package models
 
-import "uuid"
+import (
+	"uuid"
+)
 
 type Year struct {
 	name               int
@@ -77,7 +79,7 @@ type YearAction struct {
 	id                    uuid.UUID
 	actorName             string
 	revertsActionID       *uuid.UUID
-	newName               int
+	name                  int
 	newWageNormalHours    int
 	newExtHourlyWageTier1 int
 	newExtHourlyWageTier2 int
@@ -86,8 +88,8 @@ type YearAction struct {
 	newIsDeleted          bool
 }
 
-func NewYearAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, newName int, newWageNormalHours int, newExtHourlyWageTier1 int, newExtHourlyWageTier2 int, newExtHourlyWageTier3 int, newWageTolerance int, newIsDeleted bool) *YearAction {
-	return &YearAction{id: id, actorName: actorName, revertsActionID: revertsActionID, newName: newName, newWageNormalHours: newWageNormalHours, newExtHourlyWageTier1: newExtHourlyWageTier1, newExtHourlyWageTier2: newExtHourlyWageTier2, newExtHourlyWageTier3: newExtHourlyWageTier3, newWageTolerance: newWageTolerance, newIsDeleted: newIsDeleted}
+func NewYearAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, newWageNormalHours int, newExtHourlyWageTier1 int, newExtHourlyWageTier2 int, newExtHourlyWageTier3 int, newWageTolerance int, newIsDeleted bool) *YearAction {
+	return &YearAction{id: id, actorName: actorName, revertsActionID: revertsActionID, newWageNormalHours: newWageNormalHours, newExtHourlyWageTier1: newExtHourlyWageTier1, newExtHourlyWageTier2: newExtHourlyWageTier2, newExtHourlyWageTier3: newExtHourlyWageTier3, newWageTolerance: newWageTolerance, newIsDeleted: newIsDeleted}
 }
 
 func (y YearAction) NewIsDeleted() bool {
@@ -114,8 +116,8 @@ func (y YearAction) NewWageNormalHours() int {
 	return y.newWageNormalHours
 }
 
-func (y YearAction) NewName() int {
-	return y.newName
+func (y YearAction) Name() int {
+	return y.name
 }
 
 func (y YearAction) RevertsActionID() *uuid.UUID {

@@ -5,19 +5,19 @@ import "uuid"
 type UserRole int
 
 const (
-	UserRoleAdmin UserRole = iota
-	UserRoleTeacher
+	UserRoleTeacher UserRole = iota
 	UserRoleEditor
+	UserRoleAdmin
 )
 
 type User struct {
 	name                string
 	passwordHash        string
 	role                UserRole
-	associatedTeacherId uuid.UUID
+	associatedTeacherId *uuid.UUID
 }
 
-func NewUser(name string, passwordHash string, role UserRole, associatedTeacherId uuid.UUID) *User {
+func NewUser(name string, passwordHash string, role UserRole, associatedTeacherId *uuid.UUID) *User {
 	return &User{name: name, passwordHash: passwordHash, role: role, associatedTeacherId: associatedTeacherId}
 }
 
@@ -45,10 +45,17 @@ func (u *User) SetRole(role UserRole) {
 	u.role = role
 }
 
-func (u *User) AssociatedTeacherId() uuid.UUID {
+func (u *User) AssociatedTeacherId() *uuid.UUID {
 	return u.associatedTeacherId
 }
 
-func (u *User) SetAssociatedTeacherId(associatedTeacherId uuid.UUID) {
+func (u *User) SetAssociatedTeacherId(associatedTeacherId *uuid.UUID) {
 	u.associatedTeacherId = associatedTeacherId
+}
+
+func (u UserRole) IsAdminOrEditor() bool {
+	if u == UserRoleAdmin || u == UserRoleEditor {
+		return true
+	}
+	return false
 }

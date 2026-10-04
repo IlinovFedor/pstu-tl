@@ -1,6 +1,8 @@
 package models
 
-import "uuid"
+import (
+	"uuid"
+)
 
 // Discipline базовая модель дисциплины.
 type Discipline struct {

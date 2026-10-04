@@ -1,6 +1,8 @@
 package models
 
-import "uuid"
+import (
+	"uuid"
+)
 
 // RecordType тип занятия (лекция, практика, ...)
 type RecordType int
@@ -60,36 +62,36 @@ type TeacherHours struct {
 
 // Record базовая модель дисциплины
 type Record struct {
-	id             uuid.UUID
-	importFileHash string
-	groups         []GroupsSubgroups
-	disciplineId   uuid.UUID
-	term           Term
-	recordType     RecordType
-	goalHours      int
-	teachers       []TeacherHours
-	isError        bool
-	isDeleted      bool
+	id            uuid.UUID
+	importFileID  uuid.UUID
+	groups        []GroupsSubgroups
+	disciplineId  uuid.UUID
+	term          Term
+	recordType    RecordType
+	goalHours     int
+	teachersHours []TeacherHours
+	isError       bool
+	isDeleted     bool
 }
 
-func NewRecord(importFileHash string, groups []GroupsSubgroups, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int) *Record {
-	return &Record{id: uuid.NewV7(), importFileHash: importFileHash, groups: groups, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours}
+func NewRecord(importFileID uuid.UUID, groups []GroupsSubgroups, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int) *Record {
+	return &Record{id: uuid.NewV7(), importFileID: importFileID, groups: groups, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours}
 }
 
 func (r *Record) SetIsError(isError bool) {
 	r.isError = isError
 }
 
-func (r *Record) SetTeachers(teachers []TeacherHours) {
-	r.teachers = teachers
+func (r *Record) SetTeachers(teachersHours []TeacherHours) {
+	r.teachersHours = teachersHours
 }
 
 func (r Record) Id() uuid.UUID {
 	return r.id
 }
 
-func (r Record) ImportFileHash() string {
-	return r.importFileHash
+func (r Record) ImportFileID() uuid.UUID {
+	return r.importFileID
 }
 
 func (r Record) Groups() []GroupsSubgroups {
@@ -114,14 +116,14 @@ func (r Record) GoalHours() int {
 
 func (r Record) CurrentHours() int {
 	var currentHours int
-	for _, teacher := range r.teachers {
+	for _, teacher := range r.teachersHours {
 		currentHours += teacher.hours
 	}
 	return currentHours
 }
 
 func (r Record) Teachers() []TeacherHours {
-	return r.teachers
+	return r.teachersHours
 }
 
 func (r Record) IsError() bool {

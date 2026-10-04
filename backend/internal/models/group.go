@@ -1,6 +1,8 @@
 package models
 
-import "uuid"
+import (
+	"uuid"
+)
 
 // GroupType тип группы (заоч, оч, асп)
 type GroupType int

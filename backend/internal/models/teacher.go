@@ -1,6 +1,8 @@
 package models
 
-import "uuid"
+import (
+	"uuid"
+)
 
 type TeacherJob int
 
@@ -73,40 +75,45 @@ type TeacherAction struct {
 	id              uuid.UUID
 	actorName       string
 	revertsActionID *uuid.UUID
+	teacherID       uuid.UUID
 	newName         string
 	newJob          TeacherJob
 	newWage         TeacherWage
 	newIsDeleted    bool
 }
 
-func NewTeacherAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, newName string, newJob TeacherJob, newWage TeacherWage, newIsDeleted bool) *TeacherAction {
-	return &TeacherAction{id: id, actorName: actorName, revertsActionID: revertsActionID, newName: newName, newJob: newJob, newWage: newWage, newIsDeleted: newIsDeleted}
-}
-
-func (t TeacherAction) Id() uuid.UUID {
-	return t.id
-}
-
-func (t TeacherAction) ActorName() string {
-	return t.actorName
-}
-
-func (t TeacherAction) RevertsActionID() *uuid.UUID {
-	return t.revertsActionID
-}
-
-func (t TeacherAction) NewName() string {
-	return t.newName
-}
-
-func (t TeacherAction) NewJob() TeacherJob {
-	return t.newJob
+func (t TeacherAction) NewIsDeleted() bool {
+	return t.newIsDeleted
 }
 
 func (t TeacherAction) NewWage() TeacherWage {
 	return t.newWage
 }
 
-func (t TeacherAction) NewIsDeleted() bool {
-	return t.newIsDeleted
+func (t TeacherAction) NewJob() TeacherJob {
+	return t.newJob
+}
+
+func (t TeacherAction) NewName() string {
+	return t.newName
+}
+
+func (t TeacherAction) TeacherID() uuid.UUID {
+	return t.teacherID
+}
+
+func (t TeacherAction) RevertsActionID() *uuid.UUID {
+	return t.revertsActionID
+}
+
+func (t TeacherAction) ActorName() string {
+	return t.actorName
+}
+
+func (t TeacherAction) Id() uuid.UUID {
+	return t.id
+}
+
+func NewTeacherAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, teacherID uuid.UUID, newName string, newJob TeacherJob, newWage TeacherWage, newIsDeleted bool) *TeacherAction {
+	return &TeacherAction{id: id, actorName: actorName, revertsActionID: revertsActionID, teacherID: teacherID, newName: newName, newJob: newJob, newWage: newWage, newIsDeleted: newIsDeleted}
 }
