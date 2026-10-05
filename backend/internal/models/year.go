@@ -14,16 +14,16 @@ type Year struct {
 	isDeleted          bool
 }
 
+func NewYear(name int, wageNormalHours int, extHourlyWageTier1 int, extHourlyWageTier2 int, extHourlyWageTier3 int, wageTolerance int, isDeleted bool) *Year {
+	return &Year{name: name, wageNormalHours: wageNormalHours, extHourlyWageTier1: extHourlyWageTier1, extHourlyWageTier2: extHourlyWageTier2, extHourlyWageTier3: extHourlyWageTier3, wageTolerance: wageTolerance, isDeleted: isDeleted}
+}
+
 func (y *Year) IsDeleted() bool {
 	return y.isDeleted
 }
 
 func (y *Year) SetIsDeleted(isDeleted bool) {
 	y.isDeleted = isDeleted
-}
-
-func NewYear(name int, wageNormalHours int, extHourlyWageTier1 int, extHourlyWageTier2 int, extHourlyWageTier3 int, wageTolerance int) *Year {
-	return &Year{name: name, wageNormalHours: wageNormalHours, extHourlyWageTier1: extHourlyWageTier1, extHourlyWageTier2: extHourlyWageTier2, extHourlyWageTier3: extHourlyWageTier3, wageTolerance: wageTolerance}
 }
 
 func (y *Year) Name() int {

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"uuid"
 )
 
@@ -9,6 +10,14 @@ type Discipline struct {
 	id        uuid.UUID
 	name      string
 	isDeleted bool
+}
+
+func NewDiscipline(id uuid.UUID, name string, isDeleted bool) *Discipline {
+	return &Discipline{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
+}
+
+func (d *Discipline) SetId(id uuid.UUID) {
+	d.id = id
 }
 
 func (d *Discipline) IsDeleted() bool {
@@ -20,7 +29,7 @@ func (d *Discipline) SetIsDeleted(isDeleted bool) {
 }
 
 func (d *Discipline) SetName(name string) {
-	d.name = name
+	d.name = strings.TrimSpace(name)
 }
 
 func (d Discipline) Id() uuid.UUID {
@@ -29,12 +38,6 @@ func (d Discipline) Id() uuid.UUID {
 
 func (d Discipline) Name() string {
 	return d.name
-}
-
-func NewDiscipline(name string) *Discipline {
-	return &Discipline{
-		id:   uuid.NewV7(),
-		name: name}
 }
 
 // DisciplineAction модель изменения дисциплины. Получается только из репозитория, append-only

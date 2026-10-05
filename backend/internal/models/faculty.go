@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"uuid"
 )
 
@@ -9,6 +10,14 @@ type Faculty struct {
 	id        uuid.UUID
 	name      string
 	isDeleted bool
+}
+
+func NewFaculty(id uuid.UUID, name string, isDeleted bool) *Faculty {
+	return &Faculty{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
+}
+
+func (d *Faculty) SetId(id uuid.UUID) {
+	d.id = id
 }
 
 func (d *Faculty) IsDeleted() bool {
@@ -20,7 +29,7 @@ func (d *Faculty) SetIsDeleted(isDeleted bool) {
 }
 
 func (d *Faculty) SetName(name string) {
-	d.name = name
+	d.name = strings.TrimSpace(name)
 }
 
 func (d Faculty) Id() uuid.UUID {
@@ -29,12 +38,6 @@ func (d Faculty) Id() uuid.UUID {
 
 func (d Faculty) Name() string {
 	return d.name
-}
-
-func NewFaculty(name string) *Faculty {
-	return &Faculty{
-		id:   uuid.NewV7(),
-		name: name}
 }
 
 // FacultyAction модель изменения дисциплины. Получается только из репозитория, append-only

@@ -17,7 +17,7 @@ const (
 type Group struct {
 	id               uuid.UUID
 	facultyID        uuid.UUID
-	specialization   string
+	specializationID uuid.UUID
 	yearOfEnrollment int
 	sequenceNumber   int
 	groupType        GroupType
@@ -25,8 +25,16 @@ type Group struct {
 	isDeleted        bool
 }
 
-func NewGroup(facultyID uuid.UUID, specialization string, yearOfEnrollment int, sequenceNumber int, groupType GroupType, studentsAmount int, isDeleted bool) *Group {
-	return &Group{id: uuid.NewV7(), facultyID: facultyID, specialization: specialization, yearOfEnrollment: yearOfEnrollment, sequenceNumber: sequenceNumber, groupType: groupType, studentsAmount: studentsAmount, isDeleted: isDeleted}
+func NewGroup(id uuid.UUID, facultyID uuid.UUID, specializationID uuid.UUID, yearOfEnrollment int, sequenceNumber int, groupType GroupType, studentsAmount int, isDeleted bool) *Group {
+	return &Group{id: id, facultyID: facultyID, specializationID: specializationID, yearOfEnrollment: yearOfEnrollment, sequenceNumber: sequenceNumber, groupType: groupType, studentsAmount: studentsAmount, isDeleted: isDeleted}
+}
+
+func (g *Group) SetId(id uuid.UUID) {
+	g.id = id
+}
+
+func (g *Group) SetSpecializationID(specializationID uuid.UUID) {
+	g.specializationID = specializationID
 }
 
 func (g *Group) FacultyID() uuid.UUID {
@@ -41,12 +49,12 @@ func (g *Group) Id() uuid.UUID {
 	return g.id
 }
 
-func (g *Group) Specialization() string {
-	return g.specialization
+func (g *Group) SpecializationID() uuid.UUID {
+	return g.specializationID
 }
 
-func (g *Group) SetSpecialization(specialization string) {
-	g.specialization = specialization
+func (g *Group) SetSpecialization(specializationID uuid.UUID) {
+	g.specializationID = specializationID
 }
 
 func (g *Group) YearOfEnrollment() int {

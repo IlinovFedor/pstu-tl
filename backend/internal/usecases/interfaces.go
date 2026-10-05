@@ -27,7 +27,7 @@ type CalculationRepository interface {
 
 // DisciplineRepository интерфейс для работы с дисциплинами
 type DisciplineRepository interface {
-	CreateDiscipline(ctx context.Context, discipline models.Discipline) error
+	UpsertDisciplines(ctx context.Context, discipline []*models.Discipline) ([]models.Discipline, error)
 	GetDiscipline(ctx context.Context, disciplineID uuid.UUID) (*models.Discipline, error)
 	EditDiscipline(ctx context.Context, name string) error
 
@@ -43,9 +43,27 @@ type DisciplineRepository interface {
 	RevertDisciplineAction(ctx context.Context, actionID uuid.UUID) error
 }
 
+// DisciplineRepository интерфейс для работы со специальностями
+type SpecializationRepository interface {
+	UpsertSpecializations(ctx context.Context, specializations []*models.Specialization) ([]models.Specialization, error)
+	GetSpecialization(ctx context.Context, disciplineID uuid.UUID) (*models.Specialization, error)
+	EditSpecialization(ctx context.Context, name string) error
+
+	SoftDeleteSpecialization(ctx context.Context, disciplineID uuid.UUID) error
+	RestoreSpecialization(ctx context.Context, disciplineID uuid.UUID) error
+
+	GetSpecializations(ctx context.Context, showDeleted bool) ([]models.Specialization, error)
+	GetSpecializationsByIDs(ctx context.Context, recordsIds []uuid.UUID, showDeleted bool) ([]models.Specialization, error)
+	GetSpecializationsByYear(ctx context.Context, yearName int) ([]models.Specialization, error)
+
+	GetSpecializationsActions(ctx context.Context) ([]models.SpecializationAction, error)
+	GetSpecializationActions(ctx context.Context, disciplineID uuid.UUID) ([]models.SpecializationAction, error)
+	RevertSpecializationAction(ctx context.Context, actionID uuid.UUID) error
+}
+
 // FacultyRepository интерфейс для работы с дисциплинами
 type FacultyRepository interface {
-	CreateFaculty(ctx context.Context, discipline models.Faculty) error
+	UpsertFaculties(ctx context.Context, discipline []*models.Faculty) ([]models.Faculty, error)
 	GetFaculty(ctx context.Context, disciplineID uuid.UUID) (*models.Faculty, error)
 	EditFaculty(ctx context.Context, name string) error
 
@@ -61,7 +79,7 @@ type FacultyRepository interface {
 
 // FileExportRepository интерфейс для работы с файлами экспорта
 type FileExportRepository interface {
-	CreateFileExport(ctx context.Context, fileExport models.FileExport) error
+	InsertFileExport(ctx context.Context, fileExport models.FileExport) error
 	GetFileExport(ctx context.Context, fileID uuid.UUID) (*models.FileExport, error)
 	GetFileExportData(ctx context.Context, fileID uuid.UUID) ([]byte, error)
 
@@ -77,7 +95,7 @@ type FileExportRepository interface {
 
 // FileImportRepository интерфейс для работы с файлами импорта
 type FileImportRepository interface {
-	CreateFileImport(ctx context.Context, fileImport models.FileImport) error
+	InsertFileImport(ctx context.Context, fileImport models.FileImport) error
 	GetFileImport(ctx context.Context, fileID uuid.UUID) (*models.FileImport, error)
 	GetFileImportData(ctx context.Context, fileID uuid.UUID) ([]byte, error)
 
@@ -93,7 +111,7 @@ type FileImportRepository interface {
 
 // FileReportRepository интерфейс для работы с файлами индивидуальной нагрузки
 type FileReportRepository interface {
-	CreateFileReport(ctx context.Context, fileReport models.FileReport) error
+	InsertFileReport(ctx context.Context, fileReport models.FileReport) error
 	GetFileReport(ctx context.Context, fileID uuid.UUID) (*models.FileReport, error)
 	GetFileReportData(ctx context.Context, fileID uuid.UUID) ([]byte, error)
 
@@ -110,7 +128,7 @@ type FileReportRepository interface {
 
 // GroupRepository интерфейс работы с репозиторием групп
 type GroupRepository interface {
-	CreateGroup(ctx context.Context, group models.Group) error
+	UpsertGroups(ctx context.Context, groups []*models.Group) ([]models.Group, error)
 	GetGroup(ctx context.Context, groupID uuid.UUID) (*models.Group, error)
 	EditGroup(
 		ctx context.Context,
@@ -134,7 +152,7 @@ type GroupRepository interface {
 
 // RecordsRepository интерфейс для работы с файлами учебных записей
 type RecordsRepository interface {
-	CreateRecords(ctx context.Context, records []models.Record) error
+	InsertRecords(ctx context.Context, records []*models.Record) error
 	GetRecord(ctx context.Context, recordID uuid.UUID) (*models.Record, error)
 	EditRecord(ctx context.Context, teachersHours []models.TeacherHours, isError bool) error
 
@@ -151,7 +169,7 @@ type RecordsRepository interface {
 
 // TeacherRepository интерфейс для работы с преподавателями
 type TeacherRepository interface {
-	CreateTeacher(ctx context.Context, teacher models.Teacher) error
+	InsertTeacher(ctx context.Context, teacher models.Teacher) error
 	GetTeacher(ctx context.Context, teacherID uuid.UUID) (*models.Teacher, error)
 	EditTeacher(ctx context.Context,
 		name string,
@@ -173,7 +191,7 @@ type TeacherRepository interface {
 
 // YearRepository интерфейс для работы с учебными годами
 type YearRepository interface {
-	CreateYear(ctx context.Context, year models.Year) error
+	InsertYear(ctx context.Context, year models.Year) error
 	GetYear(ctx context.Context, yearID uuid.UUID) (*models.Year, error)
 	EditYear(
 		ctx context.Context,
@@ -201,10 +219,16 @@ type UserRepository interface {
 	GetUsers(ctx context.Context, showDeleted bool) ([]models.User, error)
 	GetUserByName(ctx context.Context, name string) (*models.User, error)
 
-	CreateUser(ctx context.Context, user models.User) error
-	CreateUsers(ctx context.Context, users []models.User) error
+	InsertUser(ctx context.Context, user models.User) error
+	InsertUsers(ctx context.Context, users []models.User) error
 	UpdateUser(ctx context.Context, userName string, role models.UserRole, associatedTeacherID uuid.UUID) error
 	DeleteUser(ctx context.Context, userName string) error
 
 	ChangePassword(ctx context.Context, userName string, passwordHash string) error
+}
+
+type FileStorage interface {
+	CreateFile(uuid uuid.UUID, data []byte) error
+	GetFile(uuid uuid.UUID) ([]byte, error)
+	DeleteFile(uuid uuid.UUID) error
 }

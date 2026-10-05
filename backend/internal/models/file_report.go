@@ -5,17 +5,17 @@ import (
 )
 
 type FileReport struct {
-	id                  uuid.UUID
-	isDeleted           bool
-	associatedTeacherId uuid.UUID
+	id        uuid.UUID
+	isDeleted bool
+	teacherID uuid.UUID
 }
 
 func (f *FileReport) SetIsDeleted(isDeleted bool) {
 	f.isDeleted = isDeleted
 }
 
-func (f FileReport) AssociatedTeacherId() uuid.UUID {
-	return f.associatedTeacherId
+func (f FileReport) TeacherID() uuid.UUID {
+	return f.teacherID
 }
 
 func (f FileReport) IsDeleted() bool {
@@ -26,8 +26,8 @@ func (f FileReport) Id() uuid.UUID {
 	return f.id
 }
 
-func NewFileReport(id uuid.UUID, isDeleted bool, associatedTeacherId uuid.UUID) *FileReport {
-	return &FileReport{id: id, isDeleted: isDeleted, associatedTeacherId: associatedTeacherId}
+func NewFileReport(id uuid.UUID, isDeleted bool, teacherID uuid.UUID) *FileReport {
+	return &FileReport{id: id, isDeleted: isDeleted, teacherID: teacherID}
 }
 
 type FileReportAction struct {

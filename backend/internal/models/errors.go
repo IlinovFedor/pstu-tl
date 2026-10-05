@@ -17,4 +17,7 @@ var (
 	ErrDuplicateFileName  = errors.New("duplicate file name")
 	ErrDuplicateFileData  = errors.New("duplicate file data")
 	ErrInvalidFileData    = errors.New("invalid file data")
+	ErrUnknownRecordType  = errors.New("unknown record type")
+	ErrUnparsableGroup    = errors.New("cannot parse group name")
+	ErrUnparsableHours    = errors.New("cannot parse record hours")
 )

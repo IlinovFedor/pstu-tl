@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"uuid"
 )
 
@@ -30,6 +31,40 @@ const (
 	RecordTypeWorkPractice       // ПрПр
 	RecordTypePreDiplomaPractice // ПредПр
 )
+
+var recordTypeMap = map[string]RecordType{
+	"лек": RecordTypeLecture,
+	"пр":  RecordTypePractice,
+	"лаб": RecordTypeLab,
+	"кср": RecordTypeKsr,
+
+	"кп":       RecordTypeCourseProject,
+	"кр":       RecordTypeCourseWork,
+	"контрраб": RecordTypeControlWork,
+
+	"зач":    RecordTypePass,
+	"дифзач": RecordTypeGradedPass,
+	"экз":    RecordTypeExam,
+	"госэкз": RecordTypeStateExam,
+	"гэк":    RecordTypeGek,
+
+	"руквкр": RecordTypeThesisSupervision,
+	"рец":    RecordTypeReviewing,
+
+	"учпр":   RecordTypeStudyPractice,
+	"прпр":   RecordTypeWorkPractice,
+	"предпр": RecordTypePreDiplomaPractice,
+}
+
+func MapStringToRecordType(name string) (RecordType, error) {
+	name = strings.ToLower(name)
+	name = strings.TrimSpace(name)
+	recordType, ok := recordTypeMap[name]
+	if !ok {
+		return 0, ErrUnknownRecordType
+	}
+	return recordType, nil
+}
 
 // SubgroupType тип подгруппы: 0 - обе, 1 - первая, 2 - вторая
 type SubgroupType int
@@ -74,8 +109,8 @@ type Record struct {
 	isDeleted     bool
 }
 
-func NewRecord(importFileID uuid.UUID, groups []GroupsSubgroups, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int) *Record {
-	return &Record{id: uuid.NewV7(), importFileID: importFileID, groups: groups, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours}
+func NewRecord(id uuid.UUID, importFileID uuid.UUID, groups []GroupsSubgroups, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int, teachersHours []TeacherHours, isError bool, isDeleted bool) *Record {
+	return &Record{id: id, importFileID: importFileID, groups: groups, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours, teachersHours: teachersHours, isError: isError, isDeleted: isDeleted}
 }
 
 func (r *Record) SetIsError(isError bool) {

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"uuid"
 )
 
@@ -30,6 +31,10 @@ type Teacher struct {
 	isDeleted bool
 }
 
+func NewTeacher(id uuid.UUID, name string, job TeacherJob, wage TeacherWage, isDeleted bool) *Teacher {
+	return &Teacher{id: id, name: strings.TrimSpace(name), job: job, wage: wage, isDeleted: isDeleted}
+}
+
 func (t *Teacher) IsDeleted() bool {
 	return t.isDeleted
 }
@@ -39,7 +44,7 @@ func (t *Teacher) SetIsDeleted(isDeleted bool) {
 }
 
 func (t *Teacher) SetName(name string) {
-	t.name = name
+	t.name = strings.TrimSpace(name)
 }
 
 func (t *Teacher) SetJob(job TeacherJob) {
@@ -64,10 +69,6 @@ func (t Teacher) Job() TeacherJob {
 
 func (t Teacher) Wage() TeacherWage {
 	return t.wage
-}
-
-func NewTeacher(name string, job TeacherJob, wage TeacherWage) *Teacher {
-	return &Teacher{id: uuid.NewV7(), name: name, job: job, wage: wage}
 }
 
 // TeacherAction модель изменения преподавателя. Получается только из репозитория, append-only

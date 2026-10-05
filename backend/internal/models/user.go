@@ -1,6 +1,9 @@
 package models
 
-import "uuid"
+import (
+	"strings"
+	"uuid"
+)
 
 type UserRole int
 
@@ -18,7 +21,7 @@ type User struct {
 }
 
 func NewUser(name string, passwordHash string, role UserRole, associatedTeacherId *uuid.UUID) *User {
-	return &User{name: name, passwordHash: passwordHash, role: role, associatedTeacherId: associatedTeacherId}
+	return &User{name: strings.TrimSpace(name), passwordHash: passwordHash, role: role, associatedTeacherId: associatedTeacherId}
 }
 
 func (u *User) PasswordHash() string {
@@ -31,10 +34,6 @@ func (u *User) SetPasswordHash(passwordHash string) {
 
 func (u *User) Name() string {
 	return u.name
-}
-
-func (u *User) SetName(name string) {
-	u.name = name
 }
 
 func (u *User) Role() UserRole {
