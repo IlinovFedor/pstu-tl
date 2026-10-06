@@ -28,7 +28,7 @@ const (
 	defaultRowsCnt = 1024
 )
 
-var regexGroupName = regexp.MustCompile(`^([А-я]+) +([А-я\d]+) *-(\d\d)-(\d+(?:,\d+)*)([А-я]+)$`)
+var regexGroupName = regexp.MustCompile(`^([А-яЁё]+) +([А-яЁё\d]+) *-(\d\d)-(\d+(?:,\d+)*)([А-яЁё]+)$`)
 
 var mapSheetNameToTerm = map[string]models.Term{
 	"Осенний семестр":  models.TermFirst,
@@ -94,26 +94,28 @@ func newImportRecord(record models.Record, discipline *importDiscipline, subgrou
 }
 
 type parser struct {
-	disciplines map[importDiscipline]*importDiscipline
-	faculties   map[importFaculty]*importFaculty
-	specials    map[importSpecialization]*importSpecialization
-	groups      map[importGroup]*importGroup
+	disciplines map[importDiscipline]*models.Discipline
+	faculties   map[importFaculty]*models.Faculty
+	specials    map[importSpecialization]*models.Specialization
+	groups      map[importGroup]*models.Group
 	records     []*importRecord
 }
 
 func newParser() *parser {
 	return &parser{
-		disciplines: make(map[importDiscipline]*importDiscipline),
-		faculties:   make(map[importFaculty]*importFaculty),
-		specials:    make(map[importSpecialization]*importSpecialization),
-		groups:      make(map[importGroup]*importGroup),
+		disciplines: make(map[importDiscipline]*models.Discipline),
+		faculties:   make(map[importFaculty]*models.Faculty),
+		specials:    make(map[importSpecialization]*models.Specialization),
+		groups:      make(map[importGroup]*models.Group),
 		records:     make([]*importRecord, defaultRowsCnt),
 	}
 }
 
 // TODO: привести в порядок
-func (i *parser) parseSheet(file *excelize.File, sheet string, fileID uuid.UUID) (err error) {
-	rows, err := file.Rows(sheet)
+func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.UUID) (err error) {
+	rows, err := file.Rows(
+		mapTermToSheetName[term],
+	)
 	if err != nil {
 		return
 	}
@@ -124,15 +126,16 @@ func (i *parser) parseSheet(file *excelize.File, sheet string, fileID uuid.UUID)
 		}
 	}(rows)
 
-	term := mapSheetNameToTerm[sheet]
-
 	for rows.Next() {
 		var columns []string
+		// TODO: брать данные для столбцов из merged columns
+		// TODO: оборачивать ошибки доп инфой
+		// TODO: вероятно количество студентов нужно сделать общим для records
 		columns, err = rows.Columns()
 		if err != nil {
 			return err
 		}
-		if len(columns) != 6 {
+		if len(columns) > 6 {
 			continue
 		}
 		submatch := regexGroupName.FindStringSubmatch(columns[1])
@@ -141,28 +144,22 @@ func (i *parser) parseSheet(file *excelize.File, sheet string, fileID uuid.UUID)
 		}
 
 		discipline := newImportDiscipline(*models.NewDiscipline(uuid.Nil(), columns[0], false))
-		if mapDisc, ok := i.disciplines[*discipline]; ok {
-			discipline = mapDisc
-		} else {
-			i.disciplines[*discipline] = discipline
+		if _, ok := i.disciplines[*discipline]; !ok {
+			i.disciplines[*discipline] = &discipline.Discipline
 		}
 
 		faculty := newImportFaculty(*models.NewFaculty(uuid.Nil(), submatch[1], false))
-		if mapFac, ok := i.faculties[*faculty]; ok {
-			faculty = mapFac
-		} else {
-			i.faculties[*faculty] = faculty
+		if _, ok := i.faculties[*faculty]; !ok {
+			i.faculties[*faculty] = &faculty.Faculty
 		}
 
 		specialization := newImportSpecialization(*models.NewSpecialization(uuid.Nil(), submatch[2], false))
-		if mapSpecial, ok := i.specials[*specialization]; ok {
-			specialization = mapSpecial
-		} else {
-			i.specials[*specialization] = specialization
+		if _, ok := i.specials[*specialization]; !ok {
+			i.specials[*specialization] = &specialization.Specialization
 		}
 
 		var studentsAmount int
-		studentsAmount, err = strconv.Atoi(columns[2])
+		studentsAmount, err = strconv.Atoi(strings.TrimSpace(columns[2]))
 		if err != nil {
 			return err
 		}
@@ -177,14 +174,14 @@ func (i *parser) parseSheet(file *excelize.File, sheet string, fileID uuid.UUID)
 
 		var subgroupInt int
 		subgroupType := models.SubgroupTypeBoth
-		subgroupInt, err = strconv.Atoi(columns[3])
+		subgroupInt, err = strconv.Atoi(strings.TrimSpace(columns[3]))
 		if err == nil {
 			subgroupType = models.SubgroupType(subgroupInt)
 		}
 
 		for _, numStr := range groupsSeqNums {
 			var num int
-			num, err = strconv.Atoi(numStr)
+			num, err = strconv.Atoi(strings.TrimSpace(numStr))
 			if err != nil {
 				return err
 			}
@@ -202,10 +199,8 @@ func (i *parser) parseSheet(file *excelize.File, sheet string, fileID uuid.UUID)
 				specialization,
 			)
 
-			if mapGroup, ok := i.groups[*group]; ok {
-				group = mapGroup
-			} else {
-				i.groups[*group] = group
+			if _, ok := i.groups[*group]; !ok {
+				i.groups[*group] = &group.Group
 			}
 			subgroups = append(subgroups, *newImportSubgroups(group, subgroupType))
 		}
