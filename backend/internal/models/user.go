@@ -21,6 +21,7 @@ type User struct {
 }
 
 func NewUser(name string, passwordHash string, role UserRole, associatedTeacherId *uuid.UUID) *User {
+	name = strings.ToLower(name)
 	return &User{name: strings.TrimSpace(name), passwordHash: passwordHash, role: role, associatedTeacherId: associatedTeacherId}
 }
 

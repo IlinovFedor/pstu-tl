@@ -13,6 +13,7 @@ type Faculty struct {
 }
 
 func NewFaculty(id uuid.UUID, name string, isDeleted bool) *Faculty {
+	name = strings.ToLower(name)
 	return &Faculty{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
 }
 
@@ -29,6 +30,7 @@ func (d *Faculty) SetIsDeleted(isDeleted bool) {
 }
 
 func (d *Faculty) SetName(name string) {
+	name = strings.ToLower(name)
 	d.name = strings.TrimSpace(name)
 }
 

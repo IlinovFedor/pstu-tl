@@ -13,6 +13,7 @@ type Discipline struct {
 }
 
 func NewDiscipline(id uuid.UUID, name string, isDeleted bool) *Discipline {
+	name = strings.ToLower(name)
 	return &Discipline{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
 }
 
@@ -29,6 +30,7 @@ func (d *Discipline) SetIsDeleted(isDeleted bool) {
 }
 
 func (d *Discipline) SetName(name string) {
+	name = strings.ToLower(name)
 	d.name = strings.TrimSpace(name)
 }
 

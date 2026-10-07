@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -25,10 +26,23 @@ type FileImportService struct {
 }
 
 const (
-	defaultRowsCnt = 1024
+	colDiscipline = iota
+	colGroup
+	colStudentsAmount
+	colSubgroupNumber
+	colRecordType
+	colGoalHours
 )
 
 var regexGroupName = regexp.MustCompile(`^([А-яЁё]+) +([А-яЁё\d]+) *-(\d\d)-(\d+(?:,\d+)*)([А-яЁё]+)$`)
+
+const (
+	submatchFaculty = iota + 1
+	submatchSpecialization
+	submatchYearOfEnrollment
+	submatchSequenceNumbers
+	submatchGroupType
+)
 
 var mapSheetNameToTerm = map[string]models.Term{
 	"Осенний семестр":  models.TermFirst,
@@ -107,12 +121,20 @@ func newParser() *parser {
 		faculties:   make(map[importFaculty]*importFaculty),
 		specials:    make(map[importSpecialization]*importSpecialization),
 		groups:      make(map[importGroup]*importGroup),
-		records:     make([]importRecord, 0, defaultRowsCnt),
+		records:     make([]importRecord, 0),
 	}
 }
 
+func intern[T comparable](m map[T]*T, v *T) *T {
+	if ref, ok := m[*v]; ok {
+		return ref
+	}
+	m[*v] = v
+	return v
+}
+
 // TODO: привести в порядок
-func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.UUID) (err error) {
+func (p *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.UUID) (err error) {
 	rows, err := file.Rows(
 		mapTermToSheetName[term],
 	)
@@ -126,109 +148,120 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		}
 	}(rows)
 
+	parseErr := models.NewParseError(
+		make([]models.CellError, 0))
+
+	var (
+		columns   []string
+		rowNum    = 0
+		rowFailed bool
+	)
+
+	cell := func(col int) string {
+		if col < len(columns) {
+			return strings.TrimSpace(columns[col])
+		}
+		return ""
+	}
+	fail := func(col int, reason, cause error) {
+		rowFailed = true
+		name, errName := excelize.CoordinatesToCellName(col+1, rowNum)
+		if errName != nil {
+			name = fmt.Sprintf("R%dC%d", rowNum, col+1)
+		}
+		if cause != nil {
+			reason = fmt.Errorf("%w: %v", reason, cause)
+		}
+		parseErr.AddErr(models.NewCellError(reason, term, name, cell(col)))
+	}
+	atoi := func(col int, s string, reason error) (int, bool) {
+		n, errAtoi := strconv.Atoi(strings.TrimSpace(s))
+		if errAtoi != nil {
+			fail(col, reason, errAtoi)
+			return 0, false
+		}
+		return n, true
+	}
+
 	for rows.Next() {
-		var columns []string
+		rowNum++
 		// TODO: брать данные для столбцов из merged columns
-		// TODO: оборачивать ошибки доп инфой
-		// TODO: вероятно количество студентов нужно сделать общим для records
-		columns, err = rows.Columns()
-		if err != nil {
-			return err
+		var errGetColumns error
+		columns, errGetColumns = rows.Columns()
+		if errGetColumns != nil {
+			return errGetColumns
 		}
 		if len(columns) < 6 {
 			continue
 		}
-		submatch := regexGroupName.FindStringSubmatch(columns[1])
+
+		studentsAmount, errParseStudentsAmount := strconv.Atoi(strings.TrimSpace(columns[colStudentsAmount]))
+		if errParseStudentsAmount != nil {
+			fail(colStudentsAmount, models.ErrUnparsableStudentsAmount, errParseStudentsAmount)
+		}
+
+		recordType, errRecordType := models.NewRecordType(columns[colRecordType])
+		if errRecordType != nil {
+			fail(colRecordType, models.ErrUnknownRecordType, errRecordType)
+		}
+
+		goalHours, errParseGoalHours := strconv.Atoi(columns[colGoalHours])
+		if errParseGoalHours != nil {
+			fail(colGoalHours, models.ErrUnparsableGoalHours, errParseGoalHours)
+		}
+
+		subgroupType := models.SubgroupTypeBoth
+		if cell(colSubgroupNumber) != "" {
+			if n, ok := atoi(colSubgroupNumber, cell(colSubgroupNumber), models.ErrUnparsableSubgroupNumber); ok {
+				subgroupType = models.SubgroupType(n)
+			}
+		}
+
+		submatch := regexGroupName.FindStringSubmatch(columns[colGroup])
 		if submatch == nil {
+			fail(colGroup, models.ErrUnparsableGroupCell, nil)
 			continue
 		}
 
-		discipline := newImportDiscipline(*models.NewDiscipline(uuid.Nil(), columns[0], false))
-		if ref, ok := i.disciplines[*discipline]; !ok {
-			i.disciplines[*discipline] = discipline
-		} else {
-			discipline = ref
+		yearOfEnrollment, _ := atoi(colGroup, submatch[submatchYearOfEnrollment], models.ErrUnparsableYearOfEnrollment)
+
+		groupType, errGT := models.NewGroupTypeFromString(submatch[submatchGroupType])
+		if errGT != nil {
+			fail(colGroup, models.ErrUnknownGroupType, errGT)
 		}
 
-		faculty := newImportFaculty(*models.NewFaculty(uuid.Nil(), submatch[1], false))
-		if ref, ok := i.faculties[*faculty]; !ok {
-			i.faculties[*faculty] = faculty
-		} else {
-			faculty = ref
-		}
-
-		specialization := newImportSpecialization(*models.NewSpecialization(uuid.Nil(), submatch[2], false))
-		if ref, ok := i.specials[*specialization]; !ok {
-			i.specials[*specialization] = specialization
-		} else {
-			specialization = ref
-		}
-
-		var studentsAmount int
-		studentsAmount, err = strconv.Atoi(strings.TrimSpace(columns[2]))
-		if err != nil {
-			return err
-		}
-
-		var yearOfEnrollment int
-		yearOfEnrollment, err = strconv.Atoi(submatch[3])
-		if err != nil {
-			return err
-		}
-		groupsSeqNums := strings.Split(submatch[4], ",")
-		subgroups := make([]importSubgroups, 0)
-
-		var groupType models.GroupType
-		groupType, err = models.NewGroupTypeFromString(submatch[5])
-
-		var subgroupInt int
-		subgroupType := models.SubgroupTypeBoth
-		subgroupInt, err = strconv.Atoi(strings.TrimSpace(columns[3]))
-		if err == nil {
-			subgroupType = models.SubgroupType(subgroupInt)
-		}
-
-		for _, numStr := range groupsSeqNums {
-			var num int
-			num, err = strconv.Atoi(strings.TrimSpace(numStr))
-			if err != nil {
-				return err
+		var seqNums []int
+		for s := range strings.SplitSeq(submatch[submatchSequenceNumbers], ",") {
+			if n, ok := atoi(colGroup, s, models.ErrUnparsableGroupSequenceNumber); ok {
+				seqNums = append(seqNums, n)
 			}
+		}
 
-			group := newImportGroup(*models.NewGroup(
-				uuid.Nil(),
-				uuid.Nil(),
-				uuid.Nil(),
-				yearOfEnrollment,
-				num,
-				groupType,
-				false,
-			),
-				faculty,
-				specialization,
-			)
+		disciplineName := strings.TrimSpace(columns[colDiscipline])
+		if disciplineName == "" {
+			fail(colDiscipline, models.ErrEmptyDisciplineCol, nil)
+		}
 
-			if ref, ok := i.groups[*group]; !ok {
-				i.groups[*group] = group
-			} else {
-				group = ref
-			}
+		if rowFailed {
+			continue
+		}
+
+		discipline := intern(p.disciplines, newImportDiscipline(
+			*models.NewDiscipline(uuid.Nil(), disciplineName, false)))
+		faculty := intern(p.faculties, newImportFaculty(
+			*models.NewFaculty(uuid.Nil(), submatch[submatchFaculty], false)))
+		specialization := intern(p.specials, newImportSpecialization(
+			*models.NewSpecialization(uuid.Nil(), submatch[submatchSpecialization], false)))
+
+		subgroups := make([]importSubgroups, 0, len(seqNums))
+		for _, num := range seqNums {
+			group := intern(p.groups, newImportGroup(
+				*models.NewGroup(uuid.Nil(), uuid.Nil(), uuid.Nil(), yearOfEnrollment, num, groupType, false),
+				faculty, specialization))
 			subgroups = append(subgroups, *newImportSubgroups(group, subgroupType))
 		}
 
-		var recordType models.RecordType
-		recordType, err = models.NewRecordType(columns[4])
-		if err != nil {
-			return err
-		}
-
-		var hoursGoal int
-		hoursGoal, err = strconv.Atoi(columns[5])
-		if err != nil {
-			return err
-		}
-
-		i.records = append(i.records,
+		p.records = append(p.records,
 			*newImportRecord(
 				*models.NewRecord(
 					uuid.Nil(),
@@ -238,7 +271,7 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 					uuid.Nil(),
 					term,
 					recordType,
-					hoursGoal,
+					goalHours,
 					nil,
 					false,
 					false,
@@ -248,7 +281,10 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		)
 	}
 
-	return
+	if parseErr.HasErrors() {
+		return parseErr
+	}
+	return nil
 }
 
 func (f *FileImportService) ImportFile(ctx context.Context, yearName int, data []byte, fileName string) (err error) {

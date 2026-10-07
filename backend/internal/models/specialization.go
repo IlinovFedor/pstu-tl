@@ -13,6 +13,7 @@ type Specialization struct {
 }
 
 func NewSpecialization(id uuid.UUID, name string, isDeleted bool) *Specialization {
+	name = strings.ToLower(name)
 	return &Specialization{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
 }
 
@@ -29,6 +30,7 @@ func (d *Specialization) SetIsDeleted(isDeleted bool) {
 }
 
 func (d *Specialization) SetName(name string) {
+	name = strings.ToLower(name)
 	d.name = strings.TrimSpace(name)
 }
 

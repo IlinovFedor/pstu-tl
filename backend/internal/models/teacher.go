@@ -32,6 +32,7 @@ type Teacher struct {
 }
 
 func NewTeacher(id uuid.UUID, name string, job TeacherJob, wage TeacherWage, isDeleted bool) *Teacher {
+	name = strings.ToLower(name)
 	return &Teacher{id: id, name: strings.TrimSpace(name), job: job, wage: wage, isDeleted: isDeleted}
 }
 
@@ -44,6 +45,7 @@ func (t *Teacher) SetIsDeleted(isDeleted bool) {
 }
 
 func (t *Teacher) SetName(name string) {
+	name = strings.ToLower(name)
 	t.name = strings.TrimSpace(name)
 }
 
