@@ -20,4 +20,5 @@ var (
 	ErrUnknownRecordType  = errors.New("unknown record type")
 	ErrUnparsableGroup    = errors.New("cannot parse group name")
 	ErrUnparsableHours    = errors.New("cannot parse record hours")
+	ErrUnknownGroupType   = errors.New("cannot parse group type")
 )

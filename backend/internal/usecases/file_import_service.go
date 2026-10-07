@@ -94,20 +94,20 @@ func newImportRecord(record models.Record, discipline *importDiscipline, subgrou
 }
 
 type parser struct {
-	disciplines map[importDiscipline]*models.Discipline
-	faculties   map[importFaculty]*models.Faculty
-	specials    map[importSpecialization]*models.Specialization
-	groups      map[importGroup]*models.Group
-	records     []*importRecord
+	disciplines map[importDiscipline]*importDiscipline
+	faculties   map[importFaculty]*importFaculty
+	specials    map[importSpecialization]*importSpecialization
+	groups      map[importGroup]*importGroup
+	records     []importRecord
 }
 
 func newParser() *parser {
 	return &parser{
-		disciplines: make(map[importDiscipline]*models.Discipline),
-		faculties:   make(map[importFaculty]*models.Faculty),
-		specials:    make(map[importSpecialization]*models.Specialization),
-		groups:      make(map[importGroup]*models.Group),
-		records:     make([]*importRecord, defaultRowsCnt),
+		disciplines: make(map[importDiscipline]*importDiscipline),
+		faculties:   make(map[importFaculty]*importFaculty),
+		specials:    make(map[importSpecialization]*importSpecialization),
+		groups:      make(map[importGroup]*importGroup),
+		records:     make([]importRecord, 0, defaultRowsCnt),
 	}
 }
 
@@ -135,7 +135,7 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		if err != nil {
 			return err
 		}
-		if len(columns) > 6 {
+		if len(columns) < 6 {
 			continue
 		}
 		submatch := regexGroupName.FindStringSubmatch(columns[1])
@@ -144,18 +144,24 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		}
 
 		discipline := newImportDiscipline(*models.NewDiscipline(uuid.Nil(), columns[0], false))
-		if _, ok := i.disciplines[*discipline]; !ok {
-			i.disciplines[*discipline] = &discipline.Discipline
+		if ref, ok := i.disciplines[*discipline]; !ok {
+			i.disciplines[*discipline] = discipline
+		} else {
+			discipline = ref
 		}
 
 		faculty := newImportFaculty(*models.NewFaculty(uuid.Nil(), submatch[1], false))
-		if _, ok := i.faculties[*faculty]; !ok {
-			i.faculties[*faculty] = &faculty.Faculty
+		if ref, ok := i.faculties[*faculty]; !ok {
+			i.faculties[*faculty] = faculty
+		} else {
+			faculty = ref
 		}
 
 		specialization := newImportSpecialization(*models.NewSpecialization(uuid.Nil(), submatch[2], false))
-		if _, ok := i.specials[*specialization]; !ok {
-			i.specials[*specialization] = &specialization.Specialization
+		if ref, ok := i.specials[*specialization]; !ok {
+			i.specials[*specialization] = specialization
+		} else {
+			specialization = ref
 		}
 
 		var studentsAmount int
@@ -172,6 +178,9 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		groupsSeqNums := strings.Split(submatch[4], ",")
 		subgroups := make([]importSubgroups, 0)
 
+		var groupType models.GroupType
+		groupType, err = models.NewGroupTypeFromString(submatch[5])
+
 		var subgroupInt int
 		subgroupType := models.SubgroupTypeBoth
 		subgroupInt, err = strconv.Atoi(strings.TrimSpace(columns[3]))
@@ -186,27 +195,29 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 				return err
 			}
 
-			group := newImportGroup(*models.NewGroup(uuid.Nil(),
+			group := newImportGroup(*models.NewGroup(
+				uuid.Nil(),
 				uuid.Nil(),
 				uuid.Nil(),
 				yearOfEnrollment,
 				num,
-				models.GroupTypePartTime,
-				studentsAmount,
+				groupType,
 				false,
 			),
 				faculty,
 				specialization,
 			)
 
-			if _, ok := i.groups[*group]; !ok {
-				i.groups[*group] = &group.Group
+			if ref, ok := i.groups[*group]; !ok {
+				i.groups[*group] = group
+			} else {
+				group = ref
 			}
 			subgroups = append(subgroups, *newImportSubgroups(group, subgroupType))
 		}
 
 		var recordType models.RecordType
-		recordType, err = models.MapStringToRecordType(columns[4])
+		recordType, err = models.NewRecordType(columns[4])
 		if err != nil {
 			return err
 		}
@@ -218,10 +229,12 @@ func (i *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		}
 
 		i.records = append(i.records,
-			newImportRecord(
-				*models.NewRecord(uuid.Nil(),
+			*newImportRecord(
+				*models.NewRecord(
+					uuid.Nil(),
 					fileID,
 					nil,
+					studentsAmount,
 					uuid.Nil(),
 					term,
 					recordType,

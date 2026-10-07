@@ -32,38 +32,88 @@ const (
 	RecordTypePreDiplomaPractice // ПредПр
 )
 
-var recordTypeMap = map[string]RecordType{
-	"лек": RecordTypeLecture,
-	"пр":  RecordTypePractice,
-	"лаб": RecordTypeLab,
-	"кср": RecordTypeKsr,
-
-	"кп":       RecordTypeCourseProject,
-	"кр":       RecordTypeCourseWork,
-	"контрраб": RecordTypeControlWork,
-
-	"зач":    RecordTypePass,
-	"дифзач": RecordTypeGradedPass,
-	"экз":    RecordTypeExam,
-	"госэкз": RecordTypeStateExam,
-	"гэк":    RecordTypeGek,
-
-	"руквкр": RecordTypeThesisSupervision,
-	"рец":    RecordTypeReviewing,
-
-	"учпр":   RecordTypeStudyPractice,
-	"прпр":   RecordTypeWorkPractice,
-	"предпр": RecordTypePreDiplomaPractice,
-}
-
-func MapStringToRecordType(name string) (RecordType, error) {
+func NewRecordType(name string) (RecordType, error) {
 	name = strings.ToLower(name)
 	name = strings.TrimSpace(name)
-	recordType, ok := recordTypeMap[name]
-	if !ok {
+	switch name {
+	case "лек":
+		return RecordTypeLecture, nil
+	case "пр":
+		return RecordTypePractice, nil
+	case "лаб":
+		return RecordTypeLab, nil
+	case "кср":
+		return RecordTypeKsr, nil
+	case "кп":
+		return RecordTypeCourseProject, nil
+	case "кр":
+		return RecordTypeCourseWork, nil
+	case "контрраб":
+		return RecordTypeControlWork, nil
+	case "зач":
+		return RecordTypePass, nil
+	case "дифзач":
+		return RecordTypeGradedPass, nil
+	case "экз":
+		return RecordTypeExam, nil
+	case "госэкз":
+		return RecordTypeStateExam, nil
+	case "гэк":
+		return RecordTypeGek, nil
+	case "руквкр":
+		return RecordTypeThesisSupervision, nil
+	case "рец":
+		return RecordTypeReviewing, nil
+	case "учпр":
+		return RecordTypeStudyPractice, nil
+	case "прпр":
+		return RecordTypeWorkPractice, nil
+	case "предпр":
+		return RecordTypePreDiplomaPractice, nil
+	default:
 		return 0, ErrUnknownRecordType
 	}
-	return recordType, nil
+}
+
+func (r RecordType) String() (string, error) {
+	switch r {
+	case RecordTypeLecture:
+		return "лек", nil
+	case RecordTypePractice:
+		return "пр", nil
+	case RecordTypeLab:
+		return "лаб", nil
+	case RecordTypeKsr:
+		return "кср", nil
+	case RecordTypeCourseProject:
+		return "кп", nil
+	case RecordTypeCourseWork:
+		return "кр", nil
+	case RecordTypeControlWork:
+		return "контрраб", nil
+	case RecordTypePass:
+		return "зач", nil
+	case RecordTypeGradedPass:
+		return "дифзач", nil
+	case RecordTypeExam:
+		return "экз", nil
+	case RecordTypeStateExam:
+		return "госэкз", nil
+	case RecordTypeGek:
+		return "гэк", nil
+	case RecordTypeThesisSupervision:
+		return "руквкр", nil
+	case RecordTypeReviewing:
+		return "рец", nil
+	case RecordTypeStudyPractice:
+		return "учпр", nil
+	case RecordTypeWorkPractice:
+		return "прпр", nil
+	case RecordTypePreDiplomaPractice:
+		return "предпр", nil
+	default:
+		return "", ErrUnknownRecordType
+	}
 }
 
 // SubgroupType тип подгруппы: 0 - обе, 1 - первая, 2 - вторая
@@ -97,20 +147,29 @@ type TeacherHours struct {
 
 // Record базовая модель дисциплины
 type Record struct {
-	id            uuid.UUID
-	importFileID  uuid.UUID
-	groups        []GroupsSubgroups
-	disciplineId  uuid.UUID
-	term          Term
-	recordType    RecordType
-	goalHours     int
-	teachersHours []TeacherHours
-	isError       bool
-	isDeleted     bool
+	id             uuid.UUID
+	importFileID   uuid.UUID
+	groups         []GroupsSubgroups
+	studentsAmount int
+	disciplineId   uuid.UUID
+	term           Term
+	recordType     RecordType
+	goalHours      int
+	teachersHours  []TeacherHours
+	isError        bool
+	isDeleted      bool
 }
 
-func NewRecord(id uuid.UUID, importFileID uuid.UUID, groups []GroupsSubgroups, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int, teachersHours []TeacherHours, isError bool, isDeleted bool) *Record {
-	return &Record{id: id, importFileID: importFileID, groups: groups, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours, teachersHours: teachersHours, isError: isError, isDeleted: isDeleted}
+func (r *Record) StudentsAmount() int {
+	return r.studentsAmount
+}
+
+func (r *Record) SetStudentsAmount(studentsAmount int) {
+	r.studentsAmount = studentsAmount
+}
+
+func NewRecord(id uuid.UUID, importFileID uuid.UUID, groups []GroupsSubgroups, studentsAmount int, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int, teachersHours []TeacherHours, isError bool, isDeleted bool) *Record {
+	return &Record{id: id, importFileID: importFileID, groups: groups, studentsAmount: studentsAmount, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours, teachersHours: teachersHours, isError: isError, isDeleted: isDeleted}
 }
 
 func (r *Record) SetIsError(isError bool) {

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"uuid"
 )
 
@@ -8,10 +9,58 @@ import (
 type GroupType int
 
 const (
-	GroupTypePartTime GroupType = iota
-	GroupTypeUndergraduate
+	GroupTypeBachelorPartTime GroupType = iota
+	GroupTypeBachelorPartTimeAccelerated
+	GroupTypeBachelor
+	GroupTypeSpecialistPartTime
+	GroupTypeSpecialistPartTimeAccelerated
+	GroupTypeSpecialist
 	GroupTypePostgraduate
 )
+
+func NewGroupTypeFromString(s string) (GroupType, error) {
+	s = strings.ToLower(s)
+	s = strings.TrimSpace(s)
+	switch s {
+	case "б":
+		return GroupTypeBachelor, nil
+	case "бз":
+		return GroupTypeBachelorPartTime, nil
+	case "бзу":
+		return GroupTypeBachelorPartTimeAccelerated, nil
+	case "с":
+		return GroupTypeSpecialist, nil
+	case "сз":
+		return GroupTypeSpecialistPartTime, nil
+	case "сзу":
+		return GroupTypeSpecialistPartTimeAccelerated, nil
+	case "м":
+		return GroupTypePostgraduate, nil
+	default:
+		return 0, ErrUnknownGroupType
+	}
+}
+
+func (g GroupType) String() (string, error) {
+	switch g {
+	case GroupTypeBachelor:
+		return "б", nil
+	case GroupTypeBachelorPartTime:
+		return "бз", nil
+	case GroupTypeBachelorPartTimeAccelerated:
+		return "бзу", nil
+	case GroupTypeSpecialist:
+		return "с", nil
+	case GroupTypeSpecialistPartTime:
+		return "сз", nil
+	case GroupTypeSpecialistPartTimeAccelerated:
+		return "сзу", nil
+	case GroupTypePostgraduate:
+		return "м", nil
+	default:
+		return "", ErrUnknownGroupType
+	}
+}
 
 // Group базовая модель группы.
 type Group struct {
@@ -21,12 +70,11 @@ type Group struct {
 	yearOfEnrollment int
 	sequenceNumber   int
 	groupType        GroupType
-	studentsAmount   int
 	isDeleted        bool
 }
 
-func NewGroup(id uuid.UUID, facultyID uuid.UUID, specializationID uuid.UUID, yearOfEnrollment int, sequenceNumber int, groupType GroupType, studentsAmount int, isDeleted bool) *Group {
-	return &Group{id: id, facultyID: facultyID, specializationID: specializationID, yearOfEnrollment: yearOfEnrollment, sequenceNumber: sequenceNumber, groupType: groupType, studentsAmount: studentsAmount, isDeleted: isDeleted}
+func NewGroup(id uuid.UUID, facultyID uuid.UUID, specializationID uuid.UUID, yearOfEnrollment int, sequenceNumber int, groupType GroupType, isDeleted bool) *Group {
+	return &Group{id: id, facultyID: facultyID, specializationID: specializationID, yearOfEnrollment: yearOfEnrollment, sequenceNumber: sequenceNumber, groupType: groupType, isDeleted: isDeleted}
 }
 
 func (g *Group) SetId(id uuid.UUID) {
@@ -79,14 +127,6 @@ func (g *Group) GroupType() GroupType {
 
 func (g *Group) SetGroupType(groupType GroupType) {
 	g.groupType = groupType
-}
-
-func (g *Group) StudentsAmount() int {
-	return g.studentsAmount
-}
-
-func (g *Group) SetStudentsAmount(studentsAmount int) {
-	g.studentsAmount = studentsAmount
 }
 
 func (g *Group) IsDeleted() bool {
