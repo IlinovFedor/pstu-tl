@@ -2,6 +2,7 @@ package models
 
 import (
 	"strings"
+	"time"
 	"uuid"
 )
 
@@ -9,24 +10,24 @@ import (
 type Discipline struct {
 	id        uuid.UUID
 	name      string
-	isDeleted bool
+	deletedAt *time.Time
 }
 
-func NewDiscipline(id uuid.UUID, name string, isDeleted bool) *Discipline {
+func NewDiscipline(id uuid.UUID, name string, deletedAt *time.Time) *Discipline {
 	name = strings.ToLower(name)
-	return &Discipline{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
+	return &Discipline{id: id, name: strings.TrimSpace(name), deletedAt: deletedAt}
 }
 
 func (d *Discipline) SetId(id uuid.UUID) {
 	d.id = id
 }
 
-func (d *Discipline) IsDeleted() bool {
-	return d.isDeleted
+func (d *Discipline) DeletedAt() *time.Time {
+	return d.deletedAt
 }
 
-func (d *Discipline) SetIsDeleted(isDeleted bool) {
-	d.isDeleted = isDeleted
+func (d *Discipline) SetDeletedAt(deletedAt *time.Time) {
+	d.deletedAt = deletedAt
 }
 
 func (d *Discipline) SetName(name string) {
@@ -49,11 +50,11 @@ type DisciplineAction struct {
 	revertsActionID *uuid.UUID
 	disciplineID    uuid.UUID
 	newName         string
-	newIsDeleted    bool
+	newDeletedAt    *time.Time
 }
 
-func NewDisciplineAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, disciplineID uuid.UUID, newName string, newIsDeleted bool) *DisciplineAction {
-	return &DisciplineAction{id: id, actorName: actorName, revertsActionID: revertsActionID, disciplineID: disciplineID, newName: newName, newIsDeleted: newIsDeleted}
+func NewDisciplineAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, disciplineID uuid.UUID, newName string, newDeletedAt *time.Time) *DisciplineAction {
+	return &DisciplineAction{id: id, actorName: actorName, revertsActionID: revertsActionID, disciplineID: disciplineID, newName: newName, newDeletedAt: newDeletedAt}
 }
 
 func (d DisciplineAction) Id() uuid.UUID {
@@ -76,6 +77,6 @@ func (d DisciplineAction) NewName() string {
 	return d.newName
 }
 
-func (d DisciplineAction) NewIsDeleted() bool {
-	return d.newIsDeleted
+func (d DisciplineAction) NewDeletedAt() *time.Time {
+	return d.newDeletedAt
 }

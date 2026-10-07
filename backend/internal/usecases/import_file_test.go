@@ -33,7 +33,7 @@ func (f *fakeDisciplineRepo) UpsertDisciplines(_ context.Context, ds []*models.D
 			id = uuid.NewV7()
 			f.ids[d.Name()] = id
 		}
-		res = append(res, *models.NewDiscipline(id, d.Name(), false))
+		res = append(res, *models.NewDiscipline(id, d.Name(), nil))
 	}
 	return res, nil
 }
@@ -53,7 +53,7 @@ func (f *fakeFacultyRepo) UpsertFaculties(_ context.Context, fs []*models.Facult
 			id = uuid.NewV7()
 			f.ids[fc.Name()] = id
 		}
-		res = append(res, *models.NewFaculty(id, fc.Name(), false))
+		res = append(res, *models.NewFaculty(id, fc.Name(), nil))
 	}
 	return res, nil
 }
@@ -73,7 +73,7 @@ func (f *fakeSpecializationRepo) UpsertSpecializations(_ context.Context, ss []*
 			id = uuid.NewV7()
 			f.ids[s.Name()] = id
 		}
-		res = append(res, *models.NewSpecialization(id, s.Name(), false))
+		res = append(res, *models.NewSpecialization(id, s.Name(), nil))
 	}
 	return res, nil
 }
@@ -106,7 +106,7 @@ func (f *fakeGroupRepo) UpsertGroups(_ context.Context, gs []*models.Group) ([]m
 			id = uuid.NewV7()
 			f.ids[k] = id
 		}
-		res = append(res, *models.NewGroup(id, k.facultyID, k.specializationID, k.year, k.seq, k.groupType, false))
+		res = append(res, *models.NewGroup(id, k.facultyID, k.specializationID, k.year, k.seq, k.groupType, nil))
 	}
 	return res, nil
 }
@@ -310,10 +310,10 @@ func validSheetsWant() []wantRecord {
 	}
 }
 
-func disciplineName(s string) string { return models.NewDiscipline(uuid.Nil(), s, false).Name() }
-func facultyName(s string) string    { return models.NewFaculty(uuid.Nil(), s, false).Name() }
+func disciplineName(s string) string { return models.NewDiscipline(uuid.Nil(), s, nil).Name() }
+func facultyName(s string) string    { return models.NewFaculty(uuid.Nil(), s, nil).Name() }
 func specializationName(s string) string {
-	return models.NewSpecialization(uuid.Nil(), s, false).Name()
+	return models.NewSpecialization(uuid.Nil(), s, nil).Name()
 }
 
 // assertRecords проверяет, что записи ссылаются на ID, выданные репозиториями

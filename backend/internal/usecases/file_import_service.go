@@ -356,16 +356,16 @@ func (p *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		}
 
 		discipline := intern(p.disciplines, newImportDiscipline(
-			*models.NewDiscipline(uuid.Nil(), disciplineName, false)))
+			*models.NewDiscipline(uuid.Nil(), disciplineName, nil)))
 		faculty := intern(p.faculties, newImportFaculty(
-			*models.NewFaculty(uuid.Nil(), submatch[submatchFaculty], false)))
+			*models.NewFaculty(uuid.Nil(), submatch[submatchFaculty], nil)))
 		specialization := intern(p.specials, newImportSpecialization(
-			*models.NewSpecialization(uuid.Nil(), submatch[submatchSpecialization], false)))
+			*models.NewSpecialization(uuid.Nil(), submatch[submatchSpecialization], nil)))
 
 		subgroups := make([]importSubgroups, 0, len(seqNums))
 		for _, num := range seqNums {
 			group := intern(p.groups, newImportGroup(
-				*models.NewGroup(uuid.Nil(), uuid.Nil(), uuid.Nil(), yearOfEnrollment, num, groupType, false),
+				*models.NewGroup(uuid.Nil(), uuid.Nil(), uuid.Nil(), yearOfEnrollment, num, groupType, nil),
 				faculty, specialization))
 			subgroups = append(subgroups, *newImportSubgroups(group, subgroupType))
 		}
@@ -383,7 +383,7 @@ func (p *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 					goalHours,
 					nil,
 					false,
-					false,
+					nil,
 				),
 				discipline,
 				subgroups),

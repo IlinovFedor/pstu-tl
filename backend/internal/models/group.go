@@ -2,6 +2,7 @@ package models
 
 import (
 	"strings"
+	"time"
 	"uuid"
 )
 
@@ -70,11 +71,11 @@ type Group struct {
 	yearOfEnrollment int
 	sequenceNumber   int
 	groupType        GroupType
-	isDeleted        bool
+	deletedAt        *time.Time
 }
 
-func NewGroup(id uuid.UUID, facultyID uuid.UUID, specializationID uuid.UUID, yearOfEnrollment int, sequenceNumber int, groupType GroupType, isDeleted bool) *Group {
-	return &Group{id: id, facultyID: facultyID, specializationID: specializationID, yearOfEnrollment: yearOfEnrollment, sequenceNumber: sequenceNumber, groupType: groupType, isDeleted: isDeleted}
+func NewGroup(id uuid.UUID, facultyID uuid.UUID, specializationID uuid.UUID, yearOfEnrollment int, sequenceNumber int, groupType GroupType, deletedAt *time.Time) *Group {
+	return &Group{id: id, facultyID: facultyID, specializationID: specializationID, yearOfEnrollment: yearOfEnrollment, sequenceNumber: sequenceNumber, groupType: groupType, deletedAt: deletedAt}
 }
 
 func (g *Group) SetId(id uuid.UUID) {
@@ -129,12 +130,12 @@ func (g *Group) SetGroupType(groupType GroupType) {
 	g.groupType = groupType
 }
 
-func (g *Group) IsDeleted() bool {
-	return g.isDeleted
+func (g *Group) DeletedAt() *time.Time {
+	return g.deletedAt
 }
 
-func (g *Group) SetIsDeleted(isDeleted bool) {
-	g.isDeleted = isDeleted
+func (g *Group) SetDeletedAt(deletedAt *time.Time) {
+	g.deletedAt = deletedAt
 }
 
 // GroupAction модель изменения группы. Получается только из репозитория, append-only
@@ -149,15 +150,15 @@ type GroupAction struct {
 	newSequenceNumber   int
 	newGroupType        GroupType
 	newStudentsAmount   int
-	newIsDeleted        bool
+	newDeletedAt        *time.Time
 }
 
-func NewGroupAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, groupId uuid.UUID, newFacultyId uuid.UUID, newSpecialization string, newYearOfEnrollment int, newSequenceNumber int, newGroupType GroupType, newStudentsAmount int, newIsDeleted bool) *GroupAction {
-	return &GroupAction{id: id, actorName: actorName, revertsActionID: revertsActionID, groupId: groupId, newFacultyId: newFacultyId, newSpecialization: newSpecialization, newYearOfEnrollment: newYearOfEnrollment, newSequenceNumber: newSequenceNumber, newGroupType: newGroupType, newStudentsAmount: newStudentsAmount, newIsDeleted: newIsDeleted}
+func NewGroupAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, groupId uuid.UUID, newFacultyId uuid.UUID, newSpecialization string, newYearOfEnrollment int, newSequenceNumber int, newGroupType GroupType, newStudentsAmount int, newDeletedAt *time.Time) *GroupAction {
+	return &GroupAction{id: id, actorName: actorName, revertsActionID: revertsActionID, groupId: groupId, newFacultyId: newFacultyId, newSpecialization: newSpecialization, newYearOfEnrollment: newYearOfEnrollment, newSequenceNumber: newSequenceNumber, newGroupType: newGroupType, newStudentsAmount: newStudentsAmount, newDeletedAt: newDeletedAt}
 }
 
-func (g GroupAction) NewIsDeleted() bool {
-	return g.newIsDeleted
+func (g GroupAction) NewDeletedAt() *time.Time {
+	return g.newDeletedAt
 }
 
 func (g GroupAction) NewStudentsAmount() int {

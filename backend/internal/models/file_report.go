@@ -1,33 +1,34 @@
 package models
 
 import (
+	"time"
 	"uuid"
 )
 
 type FileReport struct {
 	id        uuid.UUID
-	isDeleted bool
+	deletedAt *time.Time
 	teacherID uuid.UUID
 }
 
-func (f *FileReport) SetIsDeleted(isDeleted bool) {
-	f.isDeleted = isDeleted
+func (f *FileReport) SetDeletedAt(deletedAt *time.Time) {
+	f.deletedAt = deletedAt
 }
 
 func (f FileReport) TeacherID() uuid.UUID {
 	return f.teacherID
 }
 
-func (f FileReport) IsDeleted() bool {
-	return f.isDeleted
+func (f FileReport) DeletedAt() *time.Time {
+	return f.deletedAt
 }
 
 func (f FileReport) Id() uuid.UUID {
 	return f.id
 }
 
-func NewFileReport(id uuid.UUID, isDeleted bool, teacherID uuid.UUID) *FileReport {
-	return &FileReport{id: id, isDeleted: isDeleted, teacherID: teacherID}
+func NewFileReport(id uuid.UUID, deletedAt *time.Time, teacherID uuid.UUID) *FileReport {
+	return &FileReport{id: id, deletedAt: deletedAt, teacherID: teacherID}
 }
 
 type FileReportAction struct {
@@ -35,11 +36,11 @@ type FileReportAction struct {
 	actorName       string
 	revertsActionID *uuid.UUID
 	fileID          uuid.UUID
-	newIsDeleted    bool
+	newDeletedAt    *time.Time
 }
 
-func (f FileReportAction) NewIsDeleted() bool {
-	return f.newIsDeleted
+func (f FileReportAction) NewDeletedAt() *time.Time {
+	return f.newDeletedAt
 }
 
 func (f FileReportAction) FileID() uuid.UUID {
@@ -58,6 +59,6 @@ func (f FileReportAction) Id() uuid.UUID {
 	return f.id
 }
 
-func NewFileReportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID uuid.UUID, newIsDeleted bool) *FileReportAction {
-	return &FileReportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newIsDeleted: newIsDeleted}
+func NewFileReportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID uuid.UUID, newDeletedAt *time.Time) *FileReportAction {
+	return &FileReportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newDeletedAt: newDeletedAt}
 }

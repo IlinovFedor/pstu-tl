@@ -2,6 +2,7 @@ package models
 
 import (
 	"strings"
+	"time"
 	"uuid"
 )
 
@@ -28,20 +29,20 @@ type Teacher struct {
 	name      string
 	job       TeacherJob
 	wage      TeacherWage
-	isDeleted bool
+	deletedAt *time.Time
 }
 
-func NewTeacher(id uuid.UUID, name string, job TeacherJob, wage TeacherWage, isDeleted bool) *Teacher {
+func NewTeacher(id uuid.UUID, name string, job TeacherJob, wage TeacherWage, deletedAt *time.Time) *Teacher {
 	name = strings.ToLower(name)
-	return &Teacher{id: id, name: strings.TrimSpace(name), job: job, wage: wage, isDeleted: isDeleted}
+	return &Teacher{id: id, name: strings.TrimSpace(name), job: job, wage: wage, deletedAt: deletedAt}
 }
 
-func (t *Teacher) IsDeleted() bool {
-	return t.isDeleted
+func (t *Teacher) DeletedAt() *time.Time {
+	return t.deletedAt
 }
 
-func (t *Teacher) SetIsDeleted(isDeleted bool) {
-	t.isDeleted = isDeleted
+func (t *Teacher) SetDeletedAt(deletedAt *time.Time) {
+	t.deletedAt = deletedAt
 }
 
 func (t *Teacher) SetName(name string) {
@@ -82,11 +83,11 @@ type TeacherAction struct {
 	newName         string
 	newJob          TeacherJob
 	newWage         TeacherWage
-	newIsDeleted    bool
+	newDeletedAt    *time.Time
 }
 
-func (t TeacherAction) NewIsDeleted() bool {
-	return t.newIsDeleted
+func (t TeacherAction) NewDeletedAt() *time.Time {
+	return t.newDeletedAt
 }
 
 func (t TeacherAction) NewWage() TeacherWage {
@@ -117,6 +118,6 @@ func (t TeacherAction) Id() uuid.UUID {
 	return t.id
 }
 
-func NewTeacherAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, teacherID uuid.UUID, newName string, newJob TeacherJob, newWage TeacherWage, newIsDeleted bool) *TeacherAction {
-	return &TeacherAction{id: id, actorName: actorName, revertsActionID: revertsActionID, teacherID: teacherID, newName: newName, newJob: newJob, newWage: newWage, newIsDeleted: newIsDeleted}
+func NewTeacherAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, teacherID uuid.UUID, newName string, newJob TeacherJob, newWage TeacherWage, newDeletedAt *time.Time) *TeacherAction {
+	return &TeacherAction{id: id, actorName: actorName, revertsActionID: revertsActionID, teacherID: teacherID, newName: newName, newJob: newJob, newWage: newWage, newDeletedAt: newDeletedAt}
 }

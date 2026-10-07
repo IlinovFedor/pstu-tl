@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"strings"
+	"time"
 	"uuid"
 )
 
@@ -195,7 +196,7 @@ type Record struct {
 	goalHours      int
 	teachersHours  []TeacherHours
 	isError        bool
-	isDeleted      bool
+	deletedAt      *time.Time
 }
 
 func (r *Record) StudentsAmount() int {
@@ -206,8 +207,8 @@ func (r *Record) SetStudentsAmount(studentsAmount int) {
 	r.studentsAmount = studentsAmount
 }
 
-func NewRecord(id uuid.UUID, importFileID uuid.UUID, groups []GroupsSubgroups, studentsAmount int, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int, teachersHours []TeacherHours, isError bool, isDeleted bool) *Record {
-	return &Record{id: id, importFileID: importFileID, groups: groups, studentsAmount: studentsAmount, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours, teachersHours: teachersHours, isError: isError, isDeleted: isDeleted}
+func NewRecord(id uuid.UUID, importFileID uuid.UUID, groups []GroupsSubgroups, studentsAmount int, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int, teachersHours []TeacherHours, isError bool, deletedAt *time.Time) *Record {
+	return &Record{id: id, importFileID: importFileID, groups: groups, studentsAmount: studentsAmount, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours, teachersHours: teachersHours, isError: isError, deletedAt: deletedAt}
 }
 
 func (r *Record) SetId(id uuid.UUID) {
@@ -283,7 +284,7 @@ type RecordAction struct {
 	teacherId       uuid.UUID
 	newHours        *int
 	newIsExtra      bool
-	newIsDeleted    bool
+	newDeletedAt    *time.Time
 }
 
 func (r RecordAction) Id() uuid.UUID {
@@ -314,10 +315,10 @@ func (r RecordAction) NewIsExtra() bool {
 	return r.newIsExtra
 }
 
-func (r RecordAction) NewIsDeleted() bool {
-	return r.newIsDeleted
+func (r RecordAction) NewDeletedAt() *time.Time {
+	return r.newDeletedAt
 }
 
-func NewRecordAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, recordId uuid.UUID, teacherId uuid.UUID, newHours *int, newIsExtra bool, newIsDeleted bool) *RecordAction {
-	return &RecordAction{id: id, actorName: actorName, revertsActionID: revertsActionID, recordId: recordId, teacherId: teacherId, newHours: newHours, newIsExtra: newIsExtra, newIsDeleted: newIsDeleted}
+func NewRecordAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, recordId uuid.UUID, teacherId uuid.UUID, newHours *int, newIsExtra bool, newDeletedAt *time.Time) *RecordAction {
+	return &RecordAction{id: id, actorName: actorName, revertsActionID: revertsActionID, recordId: recordId, teacherId: teacherId, newHours: newHours, newIsExtra: newIsExtra, newDeletedAt: newDeletedAt}
 }

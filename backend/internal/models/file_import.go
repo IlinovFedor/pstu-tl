@@ -1,6 +1,7 @@
 package models
 
 import (
+	"time"
 	"uuid"
 )
 
@@ -9,11 +10,11 @@ type FileImport struct {
 	yearName  int
 	name      string
 	hash      string
-	isDeleted bool
+	deletedAt *time.Time
 }
 
-func (f *FileImport) SetIsDeleted(isDeleted bool) {
-	f.isDeleted = isDeleted
+func (f *FileImport) SetDeletedAt(deletedAt *time.Time) {
+	f.deletedAt = deletedAt
 }
 
 func (f FileImport) Id() uuid.UUID {
@@ -32,8 +33,8 @@ func (f FileImport) Hash() string {
 	return f.hash
 }
 
-func (f FileImport) IsDeleted() bool {
-	return f.isDeleted
+func (f FileImport) DeletedAt() *time.Time {
+	return f.deletedAt
 }
 
 func NewFileImport(id uuid.UUID, yearName int, name string, hash string) *FileImport {
@@ -45,7 +46,7 @@ type FileImportAction struct {
 	actorName       string
 	revertsActionID *uuid.UUID
 	fileID          uuid.UUID
-	newIsDeleted    bool
+	newDeletedAt    *time.Time
 }
 
 func (f FileImportAction) Id() uuid.UUID {
@@ -64,10 +65,10 @@ func (f FileImportAction) FileImportID() uuid.UUID {
 	return f.fileID
 }
 
-func (f FileImportAction) NewIsDeleted() bool {
-	return f.newIsDeleted
+func (f FileImportAction) NewDeletedAt() *time.Time {
+	return f.newDeletedAt
 }
 
-func NewFileImportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID uuid.UUID, newIsDeleted bool) *FileImportAction {
-	return &FileImportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newIsDeleted: newIsDeleted}
+func NewFileImportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID uuid.UUID, newDeletedAt *time.Time) *FileImportAction {
+	return &FileImportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newDeletedAt: newDeletedAt}
 }

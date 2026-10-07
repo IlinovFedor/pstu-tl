@@ -1,6 +1,7 @@
 package models
 
 import (
+	"time"
 	"uuid"
 )
 
@@ -11,19 +12,19 @@ type Year struct {
 	extHourlyWageTier2 int
 	extHourlyWageTier3 int
 	wageTolerance      int
-	isDeleted          bool
+	deletedAt          *time.Time
 }
 
-func NewYear(name int, wageNormalHours int, extHourlyWageTier1 int, extHourlyWageTier2 int, extHourlyWageTier3 int, wageTolerance int, isDeleted bool) *Year {
-	return &Year{name: name, wageNormalHours: wageNormalHours, extHourlyWageTier1: extHourlyWageTier1, extHourlyWageTier2: extHourlyWageTier2, extHourlyWageTier3: extHourlyWageTier3, wageTolerance: wageTolerance, isDeleted: isDeleted}
+func NewYear(name int, wageNormalHours int, extHourlyWageTier1 int, extHourlyWageTier2 int, extHourlyWageTier3 int, wageTolerance int, deletedAt *time.Time) *Year {
+	return &Year{name: name, wageNormalHours: wageNormalHours, extHourlyWageTier1: extHourlyWageTier1, extHourlyWageTier2: extHourlyWageTier2, extHourlyWageTier3: extHourlyWageTier3, wageTolerance: wageTolerance, deletedAt: deletedAt}
 }
 
-func (y *Year) IsDeleted() bool {
-	return y.isDeleted
+func (y *Year) DeletedAt() *time.Time {
+	return y.deletedAt
 }
 
-func (y *Year) SetIsDeleted(isDeleted bool) {
-	y.isDeleted = isDeleted
+func (y *Year) SetDeletedAt(deletedAt *time.Time) {
+	y.deletedAt = deletedAt
 }
 
 func (y *Year) Name() int {
@@ -85,15 +86,15 @@ type YearAction struct {
 	newExtHourlyWageTier2 int
 	newExtHourlyWageTier3 int
 	newWageTolerance      int
-	newIsDeleted          bool
+	newDeletedAt          *time.Time
 }
 
-func NewYearAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, newWageNormalHours int, newExtHourlyWageTier1 int, newExtHourlyWageTier2 int, newExtHourlyWageTier3 int, newWageTolerance int, newIsDeleted bool) *YearAction {
-	return &YearAction{id: id, actorName: actorName, revertsActionID: revertsActionID, newWageNormalHours: newWageNormalHours, newExtHourlyWageTier1: newExtHourlyWageTier1, newExtHourlyWageTier2: newExtHourlyWageTier2, newExtHourlyWageTier3: newExtHourlyWageTier3, newWageTolerance: newWageTolerance, newIsDeleted: newIsDeleted}
+func NewYearAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, newWageNormalHours int, newExtHourlyWageTier1 int, newExtHourlyWageTier2 int, newExtHourlyWageTier3 int, newWageTolerance int, newDeletedAt *time.Time) *YearAction {
+	return &YearAction{id: id, actorName: actorName, revertsActionID: revertsActionID, newWageNormalHours: newWageNormalHours, newExtHourlyWageTier1: newExtHourlyWageTier1, newExtHourlyWageTier2: newExtHourlyWageTier2, newExtHourlyWageTier3: newExtHourlyWageTier3, newWageTolerance: newWageTolerance, newDeletedAt: newDeletedAt}
 }
 
-func (y YearAction) NewIsDeleted() bool {
-	return y.newIsDeleted
+func (y YearAction) NewDeletedAt() *time.Time {
+	return y.newDeletedAt
 }
 
 func (y YearAction) NewWageTolerance() int {

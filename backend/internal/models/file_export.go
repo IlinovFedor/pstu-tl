@@ -1,17 +1,18 @@
 package models
 
 import (
+	"time"
 	"uuid"
 )
 
 type FileExport struct {
 	id        uuid.UUID
 	yearName  int
-	isDeleted bool
+	deletedAt *time.Time
 }
 
-func (f *FileExport) SetIsDeleted(isDeleted bool) {
-	f.isDeleted = isDeleted
+func (f *FileExport) SetDeletedAt(deletedAt *time.Time) {
+	f.deletedAt = deletedAt
 }
 
 func (f FileExport) Id() uuid.UUID {
@@ -22,12 +23,12 @@ func (f FileExport) YearName() int {
 	return f.yearName
 }
 
-func (f FileExport) IsDeleted() bool {
-	return f.isDeleted
+func (f FileExport) DeletedAt() *time.Time {
+	return f.deletedAt
 }
 
-func NewFileExport(id uuid.UUID, yearName int, isDeleted bool) *FileExport {
-	return &FileExport{id: id, yearName: yearName, isDeleted: isDeleted}
+func NewFileExport(id uuid.UUID, yearName int, deletedAt *time.Time) *FileExport {
+	return &FileExport{id: id, yearName: yearName, deletedAt: deletedAt}
 }
 
 type FileExportAction struct {
@@ -35,11 +36,11 @@ type FileExportAction struct {
 	actorName       string
 	revertsActionID *uuid.UUID
 	fileID          *uuid.UUID
-	newIsDeleted    bool
+	newDeletedAt    *time.Time
 }
 
-func (f FileExportAction) NewIsDeleted() bool {
-	return f.newIsDeleted
+func (f FileExportAction) NewDeletedAt() *time.Time {
+	return f.newDeletedAt
 }
 
 func (f FileExportAction) FileExportID() *uuid.UUID {
@@ -58,6 +59,6 @@ func (f FileExportAction) Id() uuid.UUID {
 	return f.id
 }
 
-func NewFileExportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID *uuid.UUID, newIsDeleted bool) *FileExportAction {
-	return &FileExportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newIsDeleted: newIsDeleted}
+func NewFileExportAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, fileID *uuid.UUID, newDeletedAt *time.Time) *FileExportAction {
+	return &FileExportAction{id: id, actorName: actorName, revertsActionID: revertsActionID, fileID: fileID, newDeletedAt: newDeletedAt}
 }

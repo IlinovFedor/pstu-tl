@@ -2,6 +2,7 @@ package models
 
 import (
 	"strings"
+	"time"
 	"uuid"
 )
 
@@ -9,24 +10,24 @@ import (
 type Specialization struct {
 	id        uuid.UUID
 	name      string
-	isDeleted bool
+	deletedAt *time.Time
 }
 
-func NewSpecialization(id uuid.UUID, name string, isDeleted bool) *Specialization {
+func NewSpecialization(id uuid.UUID, name string, deletedAt *time.Time) *Specialization {
 	name = strings.ToLower(name)
-	return &Specialization{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
+	return &Specialization{id: id, name: strings.TrimSpace(name), deletedAt: deletedAt}
 }
 
 func (d *Specialization) SetId(id uuid.UUID) {
 	d.id = id
 }
 
-func (d *Specialization) IsDeleted() bool {
-	return d.isDeleted
+func (d *Specialization) DeletedAt() *time.Time {
+	return d.deletedAt
 }
 
-func (d *Specialization) SetIsDeleted(isDeleted bool) {
-	d.isDeleted = isDeleted
+func (d *Specialization) SetDeletedAt(deletedAt *time.Time) {
+	d.deletedAt = deletedAt
 }
 
 func (d *Specialization) SetName(name string) {
@@ -49,11 +50,11 @@ type SpecializationAction struct {
 	revertsActionID  *uuid.UUID
 	specializationID uuid.UUID
 	newName          string
-	newIsDeleted     bool
+	newDeletedAt     *time.Time
 }
 
-func NewSpecializationAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, SpecializationID uuid.UUID, newName string, newIsDeleted bool) *SpecializationAction {
-	return &SpecializationAction{id: id, actorName: actorName, revertsActionID: revertsActionID, specializationID: SpecializationID, newName: newName, newIsDeleted: newIsDeleted}
+func NewSpecializationAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, SpecializationID uuid.UUID, newName string, newDeletedAt *time.Time) *SpecializationAction {
+	return &SpecializationAction{id: id, actorName: actorName, revertsActionID: revertsActionID, specializationID: SpecializationID, newName: newName, newDeletedAt: newDeletedAt}
 }
 
 func (d SpecializationAction) Id() uuid.UUID {
@@ -76,6 +77,6 @@ func (d SpecializationAction) NewName() string {
 	return d.newName
 }
 
-func (d SpecializationAction) NewIsDeleted() bool {
-	return d.newIsDeleted
+func (d SpecializationAction) NewDeletedAt() *time.Time {
+	return d.newDeletedAt
 }

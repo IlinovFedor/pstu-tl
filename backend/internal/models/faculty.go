@@ -2,6 +2,7 @@ package models
 
 import (
 	"strings"
+	"time"
 	"uuid"
 )
 
@@ -9,24 +10,24 @@ import (
 type Faculty struct {
 	id        uuid.UUID
 	name      string
-	isDeleted bool
+	deletedAt *time.Time
 }
 
-func NewFaculty(id uuid.UUID, name string, isDeleted bool) *Faculty {
+func NewFaculty(id uuid.UUID, name string, deletedAt *time.Time) *Faculty {
 	name = strings.ToLower(name)
-	return &Faculty{id: id, name: strings.TrimSpace(name), isDeleted: isDeleted}
+	return &Faculty{id: id, name: strings.TrimSpace(name), deletedAt: deletedAt}
 }
 
 func (d *Faculty) SetId(id uuid.UUID) {
 	d.id = id
 }
 
-func (d *Faculty) IsDeleted() bool {
-	return d.isDeleted
+func (d *Faculty) DeletedAt() *time.Time {
+	return d.deletedAt
 }
 
-func (d *Faculty) SetIsDeleted(isDeleted bool) {
-	d.isDeleted = isDeleted
+func (d *Faculty) SetDeletedAt(deletedAt *time.Time) {
+	d.deletedAt = deletedAt
 }
 
 func (d *Faculty) SetName(name string) {
@@ -49,11 +50,11 @@ type FacultyAction struct {
 	revertsActionID *uuid.UUID
 	disciplineID    uuid.UUID
 	newName         string
-	newIsDeleted    bool
+	newDeletedAt    *time.Time
 }
 
-func NewFacultyAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, disciplineID uuid.UUID, newName string, newIsDeleted bool) *FacultyAction {
-	return &FacultyAction{id: id, actorName: actorName, revertsActionID: revertsActionID, disciplineID: disciplineID, newName: newName, newIsDeleted: newIsDeleted}
+func NewFacultyAction(id uuid.UUID, actorName string, revertsActionID *uuid.UUID, disciplineID uuid.UUID, newName string, newDeletedAt *time.Time) *FacultyAction {
+	return &FacultyAction{id: id, actorName: actorName, revertsActionID: revertsActionID, disciplineID: disciplineID, newName: newName, newDeletedAt: newDeletedAt}
 }
 
 func (d FacultyAction) Id() uuid.UUID {
@@ -76,6 +77,6 @@ func (d FacultyAction) NewName() string {
 	return d.newName
 }
 
-func (d FacultyAction) NewIsDeleted() bool {
-	return d.newIsDeleted
+func (d FacultyAction) NewDeletedAt() *time.Time {
+	return d.newDeletedAt
 }
