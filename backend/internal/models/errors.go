@@ -25,6 +25,10 @@ var (
 
 	// Ошибки парсинга входных XLSX
 
+	ErrCannotOpenXLSX                = errors.New("cannot open xlsx file")
+	ErrCannotWriteFile               = errors.New("cannot write file")
+	ErrNoTermsSheets                 = errors.New("no terms sheets found")
+	ErrUnknownTerm                   = errors.New("unknown term")
 	ErrUnparsableGroupCell           = errors.New("cannot parse group cell")
 	ErrUnparsableStudentsAmount      = errors.New("cannot parse record students amount")
 	ErrUnparsableYearOfEnrollment    = errors.New("cannot parse year of enrollment")

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"strings"
 	"uuid"
 )
@@ -143,12 +144,37 @@ func (g GroupsSubgroups) Subgroup() SubgroupType {
 	return g.subgroupSequenceNumber
 }
 
+// Term семестр. Строковое представление совпадает с названием листа в xlsx
 type Term int
 
 const (
 	TermFirst Term = iota + 1
 	TermSecond
 )
+
+func NewTermFromString(s string) (Term, error) {
+	s = strings.ToLower(s)
+	s = strings.TrimSpace(s)
+	switch s {
+	case "осенний семестр":
+		return TermFirst, nil
+	case "весенний семестр":
+		return TermSecond, nil
+	default:
+		return 0, ErrUnknownTerm
+	}
+}
+
+func (t Term) String() string {
+	switch t {
+	case TermFirst:
+		return "Осенний семестр"
+	case TermSecond:
+		return "Весенний семестр"
+	default:
+		return fmt.Sprintf("Term(%d)", int(t))
+	}
+}
 
 // TeacherHours тройка: айди преподавателя - количество часов - является ли доп нагрузкой
 type TeacherHours struct {

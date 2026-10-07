@@ -47,16 +47,6 @@ const (
 	submatchGroupType
 )
 
-var mapSheetNameToTerm = map[string]models.Term{
-	"Осенний семестр":  models.TermFirst,
-	"Весенний семестр": models.TermSecond,
-}
-
-var mapTermToSheetName = map[models.Term]string{
-	models.TermFirst:  "Осенний семестр",
-	models.TermSecond: "Весенний семестр",
-}
-
 type importDiscipline struct {
 	models.Discipline
 }
@@ -138,9 +128,7 @@ func intern[T comparable](m map[T]*T, v *T) *T {
 
 // TODO: привести в порядок
 func (p *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.UUID) (err error) {
-	rows, err := file.Rows(
-		mapTermToSheetName[term],
-	)
+	rows, err := file.Rows(term.String())
 	if err != nil {
 		return
 	}
@@ -306,8 +294,8 @@ func (f *FileImportService) ImportFile(ctx context.Context, yearName int, data [
 	pars := newParser()
 	parseErr := models.NewParseError(make([]models.CellError, 0))
 	for _, sheet := range file.GetSheetList() {
-		term, ok := mapSheetNameToTerm[sheet]
-		if !ok {
+		term, errTerm := models.NewTermFromString(sheet)
+		if errTerm != nil {
 			continue
 		}
 

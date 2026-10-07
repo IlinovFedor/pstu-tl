@@ -241,11 +241,11 @@ func buildXLSX(t *testing.T, sheets map[string][][]string) []byte {
 func TestImportFile_ParseErrorsFromBothSheets_NoWrites(t *testing.T) {
 	f := newImportFixture()
 	data := buildXLSX(t, map[string][][]string{
-		mapTermToSheetName[models.TermFirst]: {
+		models.TermFirst.String(): {
 			{"Математика", "ЭТФ АСУ-22-1б", "25", "", "Лек", "36"},
 			{"Физика", "ЭТФ АСУ-22-1б", "x", "", "Лек", "36"},
 		},
-		mapTermToSheetName[models.TermSecond]: {
+		models.TermSecond.String(): {
 			{"Химия", "ЭТФ АСУ-22-1б", "25", "", "Лекция", "36"},
 		},
 	})
@@ -270,11 +270,11 @@ func TestImportFile_ParseErrorsFromBothSheets_NoWrites(t *testing.T) {
 // validSheets: 2 дисциплины, 2 факультета, 2 специальности, 3 группы (АСУ-22-1 встречается дважды)
 func validSheets() map[string][][]string {
 	return map[string][][]string{
-		mapTermToSheetName[models.TermFirst]: {
+		models.TermFirst.String(): {
 			{"Математика", "ЭТФ АСУ-22-1,2б", "25", "", "Лек", "36"},
 			{"Математика", "ЭТФ АСУ-22-1б", "12", "1", "Пр", "18"},
 		},
-		mapTermToSheetName[models.TermSecond]: {
+		models.TermSecond.String(): {
 			{"Физика", "ФПММ ПМИ-23-1б", "20", "", "Лаб", "10"},
 		},
 	}
@@ -442,7 +442,7 @@ func TestImportFile_DuplicateHash_NoWrites(t *testing.T) {
 	f := newImportFixture()
 	f.files.existing[existing.Hash()] = &existing
 	reordered := validSheets()
-	autumn := reordered[mapTermToSheetName[models.TermFirst]]
+	autumn := reordered[models.TermFirst.String()]
 	autumn[0], autumn[1] = autumn[1], autumn[0]
 
 	err := f.svc.ImportFile(context.Background(), 2025, buildXLSX(t, reordered), "other-name.xlsx")
@@ -468,7 +468,7 @@ func TestImportFile_InvalidFileData_NoWrites(t *testing.T) {
 			"Лист1": {{"Математика", "ЭТФ АСУ-22-1б", "25", "", "Лек", "36"}},
 		}},
 		{name: "no records", sheets: map[string][][]string{
-			mapTermToSheetName[models.TermFirst]: {{"короткая строка"}},
+			models.TermFirst.String(): {{"короткая строка"}},
 		}},
 	}
 	for _, tt := range tests {
