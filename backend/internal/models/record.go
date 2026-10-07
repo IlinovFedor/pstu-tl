@@ -131,6 +131,18 @@ type GroupsSubgroups struct {
 	subgroupSequenceNumber SubgroupType
 }
 
+func NewGroupsSubgroups(groupID uuid.UUID, subgroup SubgroupType) GroupsSubgroups {
+	return GroupsSubgroups{subgroupId: groupID, subgroupSequenceNumber: subgroup}
+}
+
+func (g GroupsSubgroups) GroupID() uuid.UUID {
+	return g.subgroupId
+}
+
+func (g GroupsSubgroups) Subgroup() SubgroupType {
+	return g.subgroupSequenceNumber
+}
+
 type Term int
 
 const (
@@ -170,6 +182,18 @@ func (r *Record) SetStudentsAmount(studentsAmount int) {
 
 func NewRecord(id uuid.UUID, importFileID uuid.UUID, groups []GroupsSubgroups, studentsAmount int, disciplineId uuid.UUID, term Term, recordType RecordType, goalHours int, teachersHours []TeacherHours, isError bool, isDeleted bool) *Record {
 	return &Record{id: id, importFileID: importFileID, groups: groups, studentsAmount: studentsAmount, disciplineId: disciplineId, term: term, recordType: recordType, goalHours: goalHours, teachersHours: teachersHours, isError: isError, isDeleted: isDeleted}
+}
+
+func (r *Record) SetId(id uuid.UUID) {
+	r.id = id
+}
+
+func (r *Record) SetDisciplineId(disciplineId uuid.UUID) {
+	r.disciplineId = disciplineId
+}
+
+func (r *Record) SetGroups(groups []GroupsSubgroups) {
+	r.groups = groups
 }
 
 func (r *Record) SetIsError(isError bool) {

@@ -98,6 +98,9 @@ type FileImportRepository interface {
 	InsertFileImport(ctx context.Context, fileImport models.FileImport) error
 	GetFileImport(ctx context.Context, fileID uuid.UUID) (*models.FileImport, error)
 	GetFileImportData(ctx context.Context, fileID uuid.UUID) ([]byte, error)
+	// GetFileImportByHash ищет неудалённый файл импорта в учебном году по хешу данных.
+	// Возвращает models.ErrUnknownFile, если файл не найден
+	GetFileImportByHash(ctx context.Context, yearName int, hash string) (*models.FileImport, error)
 
 	SoftDeleteFileImport(ctx context.Context, fileID uuid.UUID) error
 	RestoreFileImport(ctx context.Context, fileID uuid.UUID) error

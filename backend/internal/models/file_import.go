@@ -36,8 +36,8 @@ func (f FileImport) IsDeleted() bool {
 	return f.isDeleted
 }
 
-func NewFileImport(yearName int, name string, hash string) FileImport {
-	return FileImport{id: uuid.NewV7(), yearName: yearName, name: name, hash: hash}
+func NewFileImport(id uuid.UUID, yearName int, name string, hash string) FileImport {
+	return FileImport{id: id, yearName: yearName, name: name, hash: hash}
 }
 
 type FileImportAction struct {
