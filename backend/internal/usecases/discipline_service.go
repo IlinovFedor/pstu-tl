@@ -18,13 +18,13 @@ func (t *DisciplineService) GetDisciplines(ctx context.Context, showDeleted bool
 func (t *DisciplineService) CreateDiscipline(ctx context.Context,
 	name string,
 ) (*models.Discipline, error) {
-	teacher := models.NewDiscipline(
+	discipline := models.NewDiscipline(
 		uuid.NewV7(),
 		name,
 		nil,
 	)
 
-	return t.repo.InsertDiscipline(ctx, teacher)
+	return t.repo.InsertDiscipline(ctx, discipline)
 }
 
 func (t *DisciplineService) GetDiscipline(ctx context.Context, id uuid.UUID) (*models.Discipline, error) {

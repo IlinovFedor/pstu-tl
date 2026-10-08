@@ -18,13 +18,13 @@ func (t *SpecializationService) GetSpecializations(ctx context.Context, showDele
 func (t *SpecializationService) CreateSpecialization(ctx context.Context,
 	name string,
 ) (*models.Specialization, error) {
-	teacher := models.NewSpecialization(
+	specialization := models.NewSpecialization(
 		uuid.NewV7(),
 		name,
 		nil,
 	)
 
-	return t.repo.InsertSpecialization(ctx, teacher)
+	return t.repo.InsertSpecialization(ctx, specialization)
 }
 
 func (t *SpecializationService) GetSpecialization(ctx context.Context, id uuid.UUID) (*models.Specialization, error) {

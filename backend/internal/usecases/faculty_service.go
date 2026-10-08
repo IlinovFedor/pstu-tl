@@ -18,13 +18,13 @@ func (t *FacultyService) GetFaculties(ctx context.Context, showDeleted bool) ([]
 func (t *FacultyService) CreateFaculty(ctx context.Context,
 	name string,
 ) (*models.Faculty, error) {
-	teacher := models.NewFaculty(
+	faculty := models.NewFaculty(
 		uuid.NewV7(),
 		name,
 		nil,
 	)
 
-	return t.repo.InsertFaculty(ctx, teacher)
+	return t.repo.InsertFaculty(ctx, faculty)
 }
 
 func (t *FacultyService) GetFaculty(ctx context.Context, id uuid.UUID) (*models.Faculty, error) {

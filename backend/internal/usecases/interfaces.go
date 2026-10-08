@@ -198,7 +198,7 @@ type TeacherRepository interface {
 
 // YearRepository интерфейс для работы с учебными годами
 type YearRepository interface {
-	InsertYear(ctx context.Context, year models.Year) error
+	InsertYear(ctx context.Context, year *models.Year) (*models.Year, error)
 	GetYear(ctx context.Context, yearName int) (*models.Year, error)
 	EditYear(
 		ctx context.Context,
@@ -208,7 +208,7 @@ type YearRepository interface {
 		extHourlyWageTier2 int,
 		extHourlyWageTier3 int,
 		wageTolerance int,
-	) error
+	) (*models.Year, error)
 
 	SoftDeleteYear(ctx context.Context, yearName int) error
 	RestoreYear(ctx context.Context, yearName int) error
