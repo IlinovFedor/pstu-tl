@@ -28,6 +28,124 @@ type FileImportService struct {
 	storage             FileStorage
 }
 
+func (f *FileImportService) ImportFile(ctx context.Context,
+	yearName int,
+	data []byte,
+	fileName string) (fileImport *models.FileImport, err error) {
+	file, err := excelize.OpenReader(bytes.NewReader(data))
+	if err != nil {
+		return nil, errors.New("failed to open excel file: " + err.Error())
+	}
+	defer func(reader *excelize.File) {
+		errClose := reader.Close()
+		if errClose != nil {
+			err = errors.Join(err, errClose)
+		}
+	}(file)
+
+	fileID := uuid.NewV7()
+	pars := newParser()
+	parseErr := models.NewParseError(make([]models.CellError, 0))
+	for _, sheet := range file.GetSheetList() {
+		term, errTerm := models.NewTermFromString(sheet)
+		if errTerm != nil {
+			continue
+		}
+
+		errSheet := pars.parseSheet(file, term, fileID)
+		var sheetParseErr *models.ParseError
+		switch {
+		case errSheet == nil:
+		case errors.As(errSheet, &sheetParseErr):
+			for _, cellErr := range sheetParseErr.Cells() {
+				parseErr.AddErr(cellErr)
+			}
+		default:
+			return nil, fmt.Errorf("failed to parse sheet %q: %w", sheet, errSheet)
+		}
+	}
+	if parseErr.HasErrors() {
+		return nil, parseErr
+	}
+	if len(pars.records) == 0 {
+		return nil, fmt.Errorf("%w: no records found", models.ErrInvalidFileData)
+	}
+
+	fileImport = models.NewFileImport(fileID, yearName, fileName, pars.hash())
+
+	fileStored := false
+	err = f.transactor.WithTx(ctx, func(ctx context.Context) error {
+		_, errFind := f.fileRepo.GetFileImportByHash(ctx, yearName, fileImport.Hash())
+		switch {
+		case errFind == nil:
+			return models.ErrDuplicateFileData
+		case !errors.Is(errFind, models.ErrUnknownFile):
+			return fmt.Errorf("failed to find file import by hash: %w", errFind)
+		}
+
+		if errUpsert := f.upsertGraph(ctx, pars); errUpsert != nil {
+			return errUpsert
+		}
+		if errInsert := f.fileRepo.InsertFileImport(ctx, *fileImport); errInsert != nil {
+			return fmt.Errorf("failed to insert file import: %w", errInsert)
+		}
+		if errInsert := f.recordsRepo.InsertRecords(ctx, pars.buildRecords()); errInsert != nil {
+			return fmt.Errorf("failed to insert records: %w", errInsert)
+		}
+		if errStore := f.storage.CreateFile(fileID, data); errStore != nil {
+			return fmt.Errorf("failed to store file: %w", errStore)
+		}
+		fileStored = true
+		return nil
+	})
+	if err != nil && fileStored {
+		if errDelete := f.storage.DeleteFile(fileID); errDelete != nil {
+			err = errors.Join(err, errDelete)
+		}
+	}
+	return fileImport, err
+}
+
+func (f *FileImportService) GetFiles(ctx context.Context, year int, showDeleted bool) ([]models.FileImport, error) {
+	return f.fileRepo.GetFilesImportsByYearName(ctx, showDeleted, year)
+}
+
+func (f *FileImportService) GetFile(ctx context.Context, id uuid.UUID) (*models.FileImport, error) {
+	return f.fileRepo.GetFileImport(ctx, id)
+}
+
+func (f *FileImportService) DeleteFile(ctx context.Context, id uuid.UUID) error {
+	return f.fileRepo.SoftDeleteFileImport(ctx, id)
+}
+
+func (f *FileImportService) GetFileData(ctx context.Context, id uuid.UUID) ([]byte, string, error) {
+	data, err := f.storage.GetFile(id)
+	if err != nil {
+		return nil, "", fmt.Errorf("cannot get file data: %w", err)
+	}
+	fileImport, err := f.fileRepo.GetFileImport(ctx, id)
+	if err != nil {
+		return nil, "", err
+	}
+	return data, fileImport.Name(), nil
+}
+
+func (f *FileImportService) RestoreFile(ctx context.Context, id uuid.UUID) error {
+	return f.fileRepo.RestoreFileImport(ctx, id)
+}
+
+func (f *FileImportService) GetFilesHistory(ctx context.Context, year int) ([]models.FileImportAction, error) {
+	return f.fileRepo.GetFilesImportsActionsByYearName(ctx, year)
+}
+
+func (f *FileImportService) GetFileHistory(ctx context.Context, id uuid.UUID) ([]models.FileImportAction, error) {
+	return f.fileRepo.GetFileImportActions(ctx, id)
+}
+
+func (f *FileImportService) RevertAction(ctx context.Context, id uuid.UUID) error {
+	return f.fileRepo.RevertFileImportAction(ctx, id)
+}
+
 const (
 	colDiscipline = iota
 	colGroup
@@ -276,81 +394,6 @@ func (p *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 		return parseErr
 	}
 	return nil
-}
-
-func (f *FileImportService) ImportFile(ctx context.Context, yearName int, data []byte, fileName string) (err error) {
-	file, err := excelize.OpenReader(bytes.NewReader(data))
-	if err != nil {
-		return errors.New("failed to open excel file: " + err.Error())
-	}
-	defer func(reader *excelize.File) {
-		errClose := reader.Close()
-		if errClose != nil {
-			err = errors.Join(err, errClose)
-		}
-	}(file)
-
-	fileID := uuid.NewV7()
-	pars := newParser()
-	parseErr := models.NewParseError(make([]models.CellError, 0))
-	for _, sheet := range file.GetSheetList() {
-		term, errTerm := models.NewTermFromString(sheet)
-		if errTerm != nil {
-			continue
-		}
-
-		errSheet := pars.parseSheet(file, term, fileID)
-		var sheetParseErr *models.ParseError
-		switch {
-		case errSheet == nil:
-		case errors.As(errSheet, &sheetParseErr):
-			for _, cellErr := range sheetParseErr.Cells() {
-				parseErr.AddErr(cellErr)
-			}
-		default:
-			return fmt.Errorf("failed to parse sheet %q: %w", sheet, errSheet)
-		}
-	}
-	if parseErr.HasErrors() {
-		return parseErr
-	}
-	if len(pars.records) == 0 {
-		return fmt.Errorf("%w: no records found", models.ErrInvalidFileData)
-	}
-
-	fileImport := models.NewFileImport(fileID, yearName, fileName, pars.hash())
-
-	fileStored := false
-	err = f.transactor.WithTx(ctx, func(ctx context.Context) error {
-		_, errFind := f.fileRepo.GetFileImportByHash(ctx, yearName, fileImport.Hash())
-		switch {
-		case errFind == nil:
-			return models.ErrDuplicateFileData
-		case !errors.Is(errFind, models.ErrUnknownFile):
-			return fmt.Errorf("failed to find file import by hash: %w", errFind)
-		}
-
-		if errUpsert := f.upsertGraph(ctx, pars); errUpsert != nil {
-			return errUpsert
-		}
-		if errInsert := f.fileRepo.InsertFileImport(ctx, fileImport); errInsert != nil {
-			return fmt.Errorf("failed to insert file import: %w", errInsert)
-		}
-		if errInsert := f.recordsRepo.InsertRecords(ctx, pars.buildRecords()); errInsert != nil {
-			return fmt.Errorf("failed to insert records: %w", errInsert)
-		}
-		if errStore := f.storage.CreateFile(fileID, data); errStore != nil {
-			return fmt.Errorf("failed to store file: %w", errStore)
-		}
-		fileStored = true
-		return nil
-	})
-	if err != nil && fileStored {
-		if errDelete := f.storage.DeleteFile(fileID); errDelete != nil {
-			err = errors.Join(err, errDelete)
-		}
-	}
-	return err
 }
 
 // upsertGraph сохраняет справочники парсера пачками и записывает в значения map реальные объекты из репозиториев.
