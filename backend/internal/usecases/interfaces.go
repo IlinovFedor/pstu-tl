@@ -134,16 +134,18 @@ type FileReportRepository interface {
 
 // GroupRepository интерфейс работы с репозиторием групп
 type GroupRepository interface {
+	InsertGroup(ctx context.Context, group *models.Group) (*models.Group, error)
 	UpsertGroups(ctx context.Context, groups []*models.Group) ([]models.Group, error)
 	GetGroup(ctx context.Context, id uuid.UUID) (*models.Group, error)
 	EditGroup(
 		ctx context.Context,
-		specialization string,
+		groupID uuid.UUID,
+		facultyID uuid.UUID,
+		specializationID uuid.UUID,
 		yearOfEnrollment int,
 		sequenceNumber int,
 		groupType models.GroupType,
-		studentsAmount int,
-	) error
+	) (*models.Group, error)
 
 	SoftDeleteGroup(ctx context.Context, id uuid.UUID) error
 	RestoreGroup(ctx context.Context, id uuid.UUID) error
