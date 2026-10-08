@@ -73,7 +73,7 @@ func NewRecordType(name string) (RecordType, error) {
 	case "предпр":
 		return RecordTypePreDiplomaPractice, nil
 	default:
-		return 0, ErrUnknownRecordType
+		return 0, ErrUnexpectedRecordType
 	}
 }
 
@@ -114,7 +114,7 @@ func (r RecordType) String() (string, error) {
 	case RecordTypePreDiplomaPractice:
 		return "предпр", nil
 	default:
-		return "", ErrUnknownRecordType
+		return "", ErrUnexpectedRecordType
 	}
 }
 
@@ -162,7 +162,7 @@ func NewTermFromString(s string) (Term, error) {
 	case "весенний семестр":
 		return TermSecond, nil
 	default:
-		return 0, ErrUnknownTerm
+		return 0, ErrUnexpectedTerm
 	}
 }
 

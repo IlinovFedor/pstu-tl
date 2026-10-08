@@ -38,7 +38,7 @@ func NewGroupTypeFromString(s string) (GroupType, error) {
 	case "м":
 		return GroupTypePostgraduate, nil
 	default:
-		return 0, ErrUnknownGroupType
+		return 0, ErrUnexpectedGroupType
 	}
 }
 
@@ -59,7 +59,7 @@ func (g GroupType) String() (string, error) {
 	case GroupTypePostgraduate:
 		return "м", nil
 	default:
-		return "", ErrUnknownGroupType
+		return "", ErrUnexpectedGroupType
 	}
 }
 

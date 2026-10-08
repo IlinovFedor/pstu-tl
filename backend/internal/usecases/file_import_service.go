@@ -34,7 +34,7 @@ func (f *FileImportService) ImportFile(ctx context.Context,
 	fileName string) (fileImport *models.FileImport, err error) {
 	file, err := excelize.OpenReader(bytes.NewReader(data))
 	if err != nil {
-		return nil, errors.New("failed to open excel file: " + err.Error())
+		return nil, errors.Join(models.ErrCannotOpenXLSX, err)
 	}
 	defer func(reader *excelize.File) {
 		errClose := reader.Close()
@@ -79,7 +79,7 @@ func (f *FileImportService) ImportFile(ctx context.Context,
 		switch {
 		case errFind == nil:
 			return models.ErrDuplicateFileData
-		case !errors.Is(errFind, models.ErrUnknownFile):
+		case !errors.Is(errFind, models.ErrFileNotFound):
 			return fmt.Errorf("failed to find file import by hash: %w", errFind)
 		}
 
@@ -134,11 +134,11 @@ func (f *FileImportService) RestoreFile(ctx context.Context, id uuid.UUID) error
 	return f.fileRepo.RestoreFileImport(ctx, id)
 }
 
-func (f *FileImportService) GetFilesHistory(ctx context.Context, year int) ([]models.FileImportAction, error) {
+func (f *FileImportService) GetHistoryByYear(ctx context.Context, year int) ([]models.FileImportAction, error) {
 	return f.fileRepo.GetFilesImportsActionsByYearName(ctx, year)
 }
 
-func (f *FileImportService) GetFileHistory(ctx context.Context, id uuid.UUID) ([]models.FileImportAction, error) {
+func (f *FileImportService) GetHistoryByID(ctx context.Context, id uuid.UUID) ([]models.FileImportAction, error) {
 	return f.fileRepo.GetFileImportActions(ctx, id)
 }
 
@@ -311,7 +311,7 @@ func (p *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 
 		recordType, errRecordType := models.NewRecordType(columns[colRecordType])
 		if errRecordType != nil {
-			fail(colRecordType, models.ErrUnknownRecordType, errRecordType)
+			fail(colRecordType, errRecordType, nil)
 		}
 
 		goalHours, errParseGoalHours := strconv.Atoi(columns[colGoalHours])
@@ -336,7 +336,7 @@ func (p *parser) parseSheet(file *excelize.File, term models.Term, fileID uuid.U
 
 		groupType, errGT := models.NewGroupTypeFromString(submatch[submatchGroupType])
 		if errGT != nil {
-			fail(colGroup, models.ErrUnknownGroupType, errGT)
+			fail(colGroup, errGT, nil)
 		}
 
 		var seqNums []int

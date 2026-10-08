@@ -123,7 +123,7 @@ func (f *fakeFileImportRepo) GetFileImportByHash(_ context.Context, _ int, hash 
 	if fi, ok := f.existing[hash]; ok {
 		return fi, nil
 	}
-	return nil, models.ErrUnknownFile
+	return nil, models.ErrFileNotFound
 }
 
 func (f *fakeFileImportRepo) InsertFileImport(_ context.Context, fi models.FileImport) error {
@@ -250,7 +250,7 @@ func TestImportFile_ParseErrorsFromBothSheets_NoWrites(t *testing.T) {
 		},
 	})
 
-	err := f.svc.ImportFile(context.Background(), 2025, data, "plan.xlsx")
+	_, err := f.svc.ImportFile(context.Background(), 2025, data, "plan.xlsx")
 
 	var parseErr *models.ParseError
 	if !errors.As(err, &parseErr) {
@@ -370,7 +370,7 @@ func TestImportFile_Valid_UpsertsGraphInBatches(t *testing.T) {
 	f := newImportFixture()
 	data := buildXLSX(t, validSheets())
 
-	if err := f.svc.ImportFile(context.Background(), 2025, data, "plan.xlsx"); err != nil {
+	if _, err := f.svc.ImportFile(context.Background(), 2025, data, "plan.xlsx"); err != nil {
 		t.Fatalf("ImportFile: %v", err)
 	}
 
@@ -415,7 +415,7 @@ func TestImportFile_ExistingRows_KeepIDs(t *testing.T) {
 	existingGroup := groupKey{facultyID, specializationID, 22, 1, models.GroupTypeBachelor}
 	f.groups.ids[existingGroup] = groupID
 
-	if err := f.svc.ImportFile(context.Background(), 2025, buildXLSX(t, validSheets()), "plan.xlsx"); err != nil {
+	if _, err := f.svc.ImportFile(context.Background(), 2025, buildXLSX(t, validSheets()), "plan.xlsx"); err != nil {
 		t.Fatalf("ImportFile: %v", err)
 	}
 
@@ -434,7 +434,7 @@ func TestImportFile_ExistingRows_KeepIDs(t *testing.T) {
 
 func TestImportFile_DuplicateHash_NoWrites(t *testing.T) {
 	first := newImportFixture()
-	if err := first.svc.ImportFile(context.Background(), 2025, buildXLSX(t, validSheets()), "plan.xlsx"); err != nil {
+	if _, err := first.svc.ImportFile(context.Background(), 2025, buildXLSX(t, validSheets()), "plan.xlsx"); err != nil {
 		t.Fatalf("first ImportFile: %v", err)
 	}
 	existing := first.files.inserted[0]
@@ -445,7 +445,7 @@ func TestImportFile_DuplicateHash_NoWrites(t *testing.T) {
 	autumn := reordered[models.TermFirst.String()]
 	autumn[0], autumn[1] = autumn[1], autumn[0]
 
-	err := f.svc.ImportFile(context.Background(), 2025, buildXLSX(t, reordered), "other-name.xlsx")
+	_, err := f.svc.ImportFile(context.Background(), 2025, buildXLSX(t, reordered), "other-name.xlsx")
 
 	if !errors.Is(err, models.ErrDuplicateFileData) {
 		t.Fatalf("want ErrDuplicateFileData, got %v", err)
@@ -475,7 +475,7 @@ func TestImportFile_InvalidFileData_NoWrites(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			f := newImportFixture()
 
-			err := f.svc.ImportFile(context.Background(), 2025, buildXLSX(t, tt.sheets), "plan.xlsx")
+			_, err := f.svc.ImportFile(context.Background(), 2025, buildXLSX(t, tt.sheets), "plan.xlsx")
 
 			if !errors.Is(err, models.ErrInvalidFileData) {
 				t.Fatalf("want ErrInvalidFileData, got %v", err)

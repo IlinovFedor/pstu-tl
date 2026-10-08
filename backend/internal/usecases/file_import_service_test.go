@@ -153,7 +153,7 @@ func Test_parser_parseSheet_errors(t *testing.T) {
 					Cell:  "E1",
 					Term:  2,
 					Value: "лекция",
-					Err:   "unknown record type: unknown record type",
+					Err:   "unexpected record type",
 				},
 				{
 					Cell:  "F1",
@@ -205,14 +205,14 @@ func Test_parser_parseSheet_errors(t *testing.T) {
 					Cell:  "E1",
 					Term:  2,
 					Value: "лекция1",
-					Err:   "unknown record type: unknown record type",
+					Err:   "unexpected record type",
 				},
-				{Cell: "E12", Term: 2, Err: "unknown record type: unknown record type"},
+				{Cell: "E12", Term: 2, Err: "unexpected record type"},
 				{
 					Cell:  "E6",
 					Term:  2,
 					Value: "лекция2",
-					Err:   "unknown record type: unknown record type",
+					Err:   "unexpected record type",
 				},
 				{
 					Cell:  "F1",
